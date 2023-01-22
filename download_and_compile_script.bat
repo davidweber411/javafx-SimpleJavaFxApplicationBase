@@ -2,18 +2,18 @@
 
 rem variables
 set folderPath=C:\Users\%username%\desktop
-set repositoryName=SimpleJavaFxTestBase
+set repositoryName=SimpleJavaFxApplicationBase
 
 rem init text
 echo ====================================================================================
-echo Hello and welcome to the great SimpleJavaFxTestBase JAR compiler script!
+echo Hello and welcome to the great SimpleJavaFxApplicationBase JAR compiler script!
 echo ====================================================================================
 
 echo:
 echo This script will do the following things for you:
 echo:
 echo   1. Download the git repository to your desktop via:
-echo      git clone https://github.com/davidweber411/SimpleJavaFxTestBase
+echo      git clone https://github.com/davidweber411/SimpleJavaFxApplicationBase
 echo:
 echo   2. Compile the project to your local maven repository via:
 echo      ./gradlew publishToMavenLocal
@@ -51,7 +51,7 @@ if exist "%folderPath%\%repositoryName%" (
 	echo:
 	cd %folderPath%
 	rem rmdir /S /Q %folderPath%\%repositoryName%
-	git clone https://github.com/davidweber411/SimpleJavaFxTestBase
+	git clone https://github.com/davidweber411/SimpleJavaFxApplicationBase
 	echo:
 	echo ====================================================================================
 	echo Executing the gradle wrapper task to publish the JAR to maven local
@@ -64,7 +64,7 @@ if exist "%folderPath%\%repositoryName%" (
 	echo ====================================================================================
 	echo:
 	echo The generated JAR should be here: 
-	echo C:\Users\%username%\.m2\repository\com\wedasoft\SimpleJavaFxTestBase\...
+	echo C:\Users\%username%\.m2\repository\com\wedasoft\SimpleJavaFxApplicationBase\...
 	echo:
 	echo Don't forget to delete the git repository folder on your desktop. 
 	echo:
