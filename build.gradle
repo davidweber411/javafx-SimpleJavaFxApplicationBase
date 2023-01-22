@@ -1,0 +1,66 @@
+//file:noinspection SpellCheckingInspection
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+    id 'maven-publish'
+}
+
+group 'com.wedasoft'
+version '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.9.1'
+}
+
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = '17'
+//noinspection GroovyUnusedAssignment
+targetCompatibility = '17'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+application {
+    mainClass = 'com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.FxmlDialogBuilderTestApp'
+}
+
+javafx {
+    version = '17.0.2'
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+dependencies {
+    implementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    implementation("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    testImplementation 'org.assertj:assertj-core:3.23.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// publishing with maven publish plugin
+jar {
+    exclude('com/wedasoft/simpleJavaFxApplicationBase/excludeInJar')
+    // exclude('net/intellidata/core/**/*Impl*')
+}
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+}
+
