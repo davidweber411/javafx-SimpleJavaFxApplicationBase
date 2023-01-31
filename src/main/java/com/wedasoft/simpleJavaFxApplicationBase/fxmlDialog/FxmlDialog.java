@@ -9,7 +9,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static java.util.Objects.isNull;
@@ -58,7 +58,7 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
         }
     }
 
-    private void passArgumentsToController(HashMap<String, String> argumentsToPass) throws Exception {
+    private void passArgumentsToController(Map<String, String> argumentsToPass) throws Exception {
         if (isNull(controller)) {
             throw new Exception("Can not execute 'passArgumentsToController()' because the controller of the fxml file is null.");
         }
@@ -170,7 +170,7 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
          * @throws Exception If an error occurs.
          * @see FxmlDialogControllerBase#getPassedArguments()
          */
-        public Builder<CONTROLLER_CLASS> passArgumentsToController(HashMap<String, String> argumentsToPass) throws Exception {
+        public Builder<CONTROLLER_CLASS> passArgumentsToController(Map<String, String> argumentsToPass) throws Exception {
             this.fxmlDialog.passArgumentsToController(argumentsToPass);
             return this;
         }

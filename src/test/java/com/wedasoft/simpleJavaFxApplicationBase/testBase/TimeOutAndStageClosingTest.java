@@ -1,9 +1,7 @@
-package com.wedasoft.simpleJavaFxApplicationBase.testBase.testBase;
+package com.wedasoft.simpleJavaFxApplicationBase.testBase;
 
 
 import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.FxmlDialog;
-import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
-import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBaseException;
 import javafx.geometry.Dimension2D;
 import javafx.scene.input.KeyCode;
 import javafx.scene.robot.Robot;

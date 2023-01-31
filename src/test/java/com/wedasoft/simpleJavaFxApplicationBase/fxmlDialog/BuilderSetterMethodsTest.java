@@ -1,7 +1,6 @@
-package com.wedasoft.simpleJavaFxApplicationBase.testBase.fxmlDialog;
+package com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog;
 
 import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.TestController;
-import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.FxmlDialog;
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
@@ -15,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class BuilderSetterMethodsTests extends SimpleJavaFxTestBase {
+public class BuilderSetterMethodsTest extends SimpleJavaFxTestBase {
 
     FxmlDialog.Builder<TestController> builder;
 

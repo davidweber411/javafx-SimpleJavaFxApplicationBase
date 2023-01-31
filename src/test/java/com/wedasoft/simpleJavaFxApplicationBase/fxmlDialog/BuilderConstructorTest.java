@@ -1,7 +1,6 @@
-package com.wedasoft.simpleJavaFxApplicationBase.testBase.fxmlDialog;
+package com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog;
 
 import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.TestController;
-import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.FxmlDialog;
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
 import javafx.geometry.Dimension2D;
 import org.junit.jupiter.api.Nested;
@@ -9,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BuilderConstructorTests extends SimpleJavaFxTestBase {
+class BuilderConstructorTest extends SimpleJavaFxTestBase {
 
     FxmlDialog.Builder<TestController> builder;
 

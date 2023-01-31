@@ -28,16 +28,15 @@ public abstract class FxmlDialogControllerBase implements Initializable {
     }
 
     /**
-     * NOT TESTED
+     * This method gets the passed argument as int.
      *
-     * @param mapKey Map of parameters and associated values.
+     * @param mapKey Key of the argument.
      */
-    public int getPassedArgumentsAsInt(String mapKey) {
+    public int getPassedArgumentsAsInt(String mapKey) throws Exception {
         try {
             return Integer.parseInt(passedArguments.get(mapKey));
         } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
+            throw new Exception("The value '" + passedArguments.get(mapKey) + "' can not be parsed into an int.");
         }
     }
 

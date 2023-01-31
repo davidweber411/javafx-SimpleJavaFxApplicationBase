@@ -1,6 +1,5 @@
-package com.wedasoft.simpleJavaFxApplicationBase.testBase.testBase;
+package com.wedasoft.simpleJavaFxApplicationBase.testBase;
 
-import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
 import javafx.scene.control.Button;
 import org.junit.jupiter.api.*;
 

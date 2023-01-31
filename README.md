@@ -2,12 +2,13 @@
 
 This library contains functions that simplify the development of JavaFX applications.<br>
 
-You can easily run unit tests that require JavaFX components.<br>
-No more annoying errors like "Toolkit not found", "Toolkit already initialized",
-"Location is not set" or "Not on FX application thread"  during testing.
-
-There are several helper methods for creating simple and complex dialogs.<br>
-You can easily create a .fxml file based dialog and pass parameters to it on a simple way.
+- Run unit tests that require JavaFX components.<br>
+  No more annoying errors like "Toolkit not found", "Toolkit already initialized","Location is not set" or "Not on FX
+  application thread"  during testing.
+- Create simple and complex .fxml file based dialogs.<br>
+  Pass and retrieve arguments without any effort.
+- Execute generic standard CRUD operations with Hibernate.<br>
+  No need for writing boilerplate code anymore.
 
 What you need to do:
 
@@ -260,3 +261,20 @@ After that, just get the wanted argument by its String key out of the map.
       
       }
 
+# How to execute Hibernate standard queries
+
+    HibernateQueryUtil.Count.countAll(Class<T> entityClass)
+
+    HibernateQueryUtil.Insert.insertOne(T entity)
+    HibernateQueryUtil.Insert.insertMany(List<T> entities)
+
+    HibernateQueryUtil.Find.findById(Class<T> classOfEntity, long id)
+    HibernateQueryUtil.Find.findAll(Class<T> classOfEntity)
+    HibernateQueryUtil.Find.findByFieldValue(Class<T> classOfEntity, String fieldName, V fieldValue)
+
+    HibernateQueryUtil.Update.updateOne(T entity)
+    HibernateQueryUtil.Update.updateMany(List<T> entities)
+
+    HibernateQueryUtil.Delete.deleteOne(T entity) 
+    HibernateQueryUtil.Delete.deleteMany(List<T> entities) 
+    HibernateQueryUtil.Delete.deleteAll(Class<T> entityClass)
