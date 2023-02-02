@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'com.wedasoft'
-version '1.1.0'
+version '1.1.1'
 
 repositories {
     mavenCentral()
@@ -47,7 +47,7 @@ test {
     useJUnitPlatform()
 }
 
-// publishing with maven publish plugin
+/* publishing with maven publish plugin */
 jar {
     exclude('com/wedasoft/simpleJavaFxApplicationBase/excludeInJar')
     // exclude('net/intellidata/core/**/*Impl*')
@@ -66,3 +66,21 @@ publishing {
     }
 }
 
+/* publish to github packages (with 'gradle publish') */
+// https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry
+publishing {
+    repositories {
+        maven {
+            url = uri("https://maven.pkg.github.com/davidweber411/SimpleJavaFxApplicationBase")
+            credentials {
+                username = System.getenv("GITHUB_USERNAME") // echo %GITHUB_USERNAME%
+                password = System.getenv("GITHUB_TOKEN") // echo %GITHUB_TOKEN%
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
+}

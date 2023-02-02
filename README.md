@@ -12,8 +12,12 @@ This library contains functions that simplify the development of JavaFX applicat
 
 What you need to do:
 
-1. Compile the JAR
-2. Add the dependency to your project
+1. Compile the JAR<br>
+   (only needed if there is no Github package!)
+
+2. Add the dependency to your project<br>
+   (works only with github package versions!)
+
 3. Profit.
 
 # 1. Compile the JAR
@@ -71,7 +75,7 @@ What you need to do:
     <!-- Maven looks in the local repository by default. -->
     <dependency>
       <groupId>com.wedasoft</groupId>
-      <artifactId>SimpleJavaFxApplicationBase</artifactId>
+      <artifactId>simplejavafxapplicationbase</artifactId>
       <version>version.num.ber</version> <!-- e.g.: 1.0.0 -->
     </dependency>
 
@@ -81,7 +85,7 @@ What you need to do:
       mavenLocal()
     }
     dependencies {
-      implementation("com.wedasoft:SimpleJavaFxApplicationBase:version.num.ber") // e.g.: 1.0.0
+      implementation("com.wedasoft:simplejavafxapplicationbase:version.num.ber") // e.g.: 1.0.0
     }
 
 ### As JAR
@@ -118,7 +122,7 @@ JUnit will not recognize failed assertions in the JavaFX thread.
         assertEquals("buttonlabel", button.getText());
     }
 
-# Example test class
+### Example test class
 
     import javafx.geometry.Dimension2D;
     import javafx.scene.control.Button;
