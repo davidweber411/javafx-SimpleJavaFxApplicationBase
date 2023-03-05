@@ -267,18 +267,35 @@ After that, just get the wanted argument by its String key out of the map.
 
 # How to execute Hibernate standard queries
 
-    HibernateQueryUtil.Count.countAll(Class<T> entityClass)
+### Insert data
 
     HibernateQueryUtil.Insert.insertOne(T entity)
     HibernateQueryUtil.Insert.insertMany(List<T> entities)
 
-    HibernateQueryUtil.Find.findById(Class<T> classOfEntity, long id)
-    HibernateQueryUtil.Find.findAll(Class<T> classOfEntity)
-    HibernateQueryUtil.Find.findByFieldValue(Class<T> classOfEntity, String fieldName, V fieldValue)
+### Update data
 
     HibernateQueryUtil.Update.updateOne(T entity)
     HibernateQueryUtil.Update.updateMany(List<T> entities)
 
+### Delete data
+
     HibernateQueryUtil.Delete.deleteOne(T entity) 
     HibernateQueryUtil.Delete.deleteMany(List<T> entities) 
     HibernateQueryUtil.Delete.deleteAll(Class<T> entityClass)
+
+### Find data
+
+    HibernateQueryUtil.Find.findWithBuilder(Student.class)
+        .addCondition(Student.Fields.firstName, new EqualsCondition<>("David"))
+        .addCondition(Student.Fields.id, new EqualsCondition<>(27))
+        .offset(10)
+        .limit(10)
+        .orderByInOrderOfList(List.of(
+            new Order(Student.Fields.id, true),
+            new Order(Student.Fields.lastName, true),
+            new Order(Student.Fields.firstName, false)))
+        .findAll();
+
+### Other things with data
+
+    HibernateQueryUtil.Count.countAll(Class<T> entityClass)

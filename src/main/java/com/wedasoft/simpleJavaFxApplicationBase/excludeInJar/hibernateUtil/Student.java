@@ -1,15 +1,17 @@
 package com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.hibernateUtil;
 
 import jakarta.persistence.*;
+import lombok.experimental.FieldNameConstants;
 
 @SuppressWarnings("all")
+@FieldNameConstants
 @Entity
 @Table(name = "student")
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column()
     private int id;
 
     @Column(name = "first_name")

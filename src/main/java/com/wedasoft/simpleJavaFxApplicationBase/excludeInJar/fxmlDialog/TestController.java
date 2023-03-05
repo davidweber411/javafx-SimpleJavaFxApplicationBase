@@ -15,14 +15,10 @@ public class TestController extends FxmlDialogControllerBase {
     @Override
     public void onFxmlDialogReady() {
         int testInt = 5;
-        System.out.println("testInt=" + testInt);
         if (getPassedArguments() != null) {
             String firstname = getPassedArguments().getOrDefault("firstname", "default name");
             int age = Integer.parseInt(getPassedArguments().getOrDefault("age", "-1"));
             boolean isMale = Boolean.parseBoolean(getPassedArguments().getOrDefault("isMale", "false"));
-            System.out.println("firstname=" + firstname);
-            System.out.println("age=" + age);
-            System.out.println("isMale=" + isMale);
         }
     }
 
