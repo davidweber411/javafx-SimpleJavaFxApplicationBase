@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FxmlDialogControllerBaseTest extends SimpleJavaFxTestBase {
 
-    FxmlDialog.Builder builder;
+    private FxmlDialog.Builder builder;
 
     @Test
     void getPassedArgumentsAsIntTest() throws Exception {

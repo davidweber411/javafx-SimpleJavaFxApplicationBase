@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("NewClassNamingConvention")
-class SimpleJavaFxTestBaseTest2 extends SimpleJavaFxTestBase {
+class SimpleJavaFxTestBaseGeneralJfxTest extends SimpleJavaFxTestBase {
 
-    FxmlDialog.Builder builder;
-    Button button;
-    Button button2;
+    private FxmlDialog.Builder builder;
+    private Button button;
+    private Button button2;
 
     @Test
     void testFxmlLoader() throws Exception {
@@ -44,6 +44,7 @@ class SimpleJavaFxTestBaseTest2 extends SimpleJavaFxTestBase {
     @Test
     void testButton() throws Exception {
         runOnJavaFxThreadAndJoin(() -> button = new Button("buttonLabel"));
+        assertEquals("buttonLabel", button.getText());
         assertEquals("buttonLabel", button.getText());
         assertNotEquals("wrongLabel", button.getText());
     }

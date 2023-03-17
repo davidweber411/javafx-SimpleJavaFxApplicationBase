@@ -7,12 +7,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/*
+This is a copied test of <code>SimpleJavaFxTestBaseGeneralJfxTest</code>.<br>
+This duplicated tests are used to test the JavaFX toolkit initialization.
+ */
 @SuppressWarnings("NewClassNamingConvention")
-class SimpleJavaFxTestBaseTest1 extends SimpleJavaFxTestBase {
+class SimpleJavaFxTestBaseGeneralJfxTest2 extends SimpleJavaFxTestBase {
 
-    FxmlDialog.Builder builder;
-    Button button;
-    Button button2;
+    private FxmlDialog.Builder builder;
+    private Button button;
+    private Button button2;
 
     @Test
     void testFxmlLoader() throws Exception {
@@ -44,7 +48,6 @@ class SimpleJavaFxTestBaseTest1 extends SimpleJavaFxTestBase {
     @Test
     void testButton() throws Exception {
         runOnJavaFxThreadAndJoin(() -> button = new Button("buttonLabel"));
-        assertEquals("buttonLabel", button.getText());
         assertEquals("buttonLabel", button.getText());
         assertNotEquals("wrongLabel", button.getText());
     }

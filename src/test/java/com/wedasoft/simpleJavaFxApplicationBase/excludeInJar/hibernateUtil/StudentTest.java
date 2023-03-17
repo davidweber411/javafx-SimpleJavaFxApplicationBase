@@ -7,18 +7,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StudentTest {
 
     @Test
-    void constructor() {
+    void constructor_test() {
         Student s = new Student("Harald", "Braun", "harald.braun@abc.com");
         assertThat(s).isNotNull();
         assertThat(s.getFirstName()).isEqualTo("Harald");
         assertThat(s.getLastName()).isEqualTo("Braun");
         assertThat(s.getEmail()).isEqualTo("harald.braun@abc.com");
         assertThat(s.getId()).isEqualTo(0);
-    }
 
-    @Test
-    void emptyConstructor() {
-        Student s = new Student();
+        s = new Student();
         assertThat(s).isNotNull();
         assertThat(s.getFirstName()).isNull();
         assertThat(s.getLastName()).isNull();
@@ -27,7 +24,7 @@ class StudentTest {
     }
 
     @Test
-    void setter() {
+    void allSetters_test() {
         Student s = new Student();
         s.setId(24);
         s.setFirstName("Harald");
@@ -41,7 +38,7 @@ class StudentTest {
     }
 
     @Test
-    void toStringTest() {
+    void toString_test() {
         Student s = new Student("Harald", "Braun", "harald.braun@abc.com");
         assertThat(s.toString()).isEqualTo("Student [id=0, firstName=Harald, lastName=Braun, email=harald.braun@abc.com]");
     }

@@ -16,10 +16,10 @@ import static com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTest
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TimeOutAndStageClosingTest extends SimpleJavaFxTestBase {
+public class SimpleJavaFxTestBaseTimeOutAndStageClosingTest extends SimpleJavaFxTestBase {
 
-    FxmlDialog.Builder builder;
-    int valueChangedByCallback;
+    private FxmlDialog.Builder builder;
+    private int valueChangedByCallback;
 
     @Test
     @Order(1)

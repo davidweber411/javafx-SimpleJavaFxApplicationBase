@@ -6,15 +6,15 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-class ExecutionOrderTest extends SimpleJavaFxTestBase {
+class SimpleJavaFxTestBaseExecutionOrderTest extends SimpleJavaFxTestBase {
 
-    final static String EXPECTED_TEST_CLASS_EXECUTION_ORDER_CHECKSUM = "ba_be12ae_be12ae_be12ae_aa";
-    static String actualTestClassExecutionOrderChecksum = "";
+    private final static String EXPECTED_TEST_CLASS_EXECUTION_ORDER_CHECKSUM = "ba_be12ae_be12ae_be12ae_aa";
+    private static String actualTestClassExecutionOrderChecksum = "";
 
-    final static String EXPECTED_TEST_METHOD_EXECUTION_ORDER_CHECKSUM = "12";
-    static String actualTestMethodExecutionOrderChecksum = "";
+    private final static String EXPECTED_TEST_METHOD_EXECUTION_ORDER_CHECKSUM = "12";
+    private static String actualTestMethodExecutionOrderChecksum = "";
 
-    Button button;
+    private Button button;
 
     @BeforeAll
     static void beforeAll() {

@@ -3,10 +3,12 @@ package com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil;
 import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.conditions.Condition;
 import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.conditions.EqualsCondition;
 import jakarta.persistence.Column;
+import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.query.criteria.HibernateCriteriaBuilder;
+import org.hibernate.query.criteria.JpaCriteriaDelete;
 import org.hibernate.query.criteria.JpaCriteriaQuery;
 import org.hibernate.query.criteria.JpaRoot;
 
@@ -19,7 +21,8 @@ import static java.util.Objects.*;
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public class HibernateQueryUtil {
 
-    public static class Insert {
+    public static class Inserter {
+
         /**
          * Inserts one entity into the database.
          *
@@ -53,7 +56,8 @@ public class HibernateQueryUtil {
         }
     }
 
-    public static class Update {
+    public static class Updater {
+
         /**
          * Updates one entity in the database.
          *
@@ -87,7 +91,14 @@ public class HibernateQueryUtil {
         }
     }
 
-    public static class Delete {
+    public static class DeleterBuilder {
+        // deleteOne()
+        // deleteMany()
+        // deleteByConditions
+    }
+
+    public static class Deleter {
+
         /**
          * Deletes one entity from the database.
          *
@@ -120,7 +131,6 @@ public class HibernateQueryUtil {
             return executedSuccessfully;
         }
 
-        @Deprecated
         /**
          * Deletes all entities of the given type from the database.
          *
@@ -129,7 +139,8 @@ public class HibernateQueryUtil {
          * @param <T>         Type of the entities.
          * @return True, if there were no errors while executing.
          */
-        public static synchronized <T> boolean deleteAll(Class<T> entityClass, boolean areYouSure) throws HibernateQueryUtilException {
+        public static synchronized <T> boolean deleteAll(Class<T> entityClass, boolean areYouSure)
+                throws HibernateQueryUtilException {
             if (!areYouSure) {
                 throw new HibernateQueryUtilException("The security flag 'areYouSure' is not set to 'true'.", null);
             }
@@ -137,7 +148,18 @@ public class HibernateQueryUtil {
             Transaction transaction = null;
             try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 transaction = session.beginTransaction();
-                session.createNativeQuery(String.format("delete from %s", entityClass.getSimpleName()), entityClass).executeUpdate();
+
+                // step #1: initialize objects
+                HibernateCriteriaBuilder cb = session.getCriteriaBuilder();
+                JpaCriteriaDelete<T> criteriaDelete = cb.createCriteriaDelete(entityClass);
+                Root<T> root = criteriaDelete.from(entityClass);
+
+                // step #2: set where clauses
+                //        criteriaDelete.where(cb.lessThanOrEqualTo(e.get("amount"), amount));
+
+                // step #3: execute
+                session.createMutationQuery(criteriaDelete).executeUpdate();
+
                 transaction.commit();
                 executedSuccessfully = true;
             } catch (Exception e) {
@@ -145,10 +167,12 @@ public class HibernateQueryUtil {
             }
             return executedSuccessfully;
         }
+
     }
 
     @Deprecated
     public static class Aggregate {
+
         /**
          * Counts the amount of datasets of the given type in the database.
          *
@@ -161,7 +185,8 @@ public class HibernateQueryUtil {
             Transaction transaction = null;
             try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 transaction = session.beginTransaction();
-                count = session.createNativeQuery("select Count(*) from " + entityClass.getSimpleName(), Long.class).getSingleResult();
+                count = session.createNativeQuery("select Count(*) from " + entityClass.getSimpleName(), Long.class)
+                        .getSingleResult();
                 transaction.commit();
             } catch (Exception e) {
                 handleCatch(nonNull(transaction), transaction, "countAll", e);
@@ -170,7 +195,8 @@ public class HibernateQueryUtil {
         }
     }
 
-    public static class Find {
+    public static class Finder {
+
         public static class Builder<ENTITY> {
 
             private final Class<ENTITY> entityClass;
@@ -193,6 +219,15 @@ public class HibernateQueryUtil {
                 this.orderBys = new ArrayList<>();
             }
 
+            /**
+             * Adds a condition to the query. <br> All conditions added with this method are concatenated in the resulting
+             * query with a logical AND.
+             *
+             * @param fieldNameOfClass The field to query.
+             * @param condition        The condition that shall match.
+             * @return The builder object.
+             * @throws NoSuchFieldException If a field does not exist with this name in the entity class.
+             */
             public Builder<ENTITY> addCondition(String fieldNameOfClass, Condition<?> condition) throws NoSuchFieldException {
                 if (condition == null) {
                     throw new NullPointerException("Condition must not be null.");
@@ -200,28 +235,55 @@ public class HibernateQueryUtil {
                 Field field = entityClass.getDeclaredField(fieldNameOfClass);
                 condition.setAttributeName(field.getName());
                 Column annotation = field.getAnnotation(Column.class);
-                String columnName = isNull(annotation) ? field.getName() : (annotation.name().isEmpty() ? field.getName() : annotation.name());
+                String columnName =
+                        isNull(annotation) ? field.getName() : (annotation.name().isEmpty() ? field.getName() : annotation.name());
                 condition.setDatabaseColumnName(columnName);
                 conditions.add(condition);
                 return this;
             }
 
+            /**
+             * Sets the offset of the matching datasets that shall be returned. <br> Example given: If the offset is "2", then
+             * the first 2 elements of the resulting datasets will not be returned by the query.
+             *
+             * @param beginWithIndex The index of the first element to return by the query.
+             * @return The builder object.
+             */
             public Builder<ENTITY> offset(long beginWithIndex) {
                 this.offset = beginWithIndex;
                 return this;
             }
 
+            /**
+             * Sets the maximum amount of the matching datasets that shall be returned by the query.
+             *
+             * @param amountOfDatasetsToLoad The amount of datasets.
+             * @return The builder object.
+             */
             public Builder<ENTITY> limit(long amountOfDatasetsToLoad) {
                 this.limit = amountOfDatasetsToLoad;
                 return this;
             }
 
+            /**
+             * Sets the ordering of the query. <br> The result is ordered by all order objects in the list. <br> The order of
+             * the orderings of the result is equivalent to their position in the list.
+             *
+             * @param orderings The orderings as a list.
+             * @return The builder object.
+             */
             public Builder<ENTITY> orderByInOrderOfList(List<Order> orderings) {
                 this.orderBys.addAll(orderings);
                 return this;
             }
 
-            public List<ENTITY> findAll() throws HibernateQueryUtilException {
+            /**
+             * Executes the created query and gets the result.
+             *
+             * @return A list of the matching entities.
+             * @throws Exception If an error occurs.
+             */
+            public List<ENTITY> findAll() throws Exception {
                 List<ENTITY> entities = null;
                 Transaction transaction = null;
                 Query<ENTITY> query;
@@ -293,16 +355,25 @@ public class HibernateQueryUtil {
             }
         }
 
+        /**
+         * Creates a builder object which is used for creating queries.
+         *
+         * @param entity   The entity type to find.
+         * @param <ENTITY> The entity class.
+         * @return The builder object.
+         */
         public static synchronized <ENTITY> Builder<ENTITY> findWithBuilder(Class<ENTITY> entity) {
             return new Builder<>(entity);
         }
 
     }
 
-    private static void handleCatch(boolean transactionIsNotNull, Transaction transaction, String methodName, Exception e) throws HibernateQueryUtilException {
+    private static void handleCatch(boolean transactionIsNotNull, Transaction transaction, String methodName, Exception e)
+            throws HibernateQueryUtilException {
         if (transactionIsNotNull) {
             transaction.rollback();
         }
-        throw new HibernateQueryUtilException("An exception occured while executing the method HibernateQueryUtil.*." + methodName + "().", e);
+        throw new HibernateQueryUtilException(
+                "An exception occured while executing the method HibernateQueryUtil.*." + methodName + "().", e);
     }
 }
