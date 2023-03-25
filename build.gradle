@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'com.wedasoft'
-version '1.2.0-SNAPSHOT'
+version '1.2.0'
 
 repositories {
     mavenLocal()
@@ -29,9 +29,11 @@ application {
 }
 
 ext {
-    junitVersion = '5.9.1'
+    junitVersion = '5.9.2'
+    assertjVersion = '3.24.2'
     lombokVersion = '1.18.26'
     hibernateVersion = '6.1.7.Final'
+    h2databaseVersion = '2.1.214'
 }
 
 javafx {
@@ -42,7 +44,7 @@ javafx {
 dependencies {
     implementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     implementation("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-    testImplementation("org.assertj:assertj-core:3.23.1")
+    testImplementation("org.assertj:assertj-core:${assertjVersion}")
 
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
@@ -50,7 +52,7 @@ dependencies {
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     implementation("org.hibernate:hibernate-core:${hibernateVersion}")
-    testImplementation("com.h2database:h2:2.1.214")
+    testImplementation("com.h2database:h2:${h2databaseVersion}")
 }
 
 test {

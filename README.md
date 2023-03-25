@@ -2,25 +2,46 @@
 
 This library contains functions that simplify the development of JavaFX applications.<br>
 
-- Run unit tests that require JavaFX components.<br>
-  No more annoying errors like "Toolkit not found", "Toolkit already initialized","Location is not set" or "Not on FX
-  application thread"  during testing.
-- Create simple and complex .fxml file based dialogs.<br>
+- <b>Common Dialogs</b><br>
+  Including information-, warning-, error-, confirmation- and input dialogs.
+
+
+- <b>Complex Dialogs</b><br>
+  Create complex .fxml file based dialogs.<br>
   Pass and retrieve arguments without any effort.
-- Execute generic standard CRUD operations with Hibernate.<br>
-  No need for writing boilerplate code anymore.
 
-What you need to do:
 
-1. Compile the JAR<br>
+- <b>Standard CRUD operations</b><br>
+  Create, read, update and delete every entity/entities.<br>
+  No need for writing boilerplate code anymore.<br>
+  Make use of a simple but powerful finding API using the builder pattern.<br>
+  The complete CRUD API is built on top of the Hibernate API - feel free to use it with every database, that is
+  supported by
+  Hibernate.
+
+
+- <b>Testing suite</b><br>
+  Run unit tests that require JavaFX components with ease, just by extending your test class with one single class.<br>
+  No more annoying errors like "Toolkit not found", "Toolkit already initialized","Location is not set" or "Not on FX
+  application thread" during testing.
+
+
+- <b>Other helpful classes</b><br>
+  CommonUtils, SystemUtils.
+
+# How to embed into your project
+
+1. <b>Compile the JAR</b><br>
    (only needed if there is no Github package!)
 
-2. Add the dependency to your project<br>
+
+2. <b>Add the dependency to your project</b><br>
    (works only with github package versions!)
 
-3. Profit.
 
-# 1. Compile the JAR
+3. <b>Profit.</b>
+
+## 1. Compile the JAR
 
 ### Fully automated
 
@@ -68,7 +89,7 @@ What you need to do:
     The JAR should be located in your local maven repo - regularly here:
     "~/.m2/repository/com/wedasoft/SimpleJavaFxApplicationBase/..."
 
-# 2. Add the dependency to your project
+## 2. Add the dependency to your project
 
 ### Maven
 
@@ -92,7 +113,248 @@ What you need to do:
 
     Please search for "how to add a JAR to my project in IDE X". 
 
-# How to write tests
+# Common Dialogs
+
+##### Information dialogs
+
+    CommonJfxDialogs.createInformationDialog(String message)
+    
+    CommonJfxDialogs.createInformationDialog(String message, String messageHeader)
+
+##### Warning dialogs
+
+    CommonJfxDialogs.createWarningDialog(String message)
+    
+    CommonJfxDialogs.createWarningDialog(String message, String messageHeader)
+
+##### Error dialogs
+
+    CommonJfxDialogs.createErrorDialog(String message)
+     
+    CommonJfxDialogs.createErrorDialog(String message, Exception exceptionForStacktrace)
+
+##### Input dialogs
+
+    CommonJfxDialogs.displayInputDialogAndGetResult(String dialogText)
+
+##### Confirm dialogs
+
+    CommonJfxDialogs.displayConfirmDialogAndGetResult(String headerText, String contentText)
+    
+    CommonJfxDialogs.displayCloseStageDialog(Stage stageToClose)
+    
+    CommonJfxDialogs.displayExitProgramDialog()
+
+# Complex Dialogs
+
+Your dream is to create a fxml based dialog and pass arguments into it, and then get the arguments in the displayed
+dialog?<br>
+You are at the right place.
+
+### Step 1: Extend your dialog controller with FxmlDialogControllerBase
+
+      public class YourControllerClass extends FxmlDialogControllerBase {
+           
+             @Override
+             public void onFxmlDialogReady() {
+                  // This method is executed, after the fxml dialog creation is complete. 
+                  // Load arguments here etc.
+             }
+         
+             @Override
+             public void initialize(URL location, ResourceBundle resources) {
+                  // This is the JavaFx initialize().
+             }
+      
+      }
+
+### Step 2: Bind the controller class to your fxml file
+
+This is the same like in standard JavaFX.<br>
+Either you do this in the SceneBuilder or you do this by code in your .fxml file:
+
+      <?xml version="1.0" encoding="UTF-8"?>
+
+      <VBox xmlns:fx="http://javafx.com/fxml"
+         fx:controller="com.wedasoft.abc.YourControllerClass">
+         ...
+      </VBox>
+
+### Step 3: Create and show the fxml dialog and pass arguments
+
+Use the builder class to create your custom fxml dialog. <br>
+You can pass arguments with passArgumentsToController().
+
+    public void openDialog() throws Exception {
+        FxmlDialog.Builder<YourControllerClass> dialogBuilder = new FxmlDialog.Builder<YourControllerClass>(getClass().getResource("/path/to/your/fxml-file.fxml"), null)
+                .setStageTitle("My stage title")
+                .setStageResizable(true)
+                .setModal(false)
+                .setCallbackOnDialogClose(() -> System.out.println("CALLBACK ON DIALOG CLOSE!"))
+                .setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE))
+                .passArgumentsToController(new HashMap<>() {{
+                    put("firstname", "David");
+                    put("age", "31");
+                    put("isMale", "true");
+                }});
+        FxmlDialog<YourControllerClass> dialog = dialogBuilder.get();
+        dialog.showAndWait();
+    }
+
+### Step 4: Load and compute passed arguments
+
+To load the passed arguments in your controller, simply invoke getPassedArguments().<br>
+After that, just get the wanted argument by its String key out of the map.
+
+      public class YourControllerClass extends FxmlDialogControllerBase {
+           
+          @Override
+          public void onFxmlDialogReady() {
+              if (getPassedArguments() != null) {
+                  String firstname = getPassedArguments().getOrDefault("firstname", "default name");
+                  int age = Integer.parseInt(getPassedArguments().getOrDefault("age", "-1"));
+                  boolean isMale = Boolean.parseBoolean(getPassedArguments().getOrDefault("isMale", "false"));
+                  System.out.println("firstname=" + firstname);
+                  System.out.println("age=" + age);
+                  System.out.println("isMale=" + isMale);
+              }
+          }
+      
+      }
+
+# Standard CRUD operations
+
+Standard CRUD operations are implemented generically, so you do not need to write boilerplate code for this actions.<br>
+
+The "entry class" is "HibernateQueryUtil", which has some subclasses for grouping methods.<br>
+This subclasses are example given "Inserter", "Updater", "Deleter" and "Finder".
+
+A session/transaction is created for every action.
+
+This API builts on top of the Hibernate API.
+You need to set up the file "hibernate.cfg.xml" in your resources directory.
+In this file, you need to do only the standard hibernate things.
+
+Example of the file using the H2 database and mapping the entity "Student":
+
+    <!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+    <hibernate-configuration>
+        <session-factory>
+            <!-- JDBC Database connection settings -->
+            <property name="connection.driver_class">org.h2.Driver</property>
+            <property name="connection.url">jdbc:h2:mem:test</property>
+            <property name="connection.username">sa</property>
+            <property name="connection.password"></property>
+            <!-- JDBC connection pool settings ... using built-in test pool -->
+            <property name="connection.pool_size">1</property>
+            <!-- Select our SQL dialect -->
+            <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+            <!-- Echo the SQL to stdout -->
+            <property name="show_sql">true</property>
+            <!-- Set the current session context -->
+            <property name="current_session_context_class">thread</property>
+            <!-- Drop and re-create the database schema on startup -->
+            <property name="hbm2ddl.auto">create-drop</property>
+            <!-- dbcp connection pool configuration -->
+            <property name="hibernate.dbcp.initialSize">5</property>
+            <property name="hibernate.dbcp.maxTotal">20</property>
+            <property name="hibernate.dbcp.maxIdle">10</property>
+            <property name="hibernate.dbcp.minIdle">5</property>
+            <property name="hibernate.dbcp.maxWaitMillis">-1</property>
+            <mapping class="com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.hibernateUtil.Student"/>
+        </session-factory>
+    </hibernate-configuration>
+
+### Insert data
+
+    HibernateQueryUtil.Inserter.insertOne(T entity)
+    HibernateQueryUtil.Inserter.insertMany(List<T> entities)
+
+### Update data
+
+    HibernateQueryUtil.Updater.updateOne(T entity)
+    HibernateQueryUtil.Updater.updateMany(List<T> entities)
+
+### Delete data
+
+    HibernateQueryUtil.Deleter.deleteOne(T entity) 
+    HibernateQueryUtil.Deleter.deleteMany(List<T> entities) 
+    HibernateQueryUtil.Deleter.deleteAll(Class<T> entityClass)
+
+### Find data
+
+###### With static condition methods
+
+    HibernateQueryUtil.Finder.findWithBuilder(Student.class)
+        .addCondition(Student.Fields.firstName, isEqualTo("David"))
+        .addCondition(Student.Fields.id, isEqualTo(27))
+        .offset(10)
+        .limit(10)
+        .orderByInOrderOfList(List.of(
+            new Order(Student.Fields.id, true),
+            new Order(Student.Fields.lastName, true),
+            new Order(Student.Fields.firstName, false)))
+        .findAll();
+
+###### With new keyword
+
+    HibernateQueryUtil.Finder.findWithBuilder(Student.class)
+        .addCondition(Student.Fields.firstName, new EqualsCondition<>("David"))
+        .addCondition(Student.Fields.id, new EqualsCondition<>(27))
+        .findAll();
+
+###### Other condition types and examples
+
+    // Matches everything, that is exactly equal to "David":
+        .addCondition(Student.Fields.attributeName, isEqualTo("David"))
+
+    // Matches everything, that is lower than 4:
+        .addCondition(Student.Fields.attributeName, isLowerThan(4))
+
+    // Matches everything, that is lower than or equal to 4:
+        .addCondition(Student.Fields.attributeName, isLowerThanOrEqualTo(4))
+
+    // Matches everything, that is greater than 4:
+        .addCondition(Student.Fields.attributeName, isGreaterThan(4))
+
+    // Matches everything, that is greater than or equal to 4:
+        .addCondition(Student.Fields.attributeName, isGreaterThanOrEqualTo(4))
+
+    // Matches everything, that is not equal to 4:
+        .addCondition(Student.Fields.attributeName, isNotEqualTo(4))
+
+    // Matches everything, that starts exactly with "Dav":
+        .addCondition(Student.Fields.attributeName, isLikeCaseSensitive("Dav%"))
+
+    // Matches everything, that ends exactly with "vid":
+        .addCondition(Student.Fields.attributeName, isLikeCaseSensitive("%vid"))
+
+    // Matches everything, that contains exactly "avi":
+        .addCondition(Student.Fields.attributeName, isLikeCaseSensitive("%avi%"))
+
+    // Matches everything, that does not contain exactly "avi":
+        .addCondition(Student.Fields.attributeName, isNotLikeCaseSensitive("%avi%"))
+
+    // Matches everything, that does not start with exactly "Dav":
+        .addCondition(Student.Fields.attributeName, isNotLikeCaseSensitive("Dav%"))
+
+    // Matches everything, that contains "avi" in every lower- and uppercase combination ("avi", "Avi", "AVi", "aVI", ...):
+        .addCondition(Student.Fields.attributeName, isLikeInCaseSensitive("%avi%"))
+
+    // Matches everything, that does not start with "dav" in every lower- and uppercase combination ("dav", "Dav", "DAV", "dAv", ...):
+        .addCondition(Student.Fields.attributeName, isNotLikeInCaseSensitive("dav%"))
+
+    // Matches everything, that does not contain "avi" in every lower- and uppercase combination ("avi", "Avi", "AVi", "aVI", ...):
+        .addCondition(Student.Fields.attributeName, isNotLikeInCaseSensitive("%avi%"))
+
+### Other things with data
+
+    HibernateQueryUtil.Count.countAll(Class<T> entityClass)
+
+# Testing suite
 
 ### Step 1: Prepare the test class(es)
 
@@ -108,7 +370,7 @@ Extend your wished test class(es) with the class "SimpleJavaFxTestBase". That's 
    The main thread will wait until the passed code is executed.<br>
    You can invoke runOnJavaFxThreadAndJoin() as often as you like.
 
-IMPORTANT: <br>
+<b>IMPORTANT:</b> <br>
 Do not use assertions in runOnJavaFxThreadAndJoin().<br>
 JUnit will not recognize failed assertions in the JavaFX thread.
 
@@ -192,110 +454,3 @@ JUnit will not recognize failed assertions in the JavaFX thread.
 
     }
 
-# How to create a fxml based dialog and pass arguments
-
-### Step 1: Extend your dialog controller with FxmlDialogControllerBase
-
-      public class YourControllerClass extends FxmlDialogControllerBase {
-           
-             @Override
-             public void onFxmlDialogReady() {
-                  // This method is executed, after the fxml dialog creation is complete. 
-                  // Load arguments here etc.
-             }
-         
-             @Override
-             public void initialize(URL location, ResourceBundle resources) {
-                  // This is the JavaFx initialize().
-             }
-      
-      }
-
-### Step 2: Bind the controller class to your fxml file
-
-This is the same like in standard JavaFX.<br>
-Either you do this in the SceneBuilder or you do this by code:
-
-      <?xml version="1.0" encoding="UTF-8"?>
-
-      <VBox xmlns:fx="http://javafx.com/fxml"
-         fx:controller="com.wedasoft.abc.YourControllerClass">
-         ...
-      </VBox>
-
-### Step 3: Create and show the fxml dialog and pass arguments
-
-Use the builder class to create your custom fxml dialog. <br>
-You can pass argument with passArgumentsToController().
-
-    public void openDialog() throws Exception {
-        FxmlDialog.Builder<YourControllerClass> dialogBuilder = new FxmlDialog.Builder<YourControllerClass>(getClass().getResource("/path/to/your/fxml-file.fxml"), null)
-                .setStageTitle("My stage title")
-                .setStageResizable(true)
-                .setModal(false)
-                .setCallbackOnDialogClose(() -> System.out.println("CALLBACK ON DIALOG CLOSE!"))
-                .setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE))
-                .passArgumentsToController(new HashMap<>() {{
-                    put("firstname", "David");
-                    put("age", "31");
-                    put("isMale", "true");
-                }});
-        FxmlDialog<TestController> dialog = dialogBuilder.get();
-        dialog.showAndWait();
-    }
-
-### Step 4: Load and compute passed arguments
-
-To load the passed arguments simply invoke getPassedArguments().<br>
-After that, just get the wanted argument by its String key out of the map.
-
-      public class YourControllerClass extends FxmlDialogControllerBase {
-           
-          @Override
-          public void onFxmlDialogReady() {
-              if (getPassedArguments() != null) {
-                  String firstname = getPassedArguments().getOrDefault("firstname", "default name");
-                  int age = Integer.parseInt(getPassedArguments().getOrDefault("age", "-1"));
-                  boolean isMale = Boolean.parseBoolean(getPassedArguments().getOrDefault("isMale", "false"));
-                  System.out.println("firstname=" + firstname);
-                  System.out.println("age=" + age);
-                  System.out.println("isMale=" + isMale);
-              }
-          }
-      
-      }
-
-# How to execute Hibernate standard queries
-
-### Insert data
-
-    HibernateQueryUtil.Inserter.insertOne(T entity)
-    HibernateQueryUtil.Inserter.insertMany(List<T> entities)
-
-### Update data
-
-    HibernateQueryUtil.Updater.updateOne(T entity)
-    HibernateQueryUtil.Updater.updateMany(List<T> entities)
-
-### Delete data
-
-    HibernateQueryUtil.Deleter.deleteOne(T entity) 
-    HibernateQueryUtil.Deleter.deleteMany(List<T> entities) 
-    HibernateQueryUtil.Deleter.deleteAll(Class<T> entityClass)
-
-### Find data
-
-    HibernateQueryUtil.Finder.findWithBuilder(Student.class)
-        .addCondition(Student.Fields.firstName, new EqualsCondition<>("David"))
-        .addCondition(Student.Fields.id, new EqualsCondition<>(27))
-        .offset(10)
-        .limit(10)
-        .orderByInOrderOfList(List.of(
-            new Order(Student.Fields.id, true),
-            new Order(Student.Fields.lastName, true),
-            new Order(Student.Fields.firstName, false)))
-        .findAll();
-
-### Other things with data
-
-    HibernateQueryUtil.Count.countAll(Class<T> entityClass)

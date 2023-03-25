@@ -165,8 +165,8 @@ public class CommonJfxDialogs {
         return dialog;
     }
 
-    public static String displayInputDialogAndGetResult(String text) {
-        TextInputDialog dialog = createInputDialog("Input", text, null);
+    public static String displayInputDialogAndGetResult(String dialogText) {
+        TextInputDialog dialog = createInputDialog("Input", dialogText, null);
         dialog.showAndWait();
         String result = dialog.getResult();
         return result != null ? result : "";
