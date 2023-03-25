@@ -1,8 +1,8 @@
 package com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil;
 
-import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.conditions.Condition;
-import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.conditions.EqualsCondition;
+import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.conditions.*;
 import jakarta.persistence.Column;
+import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -139,8 +139,7 @@ public class HibernateQueryUtil {
          * @param <T>         Type of the entities.
          * @return True, if there were no errors while executing.
          */
-        public static synchronized <T> boolean deleteAll(Class<T> entityClass, boolean areYouSure)
-                throws HibernateQueryUtilException {
+        public static synchronized <T> boolean deleteAll(Class<T> entityClass, boolean areYouSure) throws HibernateQueryUtilException {
             if (!areYouSure) {
                 throw new HibernateQueryUtilException("The security flag 'areYouSure' is not set to 'true'.", null);
             }
@@ -168,31 +167,6 @@ public class HibernateQueryUtil {
             return executedSuccessfully;
         }
 
-    }
-
-    @Deprecated
-    public static class Aggregate {
-
-        /**
-         * Counts the amount of datasets of the given type in the database.
-         *
-         * @param entityClass Entity to count.
-         * @param <T>         Type of the entity.
-         * @return The number of datasets.
-         */
-        public static synchronized <T> Long countAll(Class<T> entityClass) throws HibernateQueryUtilException {
-            Long count = null;
-            Transaction transaction = null;
-            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-                transaction = session.beginTransaction();
-                count = session.createNativeQuery("select Count(*) from " + entityClass.getSimpleName(), Long.class)
-                        .getSingleResult();
-                transaction.commit();
-            } catch (Exception e) {
-                handleCatch(nonNull(transaction), transaction, "countAll", e);
-            }
-            return count;
-        }
     }
 
     public static class Finder {
@@ -235,8 +209,7 @@ public class HibernateQueryUtil {
                 Field field = entityClass.getDeclaredField(fieldNameOfClass);
                 condition.setAttributeName(field.getName());
                 Column annotation = field.getAnnotation(Column.class);
-                String columnName =
-                        isNull(annotation) ? field.getName() : (annotation.name().isEmpty() ? field.getName() : annotation.name());
+                String columnName = isNull(annotation) ? field.getName() : (annotation.name().isEmpty() ? field.getName() : annotation.name());
                 condition.setDatabaseColumnName(columnName);
                 conditions.add(condition);
                 return this;
@@ -297,11 +270,43 @@ public class HibernateQueryUtil {
 
                     // step #2: build sql query
                     criteriaQuery = criteriaQuery.select(root);
+                    List<Predicate> andConcatenatedPredicates = new ArrayList<>();
                     for (Condition<?> condition : conditions) {
                         if (condition instanceof EqualsCondition<?>) {
-                            criteriaQuery.where(cb.equal(root.get(condition.getAttributeName()), condition.getValueToCheck()));
+                            andConcatenatedPredicates.add(cb.equal(root.get(condition.getAttributeName()), condition.getValueToCheck()));
+                        }
+                        if (condition instanceof NotEqualsCondition<?>) {
+                            andConcatenatedPredicates.add(cb.notEqual(root.get(condition.getAttributeName()), condition.getValueToCheck()));
+                        }
+                        if (condition instanceof LowerThanCondition<?>) {
+                            andConcatenatedPredicates.add(cb.lt(root.get(condition.getAttributeName()), (Number) condition.getValueToCheck()));
+                        }
+                        if (condition instanceof LowerEqualsThanCondition<?>) {
+                            andConcatenatedPredicates.add(cb.le(root.get(condition.getAttributeName()), (Number) condition.getValueToCheck()));
+                        }
+                        if (condition instanceof GreaterThanCondition<?>) {
+                            andConcatenatedPredicates.add(cb.gt(root.get(condition.getAttributeName()), (Number) condition.getValueToCheck()));
+                        }
+                        if (condition instanceof GreaterEqualsThanCondition<?>) {
+                            andConcatenatedPredicates.add(cb.ge(root.get(condition.getAttributeName()), (Number) condition.getValueToCheck()));
+                        }
+                        if (condition instanceof LikeCondition<?>) {
+                            andConcatenatedPredicates.add(cb.like(root.get(condition.getAttributeName()), (String) condition.getValueToCheck()));
+                        }
+                        if (condition instanceof LikeInCaseSensitiveCondition<?>) {
+                            andConcatenatedPredicates.add(cb.ilike(root.get(condition.getAttributeName()), (String) condition.getValueToCheck()));
+                        }
+                        if (condition instanceof NotLikeCondition<?>) {
+                            andConcatenatedPredicates.add(cb.notLike(root.get(condition.getAttributeName()), (String) condition.getValueToCheck()));
+                        }
+                        if (condition instanceof NotLikeInCaseSensitiveCondition<?>) {
+                            andConcatenatedPredicates.add(cb.notIlike(root.get(condition.getAttributeName()), (String) condition.getValueToCheck()));
                         }
                     }
+                    if (!andConcatenatedPredicates.isEmpty()) {
+                        criteriaQuery.where(cb.and(andConcatenatedPredicates.toArray(new Predicate[0])));
+                    }
+
                     if (offset > -1) {
                         criteriaQuery.offset(offset);
                     }
@@ -368,12 +373,34 @@ public class HibernateQueryUtil {
 
     }
 
-    private static void handleCatch(boolean transactionIsNotNull, Transaction transaction, String methodName, Exception e)
-            throws HibernateQueryUtilException {
+    @Deprecated
+    public static class Aggregate {
+
+        /**
+         * Counts the amount of datasets of the given type in the database.
+         *
+         * @param entityClass Entity to count.
+         * @param <T>         Type of the entity.
+         * @return The number of datasets.
+         */
+        public static synchronized <T> Long countAll(Class<T> entityClass) throws HibernateQueryUtilException {
+            Long count = null;
+            Transaction transaction = null;
+            try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+                transaction = session.beginTransaction();
+                count = session.createNativeQuery("select Count(*) from " + entityClass.getSimpleName(), Long.class).getSingleResult();
+                transaction.commit();
+            } catch (Exception e) {
+                handleCatch(nonNull(transaction), transaction, "countAll", e);
+            }
+            return count;
+        }
+    }
+
+    private static void handleCatch(boolean transactionIsNotNull, Transaction transaction, String methodName, Exception e) throws HibernateQueryUtilException {
         if (transactionIsNotNull) {
             transaction.rollback();
         }
-        throw new HibernateQueryUtilException(
-                "An exception occured while executing the method HibernateQueryUtil.*." + methodName + "().", e);
+        throw new HibernateQueryUtilException("An exception occured while executing the method HibernateQueryUtil.*." + methodName + "().", e);
     }
 }

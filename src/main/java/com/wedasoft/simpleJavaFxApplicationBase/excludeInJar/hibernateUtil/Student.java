@@ -23,13 +23,21 @@ public class Student {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "age")
+    private int age;
+
     public Student() {
     }
 
-    public Student(String firstName, String lastName, String email) {
+    public Student(String firstName, String lastName, String email, int age) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.age = age;
+    }
+
+    public Student(String firstName, String lastName, String email) {
+        this(firstName, lastName, email, -1);
     }
 
     public int getId() {
@@ -62,6 +70,14 @@ public class Student {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.HibernateQueryUtil
 import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.HibernateQueryUtil.Finder;
 import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.HibernateQueryUtil.Inserter;
 import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.HibernateQueryUtil.Updater;
-import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.conditions.EqualsCondition;
+import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.conditions.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -95,16 +95,19 @@ class HibernateQueryUtilTest {
 
     private void findWithBuilder_findByAndConditions() throws Exception {
         Deleter.deleteAll(Student.class, true);
-        Inserter.insertOne(new Student("Anna", "Angus", "anton.angus@abc.com"));
-        Inserter.insertOne(new Student("Berta", "Barbossa", "anton.angus@abc.com"));
-        Inserter.insertOne(new Student("Celina", "Calensika", "anton.angus@abc.com"));
-        Inserter.insertOne(new Student("Dora", "Diablo", "dora.diablo@abc.com"));
-        Inserter.insertOne(new Student("David", "Weber", "david.weber.original@abc.com"));
-        Inserter.insertOne(new Student("David", "Weber", "david.weber.double@abc.com"));
-        Inserter.insertOne(new Student("David", "Diablo", "david.diablo@abc.com"));
-        Inserter.insertOne(new Student("Eva", "Entity", "eva.entity@abc.com"));
+        Inserter.insertOne(new Student("Anna", "Angus", "anton.angus@abc.com", 1));
+        Inserter.insertOne(new Student("Berta", "Barbossa", "anton.angus@abc.com", 2));
+        Inserter.insertOne(new Student("Celina", "Calensika", "anton.angus@abc.com", 3));
+        Inserter.insertOne(new Student("Dora", "Diablo", "dora.diablo@abc.com", 4));
+        Inserter.insertOne(new Student("David", "Weber", "david.weber.original@abc.com", 4));
+        Inserter.insertOne(new Student("David", "Weber", "david.weber.double@abc.com", 5));
+        Inserter.insertOne(new Student("David", "Diablo", "david.diablo@abc.com", 1));
+        Inserter.insertOne(new Student("David", "Dumbo", "david.dumbo@abc.com", 3));
+        Inserter.insertOne(new Student("Eva", "Entity", "eva.entity@abc.com", 2));
 
         List<Student> students;
+
+        // EqualsCondition
         students = Finder.findWithBuilder(Student.class)
                 .addCondition(Student.Fields.firstName, new EqualsCondition<>("David"))
                 .addCondition(Student.Fields.lastName, new EqualsCondition<>("Weber"))
@@ -117,8 +120,195 @@ class HibernateQueryUtilTest {
 
         students = Finder.findWithBuilder(Student.class)
                 .addCondition(Student.Fields.firstName, new EqualsCondition<>("David"))
-                .addCondition(Student.Fields.id, new EqualsCondition<>(5))
+                .addCondition(Student.Fields.age, new EqualsCondition<>(4))
                 .addCondition(Student.Fields.email, new EqualsCondition<>("david.weber.original@abc.com"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(1);
+
+        // LowerThanCondition
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new LowerThanCondition<>(4))
+                .findAll();
+        assertThat(students.size()).isEqualTo(6);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new LowerThanCondition<>(4))
+                .addCondition(Student.Fields.firstName, new EqualsCondition<>("Celina"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(1);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new LowerThanCondition<>(3))
+                .addCondition(Student.Fields.firstName, new EqualsCondition<>("David"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(1);
+
+        // LowerEqualsThanCondition
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new LowerEqualsThanCondition<>(4))
+                .findAll();
+        assertThat(students.size()).isEqualTo(8);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new LowerEqualsThanCondition<>(4))
+                .addCondition(Student.Fields.firstName, new EqualsCondition<>("Celina"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(1);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new LowerEqualsThanCondition<>(3))
+                .addCondition(Student.Fields.firstName, new EqualsCondition<>("David"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(2);
+
+        // GreaterThanCondition
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new GreaterThanCondition<>(5))
+                .findAll();
+        assertThat(students.size()).isEqualTo(0);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new GreaterThanCondition<>(3))
+                .findAll();
+        assertThat(students.size()).isEqualTo(3);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new GreaterThanCondition<>(3))
+                .addCondition(Student.Fields.firstName, new EqualsCondition<>("David"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(2);
+
+        // GreaterEqualsThanCondition
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new GreaterEqualsThanCondition<>(5))
+                .findAll();
+        assertThat(students.size()).isEqualTo(1);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new GreaterEqualsThanCondition<>(3))
+                .findAll();
+        assertThat(students.size()).isEqualTo(5);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new GreaterEqualsThanCondition<>(3))
+                .addCondition(Student.Fields.firstName, new EqualsCondition<>("David"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(3);
+
+        // NotEqualsCondition
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new NotEqualsCondition<>(4))
+                .findAll();
+        assertThat(students.size()).isEqualTo(7);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new NotEqualsCondition<>(4))
+                .addCondition(Student.Fields.firstName, new NotEqualsCondition<>("David"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(4);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.age, new LowerEqualsThanCondition<>(4))
+                .addCondition(Student.Fields.firstName, new NotEqualsCondition<>("David"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(5);
+
+        // LikeCondition
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new LikeCondition<>("%avi"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(0);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new LikeCondition<>("%avi%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(4);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new LikeCondition<>("%avi%"))
+                .addCondition(Student.Fields.lastName, new LikeCondition<>("web%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(0);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new LikeCondition<>("%avi%"))
+                .addCondition(Student.Fields.lastName, new LikeCondition<>("Web%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(2);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new LikeCondition<>("%avi%"))
+                .addCondition(Student.Fields.lastName, new LikeCondition<>("Web%"))
+                .addCondition(Student.Fields.age, new LowerEqualsThanCondition<>(4))
+                .findAll();
+        assertThat(students.size()).isEqualTo(1);
+
+        // LikeInCaseSensitiveCondition
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new LikeInCaseSensitiveCondition<>("%AVi"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(0);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new LikeInCaseSensitiveCondition<>("%AvI%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(4);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new LikeInCaseSensitiveCondition<>("%aVI%"))
+                .addCondition(Student.Fields.lastName, new LikeInCaseSensitiveCondition<>("web%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(2);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new LikeInCaseSensitiveCondition<>("%avi%"))
+                .addCondition(Student.Fields.lastName, new LikeInCaseSensitiveCondition<>("Web%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(2);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new LikeInCaseSensitiveCondition<>("%avi%"))
+                .addCondition(Student.Fields.lastName, new LikeInCaseSensitiveCondition<>("Web%"))
+                .addCondition(Student.Fields.age, new LowerEqualsThanCondition<>(4))
+                .findAll();
+        assertThat(students.size()).isEqualTo(1);
+
+        // NotLikeCondition
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new NotLikeCondition<>("%avi"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(9);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new NotLikeCondition<>("%avi%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(5);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new NotLikeCondition<>("%aVI%"))
+                .addCondition(Student.Fields.lastName, new NotLikeCondition<>("web%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(9);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new NotLikeCondition<>("%avi%"))
+                .addCondition(Student.Fields.lastName, new NotLikeCondition<>("Web%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(5);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new NotLikeCondition<>("%avi%"))
+                .addCondition(Student.Fields.lastName, new NotLikeCondition<>("Web%"))
+                .addCondition(Student.Fields.age, new LowerEqualsThanCondition<>(3))
+                .findAll();
+        assertThat(students.size()).isEqualTo(4);
+
+        // NotLikeInCaseSensitiveCondition
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new NotLikeInCaseSensitiveCondition<>("%avi"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(9);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new NotLikeInCaseSensitiveCondition<>("%avi%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(5);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new NotLikeInCaseSensitiveCondition<>("%aVI%"))
+                .addCondition(Student.Fields.lastName, new NotLikeInCaseSensitiveCondition<>("web%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(5);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new NotLikeInCaseSensitiveCondition<>("%avi%"))
+                .addCondition(Student.Fields.lastName, new NotLikeInCaseSensitiveCondition<>("Web%"))
+                .findAll();
+        assertThat(students.size()).isEqualTo(5);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.firstName, new NotLikeInCaseSensitiveCondition<>("%xxxxxxxxxxxxx%"))
+                .addCondition(Student.Fields.lastName, new NotLikeInCaseSensitiveCondition<>("yyyyyyyyyyyyyy%"))
+                .addCondition(Student.Fields.age, new LowerEqualsThanCondition<>(3))
+                .findAll();
+        assertThat(students.size()).isEqualTo(6);
+        students = Finder.findWithBuilder(Student.class)
+                .addCondition(Student.Fields.lastName, new NotLikeInCaseSensitiveCondition<>("%eBEr%"))
+                .addCondition(Student.Fields.age, new GreaterEqualsThanCondition<>(4))
                 .findAll();
         assertThat(students.size()).isEqualTo(1);
     }

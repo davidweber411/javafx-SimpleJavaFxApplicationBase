@@ -269,23 +269,23 @@ After that, just get the wanted argument by its String key out of the map.
 
 ### Insert data
 
-    HibernateQueryUtil.Insert.insertOne(T entity)
-    HibernateQueryUtil.Insert.insertMany(List<T> entities)
+    HibernateQueryUtil.Inserter.insertOne(T entity)
+    HibernateQueryUtil.Inserter.insertMany(List<T> entities)
 
 ### Update data
 
-    HibernateQueryUtil.Update.updateOne(T entity)
-    HibernateQueryUtil.Update.updateMany(List<T> entities)
+    HibernateQueryUtil.Updater.updateOne(T entity)
+    HibernateQueryUtil.Updater.updateMany(List<T> entities)
 
 ### Delete data
 
-    HibernateQueryUtil.Delete.deleteOne(T entity) 
-    HibernateQueryUtil.Delete.deleteMany(List<T> entities) 
-    HibernateQueryUtil.Delete.deleteAll(Class<T> entityClass)
+    HibernateQueryUtil.Deleter.deleteOne(T entity) 
+    HibernateQueryUtil.Deleter.deleteMany(List<T> entities) 
+    HibernateQueryUtil.Deleter.deleteAll(Class<T> entityClass)
 
 ### Find data
 
-    HibernateQueryUtil.Find.findWithBuilder(Student.class)
+    HibernateQueryUtil.Finder.findWithBuilder(Student.class)
         .addCondition(Student.Fields.firstName, new EqualsCondition<>("David"))
         .addCondition(Student.Fields.id, new EqualsCondition<>(27))
         .offset(10)
