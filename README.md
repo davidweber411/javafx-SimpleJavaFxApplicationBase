@@ -29,89 +29,30 @@ This library contains functions that simplify the development of JavaFX applicat
 - <b>Other helpful classes</b><br>
   CommonUtils, SystemUtils.
 
-# How to embed into your project
+# Requirements
 
-1. <b>Compile the JAR</b><br>
-   (only needed if there is no Github package!)
+This Java library was built by using JDK 17.<br>
+Please make sure that your project is using at least JDK 17 too.
 
+# Dependencies to add
 
-2. <b>Add the dependency to your project</b><br>
-   (works only with github package versions!)
+##### Maven
 
-
-3. <b>Profit.</b>
-
-## 1. Compile the JAR
-
-### Fully automated
-
-###### Fully automated on Windows:
-
-    1. Do NOT clone the repository, etc.
-
-    2. Execute the batch script "download_and_compile_script.bat" from the project root from github. 
-    
-    3. The script will do everything for you. 
-       Downloading the git repository, executing the gradle task and publishing to your local maven repository. 
-
-###### Fully automated on Linux:
-
-    Linux is cool though, but the shell script is not written yet - shame on me! :( 
-    Please compile the JAR manually. 
-
-### Manually
-
-###### Manually on Windows:
-
-    #1 Download the git repository via:
-    git clone https://github.com/davidweber411/SimpleJavaFxApplicationBase
-
-    #2 Navigate to the project root via:
-    cd SimpleJavaFxApplicationBase
-
-    #3 Run the gradle task publishToMavenLocal via:
-    .\gradlew publishToMavenLocal
-
-    The JAR should be located in your local maven repo - regularly here:
-    "C:\Users\%username%\.m2\repository\com\wedasoft\SimpleJavaFxApplicationBase\..."
-
-###### Manually on Linux:
-
-    #1 Download the git repository via:
-    git clone https://github.com/davidweber411/SimpleJavaFxApplicationBase
-
-    #2 Navigate to the project root and run the gradle task publishToMavenLocal via:
-    cd SimpleJavaFxApplicationBase
-
-    #3 Run the gradle task publishToMavenLocal via:
-    ./gradlew publishToMavenLocal
-
-    The JAR should be located in your local maven repo - regularly here:
-    "~/.m2/repository/com/wedasoft/SimpleJavaFxApplicationBase/..."
-
-## 2. Add the dependency to your project
-
-### Maven
-
-    <!-- Maven looks in the local repository by default. -->
+    <!-- Maven looks in the central repository by default. -->
     <dependency>
       <groupId>com.wedasoft</groupId>
       <artifactId>simplejavafxapplicationbase</artifactId>
-      <version>version.num.ber</version> <!-- e.g.: 1.0.0 -->
+      <version>1.2.1</version>
     </dependency>
 
-### Gradle
+##### Gradle
 
     repositories {
-      mavenLocal()
+      mavenCentral()
     }
     dependencies {
-      implementation("com.wedasoft:simplejavafxapplicationbase:version.num.ber") // e.g.: 1.0.0
+      implementation("com.wedasoft:simplejavafxapplicationbase:1.2.1")
     }
-
-### As JAR
-
-    Please search for "how to add a JAR to my project in IDE X". 
 
 # Common Dialogs
 
@@ -454,3 +395,80 @@ JUnit will not recognize failed assertions in the JavaFX thread.
 
     }
 
+# Other
+
+### How to embed into your project by compiling the dependency manually
+
+1. Compile the JAR to your Maven Local repository
+
+2. Add the dependency to your project
+
+3. Profit.
+
+##### 1. Compile the JAR to your Maven Local repository
+
+###### Fully automated on Windows:
+
+    1. Do NOT clone the repository, etc.
+
+    2. Execute the batch script "download_and_compile_script.bat" from the project root from github. 
+    
+    3. The script will do everything for you. 
+       Downloading the git repository, executing the gradle task and publishing to your local maven repository. 
+
+###### Fully automated on Linux:
+
+    Linux is cool though, but the shell script is not written yet - shame on me! :( 
+    Please compile the JAR manually.
+
+###### Manually on Windows:
+
+    #1 Download the git repository via:
+    git clone https://github.com/davidweber411/SimpleJavaFxApplicationBase
+
+    #2 Navigate to the project root via:
+    cd SimpleJavaFxApplicationBase
+
+    #3 Run the gradle task publishToMavenLocal via:
+    .\gradlew publishToMavenLocal
+
+    The JAR should be located in your local maven repo - regularly here:
+    "C:\Users\%username%\.m2\repository\com\wedasoft\SimpleJavaFxApplicationBase\..."
+
+###### Manually on Linux:
+
+    #1 Download the git repository via:
+    git clone https://github.com/davidweber411/SimpleJavaFxApplicationBase
+
+    #2 Navigate to the project root and run the gradle task publishToMavenLocal via:
+    cd SimpleJavaFxApplicationBase
+
+    #3 Run the gradle task publishToMavenLocal via:
+    ./gradlew publishToMavenLocal
+
+    The JAR should be located in your local maven repo - regularly here:
+    "~/.m2/repository/com/wedasoft/SimpleJavaFxApplicationBase/..."
+
+##### 2. Add the dependency to your project
+
+###### Maven
+
+    <!-- Maven looks in the central repository by default. -->
+    <dependency>
+      <groupId>com.wedasoft</groupId>
+      <artifactId>simplejavafxapplicationbase</artifactId>
+      <version>1.2.1</version>
+    </dependency>
+
+###### Gradle
+
+    repositories {
+      mavenCentral()
+    }
+    dependencies {
+      implementation("com.wedasoft:simplejavafxapplicationbase:1.2.1")
+    }
+
+###### As JAR
+
+    Please search for "how to add a JAR to my project in IDE X". 

@@ -1,31 +1,19 @@
 //file:noinspection SpellCheckingInspection
+
 plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'maven-publish'
-//    id "io.freefair.lombok" version "6.6.3"
+    id 'signing'
 }
 
 group 'com.wedasoft'
-version '1.2.0'
+version '1.2.1'
 
 repositories {
     mavenLocal()
     mavenCentral()
-}
-
-//noinspection GroovyUnusedAssignment
-sourceCompatibility = '17'
-//noinspection GroovyUnusedAssignment
-targetCompatibility = '17'
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
-application {
-    mainClass = 'com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.FxmlDialogBuilderTestApp'
 }
 
 ext {
@@ -34,11 +22,14 @@ ext {
     lombokVersion = '1.18.26'
     hibernateVersion = '6.1.7.Final'
     h2databaseVersion = '2.1.214'
-}
 
-javafx {
-    version = '17.0.2'
-    modules = ['javafx.controls', 'javafx.fxml']
+    pomGroupId = group
+    pomVersion = version
+    pomArtifactId = "simplejavafxapplicationbase"
+    pomArtifactName = "SimpleJavaFxApplicationBase"
+
+    javaFxVersion = "17.0.2"
+    jdkCompileVersion = 17
 }
 
 dependencies {
@@ -55,44 +46,132 @@ dependencies {
     testImplementation("com.h2database:h2:${h2databaseVersion}")
 }
 
+application {
+    mainClass = 'com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.FxmlDialogBuilderTestApp'
+}
+
+javafx {
+    version = "${javaFxVersion}"
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
 test {
     useJUnitPlatform()
 }
 
-/* publishing with maven publish plugin */
 jar {
     exclude('com/wedasoft/simpleJavaFxApplicationBase/excludeInJar')
     // exclude('net/intellidata/core/**/*Impl*')
 }
-task sourceJar(type: Jar) {
-    from sourceSets.main.allJava
-}
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifact sourceJar {
-                classifier "sources"
-            }
-        }
+
+//noinspection GroovyUnusedAssignment
+sourceCompatibility = "${jdkCompileVersion}"
+//noinspection GroovyUnusedAssignment
+targetCompatibility = "${jdkCompileVersion}"
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of("${jdkCompileVersion}"))
     }
 }
 
-/* publish to github packages (with 'gradle publish') */
-// https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+/* publish to Maven Central (with maven publish plugin)
+* https://s01.oss.sonatype.org/#welcome
+* https://github.com/davidweber411/simplejavafxapplicationbase
+* */
 publishing {
-    repositories {
-        maven {
-            url = uri("https://maven.pkg.github.com/davidweber411/SimpleJavaFxApplicationBase")
-            credentials {
-                username = System.getenv("GITHUB_USERNAME") // echo %GITHUB_USERNAME%
-                password = System.getenv("GITHUB_TOKEN") // echo %GITHUB_TOKEN%
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = "${pomGroupId}"
+            artifactId = "${pomArtifactId}"
+            version = "${pomVersion}"
+            from components.java
+
+            pom {
+                name = "${pomArtifactName}"
+                description = "Easy to use common and complex dialogs with passable arguments, standard CRUD API on top of Hibernate, a testing suite and other helpful classes!"
+                url = "https://github.com/davidweber411/SimpleJavaFxApplicationBase"
+                inceptionYear = '2023'
+                licenses {
+                    license {
+                        name = 'Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'davidweber411'
+                        name = 'David Weber'
+                        email = 'weberdavid91@gmail.com'
+                    }
+                }
+                scm {
+                    url = "scm:git:https://github.com/davidweber411/SimpleJavaFxApplicationBase.git"
+                    connection = 'scm:git:git:github.com/davidweber411/SimpleJavaFxApplicationBase.git'
+                    developerConnection = 'scm:git:ssh://github.com:davidweber411/SimpleJavaFxApplicationBase.git'
+                }
             }
         }
     }
-    publications {
-        gpr(MavenPublication) {
-            from(components.java)
+    repositories {
+        maven {
+            name = "OSSRH"
+            // url = "https://s01.oss.sonatype.org/content/repositories/snapshots/" // repo for snapshots
+            url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/" // creates staging repo in nexus
+            credentials {
+                username = System.getenv("OSSRH_USERNAME") // echo %OSSRH_USERNAME%
+                password = System.getenv("OSSRH_PASSWORD") // echo %OSSRH_PASSWORD%
+            }
         }
     }
 }
+signing {
+    // By default the Signing Plugin uses a Java-based implementation of PGP for signing. This implementation cannot use the gpg-agent program for managing private keys, though. If you want to use the gpg-agent, you can change the signatory implementation used by the Signing Plugin:
+    useGpgCmd()
+    sign publishing.publications.mavenJava
+}
+
+/* publish to github packages with 'gradle publish' */
+//task sourceJar(type: Jar) {
+//    from sourceSets.main.allJava
+//}
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            from components.java
+//            artifact sourceJar {
+//                classifier "sources"
+//            }
+//        }
+//    }
+//}
+// https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry
+//publishing {
+//    repositories {
+//        maven {
+//            url = uri("https://maven.pkg.github.com/davidweber411/SimpleJavaFxApplicationBase")
+//            credentials {
+//                username = System.getenv("GITHUB_USERNAME") // echo %GITHUB_USERNAME%
+//                password = System.getenv("GITHUB_TOKEN") // echo %GITHUB_TOKEN%
+//            }
+//        }
+//    }
+//    publications {
+//        gpr(MavenPublication) {
+//            from(components.java)
+//        }
+//    }
+//}

@@ -104,10 +104,10 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
         }
 
         /**
-         * This method sets the title of the {@link Stage}.
+         * This method sets the title of the {@link Stage}.<br>
+         * Is an empty string by default.
          *
          * @param stageTitle The title of the stage.
-         * @implNote Is an empty string by default.
          */
         public Builder<CONTROLLER_CLASS> setStageTitle(String stageTitle) {
             this.fxmlDialog.getStage().setTitle(stageTitle);
@@ -115,10 +115,10 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
         }
 
         /**
-         * This method makes the {@link Stage} resizable or not.
+         * This method makes the {@link Stage} resizable or not.<br>
+         * Is resizable by default.
          *
          * @param isResizable The ability to be resizable.
-         * @implNote Is resizable by default.
          */
         public Builder<CONTROLLER_CLASS> setStageResizable(boolean isResizable) {
             this.fxmlDialog.getStage().setResizable(isResizable);
@@ -126,10 +126,10 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
         }
 
         /**
-         * This method makes the dialog modal or not.
+         * This method makes the dialog modal or not.<br>
+         * Is not modal by default.
          *
          * @param isModal The ability to be modal.
-         * @implNote Is not modal by default.
          */
         public Builder<CONTROLLER_CLASS> setModal(boolean isModal) {
             if (isModal) {
@@ -151,10 +151,10 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
         }
 
         /**
-         * This method adds a set of keys to the dialog, which can be pressed to close the dialog.
+         * This method adds a set of keys to the dialog, which can be pressed to close the dialog.<br>
+         * Example given: .setKeySetToCloseDialog(() -> new KeyCode[]{KeyCode.ESCAPE})
          *
          * @param keySet The key containing set.
-         * @implNote Example given: .setKeySetToCloseDialog(() -> new KeyCode[]{KeyCode.ESCAPE})
          */
         public Builder<CONTROLLER_CLASS> setKeySetToCloseDialog(Set<KeyCode> keySet) {
             this.fxmlDialog.setKeySetToCloseDialog(keySet);
