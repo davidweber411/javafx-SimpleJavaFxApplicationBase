@@ -5,21 +5,21 @@ import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.FxmlDialogControllerB
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "FieldMayBeFinal", "FieldCanBeLocal"})
 public class TestController extends FxmlDialogControllerBase {
 
-    private int intValue = 5;
+    private int intValue;
 
-    private String stringValue = "coolValue";
+    private String stringValue;
+
+    public TestController() {
+        intValue = 5;
+        stringValue = "coolValue";
+    }
 
     @Override
     public void onFxmlDialogReady() {
         int testInt = 5;
-        if (getPassedArguments() != null) {
-            String firstname = getPassedArguments().getOrDefault("firstname", "default name");
-            int age = Integer.parseInt(getPassedArguments().getOrDefault("age", "-1"));
-            boolean isMale = Boolean.parseBoolean(getPassedArguments().getOrDefault("isMale", "false"));
-        }
     }
 
     @Override
@@ -31,15 +31,8 @@ public class TestController extends FxmlDialogControllerBase {
         return intValue;
     }
 
-    public void setIntValue(int intValue) {
-        this.intValue = intValue;
-    }
-
     public String getStringValue() {
         return stringValue;
     }
 
-    public void setStringValue(String stringValue) {
-        this.stringValue = stringValue;
-    }
 }

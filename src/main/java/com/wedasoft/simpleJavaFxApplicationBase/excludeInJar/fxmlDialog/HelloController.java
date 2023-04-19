@@ -20,7 +20,7 @@ public class HelloController {
     }
 
     public void openDialog() throws Exception {
-        FxmlDialog.Builder<TestController> dialogBuilder = new FxmlDialog.Builder<TestController>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/test-with-controller.fxml"), null)
+        FxmlDialog.Builder<TestController> dialogBuilder = new FxmlDialog.Builder<TestController>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null)
                 .setStageTitle("My stage title")
                 .setStageResizable(true)
                 .setModal(false)

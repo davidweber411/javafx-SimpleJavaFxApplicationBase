@@ -2,6 +2,8 @@ package com.wedasoft.simpleJavaFxApplicationBase.testBase;
 
 import javafx.application.Platform;
 
+import java.time.LocalDateTime;
+
 import static java.util.Objects.nonNull;
 
 /**
@@ -17,46 +19,38 @@ public class SimpleJavaFxTestBaseImpl {
     private static final boolean DEBUG_MODE = false;
 
     /* PlatformStartup */
-    private static final int PS_TIMEOUT_SECONDS_TO_WAIT = 15; // only change this variable if needed!
-    private static final int PS_MILLIS_TO_SLEEP_PER_POLL = 250;
-    private static final int PS_TICKS_UNTIL_TIMEOUT = (int) ((1000d / PS_MILLIS_TO_SLEEP_PER_POLL) * PS_TIMEOUT_SECONDS_TO_WAIT);
+    private static final int PS_TIMEOUT_SECONDS_TO_WAIT = 15;
     private static volatile boolean ps_isTimedOut;
-
     private static boolean ps_runPlatformStartup = true;
     private static boolean ps_platformStartupIsLoading = true;
 
     /* PlatformRunLater */
-    public static final int PRL_TIMEOUT_SECONDS_TO_WAIT = 15; // only change this variable if needed!
-    private static final int PRL_MILLIS_TO_SLEEP_PER_POLL = 250;
-    private static final int PRL_TICKS_UNTIL_TIMEOUT = (int) ((1000d / PRL_MILLIS_TO_SLEEP_PER_POLL) * PRL_TIMEOUT_SECONDS_TO_WAIT);
-
+    public static final int PRL_TIMEOUT_SECONDS_TO_WAIT = 15;
     private static volatile boolean prl_jfxThreadIsLoading;
     private static Exception prl_passedExceptionFromJfxThread;
 
     static synchronized void runAndWaitForPlatformStartup() throws Exception {
-        int ticksCounterForTimeout = 0;
         if (ps_runPlatformStartup) {
             Platform.startup(() -> {
                 Platform.setImplicitExit(false);
                 ps_platformStartupIsLoading = false;
                 ps_runPlatformStartup = false;
             });
+            LocalDateTime timeOutTime = LocalDateTime.now().plusSeconds(PS_TIMEOUT_SECONDS_TO_WAIT);
             while (ps_platformStartupIsLoading) {
                 if (DEBUG_MODE) System.out.println("ps looping...");
-                //noinspection BusyWait
-                Thread.sleep(PS_MILLIS_TO_SLEEP_PER_POLL);
-                ticksCounterForTimeout++;
-                if (ticksCounterForTimeout >= PS_TICKS_UNTIL_TIMEOUT) {
+                if (LocalDateTime.now().isAfter(timeOutTime)) {
                     ps_isTimedOut = true;
                     Platform.exit();
                     throw new SimpleJavaFxTestBaseException("Timeout during the execution of runAndWaitForPlatformStartup()");
                 }
+                //noinspection BusyWait
+                Thread.sleep(250);
             }
         }
     }
 
     static synchronized void runAndWaitForPlatformRunLater(CodeRunner codeRunner) throws Exception {
-        int ticksCounterForTimeout = 0;
         prl_jfxThreadIsLoading = true;
 
         Platform.runLater(() -> {
@@ -68,15 +62,15 @@ public class SimpleJavaFxTestBaseImpl {
                 prl_jfxThreadIsLoading = false;
             }
         });
+        LocalDateTime timeOutTime = LocalDateTime.now().plusSeconds(PRL_TIMEOUT_SECONDS_TO_WAIT);
         while (prl_jfxThreadIsLoading) {
             if (DEBUG_MODE) System.out.println("prl looping...");
-            //noinspection BusyWait
-            Thread.sleep(PRL_MILLIS_TO_SLEEP_PER_POLL);
-            ticksCounterForTimeout++;
-            if (ps_isTimedOut || ticksCounterForTimeout >= PRL_TICKS_UNTIL_TIMEOUT) {
+            if (ps_isTimedOut || LocalDateTime.now().isAfter(timeOutTime)) {
                 ps_isTimedOut = false;
                 throw new SimpleJavaFxTestBaseException("Timeout during the execution of runAndWaitForPlatformRunLater()");
             }
+            //noinspection BusyWait
+            Thread.sleep(250);
         }
         Thread.sleep(200); // quick and dirty fix for assuming a wrong test result
         if (nonNull(prl_passedExceptionFromJfxThread)) {
@@ -85,20 +79,5 @@ public class SimpleJavaFxTestBaseImpl {
             throw exception;
         }
     }
-
-    //    private static void executeAfter(Runnable execute, long afterMillis) {
-    //        Task<Void> task = new Task<Void>() {
-    //            @Override
-    //            protected Void call() {
-    //                try {
-    //                    Thread.sleep(afterMillis);
-    //                } catch (Exception e) {
-    //                }
-    //                return null;
-    //            }
-    //        };
-    //        task.setOnSucceeded(event -> execute.run());
-    //        new Thread(task).start();
-    //    }
 
 }

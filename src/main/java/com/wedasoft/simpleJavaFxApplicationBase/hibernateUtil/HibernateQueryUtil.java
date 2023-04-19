@@ -371,11 +371,6 @@ public class HibernateQueryUtil {
             return new Builder<>(entity);
         }
 
-    }
-
-    @Deprecated
-    public static class Aggregate {
-
         /**
          * Counts the amount of datasets of the given type in the database.
          *
@@ -386,9 +381,21 @@ public class HibernateQueryUtil {
         public static synchronized <T> Long countAll(Class<T> entityClass) throws HibernateQueryUtilException {
             Long count = null;
             Transaction transaction = null;
+            Query<Long> query;
             try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 transaction = session.beginTransaction();
-                count = session.createNativeQuery("select Count(*) from " + entityClass.getSimpleName(), Long.class).getSingleResult();
+
+                // step #1: initialize objects
+                HibernateCriteriaBuilder cb = session.getCriteriaBuilder();
+                JpaCriteriaQuery<Long> cq = cb.createQuery(Long.class);
+                JpaRoot<T> root = cq.from(entityClass);
+
+                // step #2: build sql query
+                cq = cq.select(cb.count(root));
+
+                // step #3: execute and get result
+                query = session.createQuery(cq);
+                count = query.getSingleResult();
                 transaction.commit();
             } catch (Exception e) {
                 handleCatch(nonNull(transaction), transaction, "countAll", e);

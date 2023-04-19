@@ -15,7 +15,7 @@ public class FxmlDialogControllerBaseTest extends SimpleJavaFxTestBase {
 
     @Test
     void getPassedArgumentsAsIntTest() throws Exception {
-        runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/test-with-controller.fxml"), null).passArgumentsToController(Map.ofEntries(Map.entry("firstname", "Harald"), Map.entry("age", "25"))));
+        runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null).passArgumentsToController(Map.ofEntries(Map.entry("firstname", "Harald"), Map.entry("age", "25"))));
         assertNotNull(builder);
         assertNotNull(builder.get());
         assertThat(builder.get().getController().getPassedArgumentsAsInt("age")).isEqualTo(25);

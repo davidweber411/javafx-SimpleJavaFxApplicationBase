@@ -29,15 +29,14 @@ class HibernateQueryUtilTest {
         delete_deleteMany();
         delete_deleteAll();
 
-        findWithBuilder_addConditions();
-        findWithBuilder_findByAddedConditions();
-        findWithBuilder_offsetAndLimitAndEntityClass();
-        findWithBuilder_orderBy();
-
-        count_countAll();
+        find_findWithBuilder_addConditions();
+        find_findWithBuilder_findByAddedConditions();
+        find_findWithBuilder_offsetAndLimitAndEntityClass();
+        find_findWithBuilder_orderBy();
+        find_countAll();
     }
 
-    void findWithBuilder_orderBy() throws Exception {
+    void find_findWithBuilder_orderBy() throws Exception {
         Deleter.deleteAll(Student.class, true);
         Inserter.insertOne(new Student("Anna", "Angus", "anton.angus@abc.com"));
         Inserter.insertOne(new Student("Berta", "Barbossa", "anton.angus@abc.com"));
@@ -64,7 +63,7 @@ class HibernateQueryUtilTest {
         assertThat(students.get(4).getLastName()).isEqualTo("Weber");
     }
 
-    private void findWithBuilder_offsetAndLimitAndEntityClass() throws Exception {
+    private void find_findWithBuilder_offsetAndLimitAndEntityClass() throws Exception {
         Deleter.deleteAll(Student.class, true);
         Inserter.insertOne(new Student("Anna", "Angus", "anton.angus@abc.com"));
         Inserter.insertOne(new Student("Berta", "Barbossa", "anton.angus@abc.com"));
@@ -94,7 +93,7 @@ class HibernateQueryUtilTest {
         assertThat(students.get(2).getFirstName()).isEqualTo("David");
     }
 
-    private void findWithBuilder_findByAddedConditions() throws Exception {
+    private void find_findWithBuilder_findByAddedConditions() throws Exception {
         Deleter.deleteAll(Student.class, true);
         Inserter.insertOne(new Student("Anna", "Angus", "anton.angus@abc.com", 1));
         Inserter.insertOne(new Student("Berta", "Barbossa", "anton.angus@abc.com", 2));
@@ -582,7 +581,7 @@ class HibernateQueryUtilTest {
         assertThat(students.size()).isEqualTo(1);
     }
 
-    private void findWithBuilder_addConditions() throws NoSuchFieldException {
+    private void find_findWithBuilder_addConditions() throws NoSuchFieldException {
         Finder.Builder<Student> findBuilder = Finder.findWithBuilder(Student.class);
         assertThat(findBuilder.getConditions().size()).isEqualTo(0);
         assertThat(findBuilder.getConditions()).isNotNull();
@@ -597,6 +596,17 @@ class HibernateQueryUtilTest {
         assertThat(findBuilder.getConditions().get(0).getAttributeName()).isEqualTo("firstName");
         assertThat(findBuilder.getConditions().get(0).getDatabaseColumnName()).isEqualTo("first_name");
         assertThat(findBuilder.getConditions().get(1).getAttributeName()).isEqualTo("id");
+    }
+
+    private void find_countAll() throws Exception {
+        Deleter.deleteAll(Student.class, true);
+        Inserter.insertOne(new Student("Anna", "Angus", "anton.angus@abc.com"));
+        Inserter.insertOne(new Student("Berta", "Barbossa", "anton.angus@abc.com"));
+        Inserter.insertOne(new Student("Celina", "Calensika", "anton.angus@abc.com"));
+        long count = HibernateQueryUtil.Finder.countAll(Student.class);
+        assertThat(count).isEqualTo(3);
+
+        assertThrows(Exception.class, () -> HibernateQueryUtil.Finder.countAll(Object.class));
     }
 
     private void delete_deleteOne() throws Exception {
@@ -705,7 +715,7 @@ class HibernateQueryUtilTest {
     private void insert_insertOne() throws Exception {
         Deleter.deleteAll(Student.class, true);
         Inserter.insertOne(new Student("Anna", "Angus", "anton.angus@abc.com"));
-        long count = HibernateQueryUtil.Aggregate.countAll(Student.class);
+        long count = HibernateQueryUtil.Finder.countAll(Student.class);
         assertThat(count).isEqualTo(1);
         Student student = Finder.findWithBuilder(Student.class).addCondition(Student.Fields.id, new EqualsCondition<>(getIdOfEntityWithDbIndex(0))).findAll().get(0);
         assertThat(student.getFirstName()).isEqualTo("Anna");
@@ -718,7 +728,7 @@ class HibernateQueryUtilTest {
     private void insert_insertMany() throws Exception {
         Deleter.deleteAll(Student.class, true);
         Inserter.insertMany(List.of(new Student("Anna", "Angus", "anton.angus@abc.com"), new Student("Berta", "Barbossa", "anton.angus@abc.com"), new Student("Celina", "Calensika", "anton.angus@abc.com")));
-        long count = HibernateQueryUtil.Aggregate.countAll(Student.class);
+        long count = HibernateQueryUtil.Finder.countAll(Student.class);
         assertThat(count).isEqualTo(3);
 
         Student student = Finder.findWithBuilder(Student.class).addCondition(Student.Fields.id, new EqualsCondition<>(getIdOfEntityWithDbIndex(0))).findAll().get(0);
@@ -727,17 +737,6 @@ class HibernateQueryUtilTest {
         assertThat(student.getEmail()).isEqualTo("anton.angus@abc.com");
 
         assertThrows(Exception.class, () -> Inserter.insertMany(List.of(new Object())));
-    }
-
-    private void count_countAll() throws Exception {
-        Deleter.deleteAll(Student.class, true);
-        Inserter.insertOne(new Student("Anna", "Angus", "anton.angus@abc.com"));
-        Inserter.insertOne(new Student("Berta", "Barbossa", "anton.angus@abc.com"));
-        Inserter.insertOne(new Student("Celina", "Calensika", "anton.angus@abc.com"));
-        long count = HibernateQueryUtil.Aggregate.countAll(Student.class);
-        assertThat(count).isEqualTo(3);
-
-        assertThrows(Exception.class, () -> HibernateQueryUtil.Aggregate.countAll(Object.class));
     }
 
     private long getIdOfEntityWithDbIndex(int index) throws Exception {

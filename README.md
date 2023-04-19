@@ -112,7 +112,7 @@ You are at the right place.
 ### Step 2: Bind the controller class to your fxml file
 
 This is the same like in standard JavaFX.<br>
-Either you do this in the SceneBuilder or you do this by code in your .fxml file:
+Either you do this in the SceneBuilder or you do this by code in your *.fxml file:
 
       <?xml version="1.0" encoding="UTF-8"?>
 
@@ -172,7 +172,7 @@ This subclasses are example given "Inserter", "Updater", "Deleter" and "Finder".
 
 A session/transaction is created for every action.
 
-This API builts on top of the Hibernate API.
+This API is built on top of the Hibernate API.
 You need to set up the file "hibernate.cfg.xml" in your resources directory.
 In this file, you need to do only the standard hibernate things.
 
@@ -186,25 +186,47 @@ Example of the file using the H2 database and mapping the entity "Student":
         <session-factory>
             <!-- JDBC Database connection settings -->
             <property name="connection.driver_class">org.h2.Driver</property>
+
+            <!-- Use an in memory database named "test.h2.db" (no file on your computer) -->
             <property name="connection.url">jdbc:h2:mem:test</property>
+            <!-- Use a database named "test.h2.db" located at "/home/username/test.h2.db" (file on your computer) -->
+            <!-- <property name="connection.url">jdbc:h2:file:/home/username/test</property> -->
+
+            <!-- database login username and password (is set to this properties automatically if you create a new database -->
             <property name="connection.username">sa</property>
             <property name="connection.password"></property>
+
             <!-- JDBC connection pool settings ... using built-in test pool -->
             <property name="connection.pool_size">1</property>
+
             <!-- Select our SQL dialect -->
             <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+
             <!-- Echo the SQL to stdout -->
             <property name="show_sql">true</property>
+
             <!-- Set the current session context -->
             <property name="current_session_context_class">thread</property>
+
             <!-- Drop and re-create the database schema on startup -->
             <property name="hbm2ddl.auto">create-drop</property>
+            <!-- Other possible values: -->
+            <!-- none:         does nothing with the schema/database. -->
+            <!-- validate:     database schema will be validated using the entity mappings. -->
+            <!-- create-only:  database schema creation will be generated. -->
+            <!-- drop:         database schema will be dropped. -->
+            <!-- create:       database schema will first be dropped and then created afterward. -->
+            <!-- create-drop:  database schema will be created and will be dropped when the SessionFactory is closed explicitly (application stops). -->
+            <!-- update:       database schema will be updated by comparing the existing database schema with the entity mappings. -->
+
             <!-- dbcp connection pool configuration -->
             <property name="hibernate.dbcp.initialSize">5</property>
             <property name="hibernate.dbcp.maxTotal">20</property>
             <property name="hibernate.dbcp.maxIdle">10</property>
             <property name="hibernate.dbcp.minIdle">5</property>
             <property name="hibernate.dbcp.maxWaitMillis">-1</property>
+ 
+            <!-- mappings from your classes to hibernate/database -->
             <mapping class="com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.hibernateUtil.Student"/>
         </session-factory>
     </hibernate-configuration>
@@ -235,16 +257,9 @@ Example of the file using the H2 database and mapping the entity "Student":
         .offset(10)
         .limit(10)
         .orderByInOrderOfList(List.of(
-            new Order(Student.Fields.id, true),
-            new Order(Student.Fields.lastName, true),
-            new Order(Student.Fields.firstName, false)))
-        .findAll();
-
-###### With new keyword
-
-    HibernateQueryUtil.Finder.findWithBuilder(Student.class)
-        .addCondition(Student.Fields.firstName, new EqualsCondition<>("David"))
-        .addCondition(Student.Fields.id, new EqualsCondition<>(27))
+            new Order(Student.Fields.id, true), // 1. id ASC
+            new Order(Student.Fields.lastName, true), // 2. lastName ASC 
+            new Order(Student.Fields.firstName, false))) // 3. firstName DESC
         .findAll();
 
 ###### Other condition types and examples
@@ -291,9 +306,9 @@ Example of the file using the H2 database and mapping the entity "Student":
     // Matches everything, that does not contain "avi" in every lower- and uppercase combination ("avi", "Avi", "AVi", "aVI", ...):
         .addCondition(Student.Fields.attributeName, isNotLikeInCaseSensitive("%avi%"))
 
-### Other things with data
+###### Count datasets
 
-    HibernateQueryUtil.Count.countAll(Class<T> entityClass)
+    HibernateQueryUtil.Finder.countAll(Class<T> entityClass)
 
 # Testing suite
 
@@ -397,7 +412,7 @@ JUnit will not recognize failed assertions in the JavaFX thread.
 
 # Other
 
-### How to embed into your project by compiling the dependency manually
+### How to embed this library into your project by compiling the dependency manually
 
 1. Compile the JAR to your Maven Local repository
 
@@ -453,7 +468,7 @@ JUnit will not recognize failed assertions in the JavaFX thread.
 
 ###### Maven
 
-    <!-- Maven looks in the central repository by default. -->
+    <!-- Maven looks in the local repository by default. -->
     <dependency>
       <groupId>com.wedasoft</groupId>
       <artifactId>simplejavafxapplicationbase</artifactId>
@@ -463,7 +478,7 @@ JUnit will not recognize failed assertions in the JavaFX thread.
 ###### Gradle
 
     repositories {
-      mavenCentral()
+      mavenLocal()
     }
     dependencies {
       implementation("com.wedasoft:simplejavafxapplicationbase:1.2.1")
