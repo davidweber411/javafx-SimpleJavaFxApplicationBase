@@ -1,6 +1,8 @@
-package com.wedasoft.simpleJavaFxApplicationBase.commonJfxDialog;
+package com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs;
 
+import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.TestController;
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
+import javafx.geometry.Dimension2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -12,12 +14,29 @@ import java.awt.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.wedasoft.simpleJavaFxApplicationBase.commonJfxDialog.CommonJfxDialogs.*;
+import static com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.JfxDialogUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CommonJfxDialogsTest extends SimpleJavaFxTestBase {
+class JfxDialogUtilTest extends SimpleJavaFxTestBase {
 
     private final String loremIpsumText = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ";
+
+    @Nested
+    class FxmlDialogBuilderTest {
+        @SuppressWarnings("unused")
+        private FxmlDialog.Builder<TestController> builder2;
+
+        @Test
+        void createFxmlDialogBuilderTest() throws Exception {
+            runOnJavaFxThreadAndJoin(() -> builder2 = JfxDialogUtil.createFxmlDialogBuilder(
+                    TestController.class,
+                    getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml")));
+            runOnJavaFxThreadAndJoin(() -> builder2 = JfxDialogUtil.createFxmlDialogBuilder(
+                    TestController.class,
+                    getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"),
+                    new Dimension2D(500, 500)));
+        }
+    }
 
     @Nested
     class InformationDialogTest {

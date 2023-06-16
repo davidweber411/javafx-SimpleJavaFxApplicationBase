@@ -1,10 +1,10 @@
 package com.wedasoft.simpleJavaFxApplicationBase.testBase;
 
 
-import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.FxmlDialog;
-import javafx.geometry.Dimension2D;
+import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.TestController;
+import com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.FxmlDialog;
+import com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.JfxDialogUtil;
 import javafx.scene.input.KeyCode;
-import javafx.scene.robot.Robot;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -13,12 +13,13 @@ import org.junit.jupiter.api.TestMethodOrder;
 import java.util.Set;
 
 import static com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBaseImpl.PRL_TIMEOUT_SECONDS_TO_WAIT;
+import static java.lang.Thread.sleep;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SimpleJavaFxTestBaseTimeOutAndStageClosingTest extends SimpleJavaFxTestBase {
 
-    private FxmlDialog.Builder builder;
+    private FxmlDialog.Builder<TestController> builder;
     private int valueChangedByCallback;
 
     @Test
@@ -26,22 +27,15 @@ public class SimpleJavaFxTestBaseTimeOutAndStageClosingTest extends SimpleJavaFx
     void openAndCloseStage_oneTime_shallCheckForChangedValue() throws Exception {
         valueChangedByCallback = 0;
         runOnJavaFxThreadAndJoin(() -> {
-            builder = new FxmlDialog.Builder(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/testBase/test-woc.fxml"), new Dimension2D(600, 500));
+            builder = JfxDialogUtil.createFxmlDialogBuilder(TestController.class, getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"));
             builder.setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE, KeyCode.K));
             builder.setCallbackOnDialogClose(() -> valueChangedByCallback = 52);
-            builder.get().getStage().setOnShown((e) -> {
-                new Robot().keyRelease(KeyCode.ESCAPE);
-                try {
-                    Thread.sleep(250);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
-            builder.get().showAndWait();
         });
+        pressKeyAsyncInOtherThread(1000, KeyCode.ESCAPE);
+        runOnJavaFxThreadAndJoin(() -> builder.get().showAndWait());
+
         assertNotNull(builder.get());
         assertEquals(52, valueChangedByCallback);
-        Thread.sleep(500);
     }
 
     @Test
@@ -49,21 +43,19 @@ public class SimpleJavaFxTestBaseTimeOutAndStageClosingTest extends SimpleJavaFx
     void openAndCloseStage_multipleTimes_shallCheckForChangedValue() throws Exception {
         valueChangedByCallback = 0;
         runOnJavaFxThreadAndJoin(() -> {
-            builder = new FxmlDialog.Builder(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/testBase/test-woc.fxml"), new Dimension2D(600, 500));
+            builder = JfxDialogUtil.createFxmlDialogBuilder(TestController.class, getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"));
             builder.setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE, KeyCode.K));
             builder.setCallbackOnDialogClose(() -> valueChangedByCallback = 52);
-            builder.get().getStage().setOnShown((e) -> {
-                new Robot().keyRelease(KeyCode.ESCAPE);
-                try {
-                    Thread.sleep(250);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
-            builder.get().showAndWait();
-            builder.get().showAndWait();
-            builder.get().showAndWait();
         });
+        pressKeyAsyncInOtherThread(1000, KeyCode.ESCAPE);
+        runOnJavaFxThreadAndJoin(() -> builder.get().showAndWait());
+
+        pressKeyAsyncInOtherThread(1000, KeyCode.ESCAPE);
+        runOnJavaFxThreadAndJoin(() -> builder.get().showAndWait());
+
+        pressKeyAsyncInOtherThread(1000, KeyCode.ESCAPE);
+        runOnJavaFxThreadAndJoin(() -> builder.get().showAndWait());
+
         assertNotNull(builder.get());
         assertEquals(52, valueChangedByCallback);
     }
@@ -71,13 +63,13 @@ public class SimpleJavaFxTestBaseTimeOutAndStageClosingTest extends SimpleJavaFx
     @Test
     @Order(3)
     void runLater_dontRunIntoTimeout_shallNotThrow() {
-        assertDoesNotThrow(() -> runOnJavaFxThreadAndJoin(() -> Thread.sleep(100)));
+        assertDoesNotThrow(() -> runOnJavaFxThreadAndJoin(() -> sleep(100)));
     }
 
     @Test
     @Order(4)
     void runLater_runIntoTimeout_shallThrow() {
         // sleep 2 seconds longer than the timeout setting.
-        assertThrows(SimpleJavaFxTestBaseException.class, () -> runOnJavaFxThreadAndJoin(() -> Thread.sleep((PRL_TIMEOUT_SECONDS_TO_WAIT * 1000) + 2000)));
+        assertThrows(SimpleJavaFxTestBaseException.class, () -> runOnJavaFxThreadAndJoin(() -> sleep((PRL_TIMEOUT_SECONDS_TO_WAIT * 1000) + 2000)));
     }
 }

@@ -1,4 +1,4 @@
-package com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog;
+package com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs;
 
 import javafx.fxml.Initializable;
 

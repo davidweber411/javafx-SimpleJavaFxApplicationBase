@@ -1,4 +1,4 @@
-package com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog;
+package com.wedasoft.simpleJavaFxApplicationBase.excludeInJar;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +15,8 @@ public class FxmlDialogBuilderTestApp extends Application {
     // Start me with the gradle task "run"!
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(FxmlDialogBuilderTestApp.class.getResource("test-app-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(FxmlDialogBuilderTestApp.class.getResource("" +
+                "/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Hello!");
         stage.setScene(scene);

@@ -2,22 +2,16 @@
 
 This library contains functions that simplify the development of JavaFX applications.<br>
 
-- <b>Common Dialogs</b><br>
-  Including information-, warning-, error-, confirmation- and input dialogs.
+- <b>Powerful dialog API</b><br>
+  Create complex .fxml file based dialogs. Pass and retrieve arguments without any effort.<br>
+  Profit from predefined common information-, warning-, error-, confirmation- and input dialogs.<br>
 
 
-- <b>Complex Dialogs</b><br>
-  Create complex .fxml file based dialogs.<br>
-  Pass and retrieve arguments without any effort.
-
-
-- <b>Standard CRUD operations</b><br>
-  Create, read, update and delete every entity/entities.<br>
-  No need for writing boilerplate code anymore.<br>
-  Make use of a simple but powerful finding API using the builder pattern.<br>
+- <b>Powerful database API</b><br>
+  Perform standard CRUD operations on every entity/entities. No need for writing boilerplate code anymore.<br>
+  Make use of a simple but very powerful finding API using the builder pattern.<br>
   The complete CRUD API is built on top of the Hibernate API - feel free to use it with every database, that is
-  supported by
-  Hibernate.
+  supported by Hibernate.<br>
 
 
 - <b>Testing suite</b><br>
@@ -27,7 +21,7 @@ This library contains functions that simplify the development of JavaFX applicat
 
 
 - <b>Other helpful classes</b><br>
-  CommonUtils, SystemUtils.
+  CommonUtils, SystemUtils, SuppressWarningStrings.
 
 # Requirements
 
@@ -58,39 +52,40 @@ Please make sure that your project is using at least JDK 17 too.
 
 ##### Information dialogs
 
-    CommonJfxDialogs.createInformationDialog(String message)
+    JfxDialogUtil.createInformationDialog(String message)
     
-    CommonJfxDialogs.createInformationDialog(String message, String messageHeader)
+    JfxDialogUtil.createInformationDialog(String message, String messageHeader)
 
 ##### Warning dialogs
 
-    CommonJfxDialogs.createWarningDialog(String message)
+    JfxDialogUtil.createWarningDialog(String message)
     
-    CommonJfxDialogs.createWarningDialog(String message, String messageHeader)
+    JfxDialogUtil.createWarningDialog(String message, String messageHeader)
 
 ##### Error dialogs
 
-    CommonJfxDialogs.createErrorDialog(String message)
+    JfxDialogUtil.createErrorDialog(String message)
      
-    CommonJfxDialogs.createErrorDialog(String message, Exception exceptionForStacktrace)
+    JfxDialogUtil.createErrorDialog(String message, Exception exceptionForStacktrace)
 
 ##### Input dialogs
 
-    CommonJfxDialogs.displayInputDialogAndGetResult(String dialogText)
+    JfxDialogUtil.displayInputDialogAndGetResult(String dialogText)
 
 ##### Confirm dialogs
 
-    CommonJfxDialogs.displayConfirmDialogAndGetResult(String headerText, String contentText)
+    JfxDialogUtil.displayConfirmDialogAndGetResult(String headerText, String contentText)
     
-    CommonJfxDialogs.displayCloseStageDialog(Stage stageToClose)
+    JfxDialogUtil.displayCloseStageDialog(Stage stageToClose)
     
-    CommonJfxDialogs.displayExitProgramDialog()
+    JfxDialogUtil.displayExitProgramDialog()
 
 # Complex Dialogs
 
+The entrypoint is the class <code>JfxDialogUtil</code>.
+
 Your dream is to create a fxml based dialog and pass arguments into it, and then get the arguments in the displayed
-dialog?<br>
-You are at the right place.
+dialog? You are at the right place.
 
 ### Step 1: Extend your dialog controller with FxmlDialogControllerBase
 
@@ -127,7 +122,7 @@ Use the builder class to create your custom fxml dialog. <br>
 You can pass arguments with passArgumentsToController().
 
     public void openDialog() throws Exception {
-        FxmlDialog.Builder<YourControllerClass> dialogBuilder = new FxmlDialog.Builder<YourControllerClass>(getClass().getResource("/path/to/your/fxml-file.fxml"), null)
+        FxmlDialog.Builder<YourControllerClass> dialogBuilder = JfxDialogUtil.createFxmlDialogBuilder(YourControllerClass.class, getClass().getResource("/path/to/your/fxml-file.fxml"))
                 .setStageTitle("My stage title")
                 .setStageResizable(true)
                 .setModal(false)
@@ -138,8 +133,7 @@ You can pass arguments with passArgumentsToController().
                     put("age", "31");
                     put("isMale", "true");
                 }});
-        FxmlDialog<YourControllerClass> dialog = dialogBuilder.get();
-        dialog.showAndWait();
+        dialogBuilder.get().showAndWait();
     }
 
 ### Step 4: Load and compute passed arguments
@@ -167,13 +161,14 @@ After that, just get the wanted argument by its String key out of the map.
 
 Standard CRUD operations are implemented generically, so you do not need to write boilerplate code for this actions.<br>
 
-The "entry class" is "HibernateQueryUtil", which has some subclasses for grouping methods.<br>
-This subclasses are example given "Inserter", "Updater", "Deleter" and "Finder".
+The entrypoint is the class <code>HibernateQueryUtil</code>.This class has some subclasses for grouping methods.<br>
+This subclasses are example given <code>Inserter</code>, <code>Updater</code>, <code>Deleter</code> and <code>
+Finder</code>.
 
 A session/transaction is created for every action.
 
 This API is built on top of the Hibernate API.
-You need to set up the file "hibernate.cfg.xml" in your resources directory.
+You need to set up the file <code>hibernate.cfg.xml</code> in your resources directory.
 In this file, you need to do only the standard hibernate things.
 
 Example of the file using the H2 database and mapping the entity "Student":
@@ -245,66 +240,66 @@ Example of the file using the H2 database and mapping the entity "Student":
 
     HibernateQueryUtil.Deleter.deleteOne(T entity) 
     HibernateQueryUtil.Deleter.deleteMany(List<T> entities) 
-    HibernateQueryUtil.Deleter.deleteAll(Class<T> entityClass)
+    HibernateQueryUtil.Deleter.deleteAll(Class<T> entityClass, securityFlag)
 
 ### Find data
 
 ###### With static condition methods
 
     HibernateQueryUtil.Finder.findWithBuilder(Student.class)
-        .addCondition(Student.Fields.firstName, isEqualTo("David"))
-        .addCondition(Student.Fields.id, isEqualTo(27))
+        .addCondition(Student_.FIRST_NAME, isEqualTo("David"))
+        .addCondition(Student_.ID, isEqualTo(27))
         .offset(10)
         .limit(10)
         .orderByInOrderOfList(List.of(
-            new Order(Student.Fields.id, true), // 1. id ASC
-            new Order(Student.Fields.lastName, true), // 2. lastName ASC 
-            new Order(Student.Fields.firstName, false))) // 3. firstName DESC
+            new Order(Student_.ID, true), // 1. id ASC
+            new Order(Student_.LAST_NAME, true), // 2. lastName ASC 
+            new Order(Student_.FIRST_NAME, false))) // 3. firstName DESC
         .findAll();
 
 ###### Other condition types and examples
 
     // Matches everything, that is exactly equal to "David":
-        .addCondition(Student.Fields.attributeName, isEqualTo("David"))
+        .addCondition(Student_.<FIELD_NAME>, isEqualTo("David"))
 
     // Matches everything, that is lower than 4:
-        .addCondition(Student.Fields.attributeName, isLowerThan(4))
+        .addCondition(Student_.<FIELD_NAME>, isLowerThan(4))
 
     // Matches everything, that is lower than or equal to 4:
-        .addCondition(Student.Fields.attributeName, isLowerThanOrEqualTo(4))
+        .addCondition(Student_.<FIELD_NAME>, isLowerThanOrEqualTo(4))
 
     // Matches everything, that is greater than 4:
-        .addCondition(Student.Fields.attributeName, isGreaterThan(4))
+        .addCondition(Student_.<FIELD_NAME>, isGreaterThan(4))
 
     // Matches everything, that is greater than or equal to 4:
-        .addCondition(Student.Fields.attributeName, isGreaterThanOrEqualTo(4))
+        .addCondition(Student_.<FIELD_NAME>, isGreaterThanOrEqualTo(4))
 
     // Matches everything, that is not equal to 4:
-        .addCondition(Student.Fields.attributeName, isNotEqualTo(4))
+        .addCondition(Student_.<FIELD_NAME>, isNotEqualTo(4))
 
     // Matches everything, that starts exactly with "Dav":
-        .addCondition(Student.Fields.attributeName, isLikeCaseSensitive("Dav%"))
+        .addCondition(Student_.<FIELD_NAME>, isLikeCaseSensitive("Dav%"))
 
     // Matches everything, that ends exactly with "vid":
-        .addCondition(Student.Fields.attributeName, isLikeCaseSensitive("%vid"))
+        .addCondition(Student_.<FIELD_NAME>, isLikeCaseSensitive("%vid"))
 
     // Matches everything, that contains exactly "avi":
-        .addCondition(Student.Fields.attributeName, isLikeCaseSensitive("%avi%"))
+        .addCondition(Student_.<FIELD_NAME>, isLikeCaseSensitive("%avi%"))
 
     // Matches everything, that does not contain exactly "avi":
-        .addCondition(Student.Fields.attributeName, isNotLikeCaseSensitive("%avi%"))
+        .addCondition(Student_.<FIELD_NAME>, isNotLikeCaseSensitive("%avi%"))
 
     // Matches everything, that does not start with exactly "Dav":
-        .addCondition(Student.Fields.attributeName, isNotLikeCaseSensitive("Dav%"))
+        .addCondition(Student_.<FIELD_NAME>, isNotLikeCaseSensitive("Dav%"))
 
     // Matches everything, that contains "avi" in every lower- and uppercase combination ("avi", "Avi", "AVi", "aVI", ...):
-        .addCondition(Student.Fields.attributeName, isLikeInCaseSensitive("%avi%"))
+        .addCondition(Student_.<FIELD_NAME>, isLikeInCaseSensitive("%avi%"))
 
     // Matches everything, that does not start with "dav" in every lower- and uppercase combination ("dav", "Dav", "DAV", "dAv", ...):
-        .addCondition(Student.Fields.attributeName, isNotLikeInCaseSensitive("dav%"))
+        .addCondition(Student_.<FIELD_NAME>, isNotLikeInCaseSensitive("dav%"))
 
     // Matches everything, that does not contain "avi" in every lower- and uppercase combination ("avi", "Avi", "AVi", "aVI", ...):
-        .addCondition(Student.Fields.attributeName, isNotLikeInCaseSensitive("%avi%"))
+        .addCondition(Student_.<FIELD_NAME>, isNotLikeInCaseSensitive("%avi%"))
 
 ###### Count datasets
 
@@ -409,81 +404,4 @@ JUnit will not recognize failed assertions in the JavaFX thread.
         }
 
     }
-
-# Other
-
-### How to embed this library into your project by compiling the dependency manually
-
-1. Compile the JAR to your Maven Local repository
-
-2. Add the dependency to your project
-
-3. Profit.
-
-##### 1. Compile the JAR to your Maven Local repository
-
-###### Fully automated on Windows:
-
-    1. Do NOT clone the repository, etc.
-
-    2. Execute the batch script "download_and_compile_script.bat" from the project root from github. 
-    
-    3. The script will do everything for you. 
-       Downloading the git repository, executing the gradle task and publishing to your local maven repository. 
-
-###### Fully automated on Linux:
-
-    Linux is cool though, but the shell script is not written yet - shame on me! :( 
-    Please compile the JAR manually.
-
-###### Manually on Windows:
-
-    #1 Download the git repository via:
-    git clone https://github.com/davidweber411/SimpleJavaFxApplicationBase
-
-    #2 Navigate to the project root via:
-    cd SimpleJavaFxApplicationBase
-
-    #3 Run the gradle task publishToMavenLocal via:
-    .\gradlew publishToMavenLocal
-
-    The JAR should be located in your local maven repo - regularly here:
-    "C:\Users\%username%\.m2\repository\com\wedasoft\SimpleJavaFxApplicationBase\..."
-
-###### Manually on Linux:
-
-    #1 Download the git repository via:
-    git clone https://github.com/davidweber411/SimpleJavaFxApplicationBase
-
-    #2 Navigate to the project root and run the gradle task publishToMavenLocal via:
-    cd SimpleJavaFxApplicationBase
-
-    #3 Run the gradle task publishToMavenLocal via:
-    ./gradlew publishToMavenLocal
-
-    The JAR should be located in your local maven repo - regularly here:
-    "~/.m2/repository/com/wedasoft/SimpleJavaFxApplicationBase/..."
-
-##### 2. Add the dependency to your project
-
-###### Maven
-
-    <!-- Maven looks in the local repository by default. -->
-    <dependency>
-      <groupId>com.wedasoft</groupId>
-      <artifactId>simplejavafxapplicationbase</artifactId>
-      <version>1.2.1</version>
-    </dependency>
-
-###### Gradle
-
-    repositories {
-      mavenLocal()
-    }
-    dependencies {
-      implementation("com.wedasoft:simplejavafxapplicationbase:1.2.1")
-    }
-
-###### As JAR
-
-    Please search for "how to add a JAR to my project in IDE X". 
+  

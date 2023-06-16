@@ -1,5 +1,6 @@
-package com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog;
+package com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs;
 
+import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.TestController;
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
 import org.junit.jupiter.api.Test;
 
@@ -11,11 +12,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FxmlDialogControllerBaseTest extends SimpleJavaFxTestBase {
 
-    private FxmlDialog.Builder builder;
+    private FxmlDialog.Builder<TestController> builder;
 
     @Test
     void getPassedArgumentsAsIntTest() throws Exception {
-        runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null).passArgumentsToController(Map.ofEntries(Map.entry("firstname", "Harald"), Map.entry("age", "25"))));
+        runOnJavaFxThreadAndJoin(() -> builder = JfxDialogUtil.createFxmlDialogBuilder(
+                        TestController.class,
+                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"),
+                        null)
+                .passArgumentsToController(Map.ofEntries(Map.entry("firstname", "Harald"), Map.entry("age", "25"))));
         assertNotNull(builder);
         assertNotNull(builder.get());
         assertThat(builder.get().getController().getPassedArgumentsAsInt("age")).isEqualTo(25);

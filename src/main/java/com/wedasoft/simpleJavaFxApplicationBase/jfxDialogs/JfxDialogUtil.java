@@ -1,6 +1,8 @@
-package com.wedasoft.simpleJavaFxApplicationBase.commonJfxDialog;
+package com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs;
 
 import javafx.application.Platform;
+import javafx.geometry.Dimension2D;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -11,8 +13,48 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
 
-public class CommonJfxDialogs {
+public class JfxDialogUtil {
+
+    /*
+     * ******************************************************************
+     * ********************** FXML Dialogs ******************************
+     * ******************************************************************
+     */
+
+    /**
+     * This method builds an initial {@link FxmlDialog.Builder} object. The scene size is computed automatically.
+     *
+     * @param fxmlFileUrl Examples: <br>getClass().getResource("test.fxml"), null)
+     *                    <br>getClass().getResource("/com/wedasoft/jfxdialoghelpers/test.fxml"), null)
+     * @throws Exception Throws if an error occurs.
+     */
+    public static <CONTROLLER_CLASS extends FxmlDialogControllerBase> FxmlDialog.Builder<CONTROLLER_CLASS> createFxmlDialogBuilder(
+            @SuppressWarnings("unused") Class<CONTROLLER_CLASS> controllerClass, URL fxmlFileUrl)
+            throws Exception {
+        return createFxmlDialogBuilder(controllerClass, fxmlFileUrl, null);
+    }
+
+    /**
+     * This method builds an initial {@link FxmlDialog.Builder} object.
+     *
+     * @param fxmlFileUrl Examples: <br>getClass().getResource("test.fxml"), null)
+     *                    <br>getClass().getResource("/com/wedasoft/jfxdialoghelpers/test.fxml"), null)
+     * @param sceneSize   The size of the {@link Scene}. Null is allowed and computes the scene size automatically.
+     * @throws Exception Throws if an error occurs.
+     */
+    public static <CONTROLLER_CLASS extends FxmlDialogControllerBase> FxmlDialog.Builder<CONTROLLER_CLASS> createFxmlDialogBuilder(
+            @SuppressWarnings("unused") Class<CONTROLLER_CLASS> controllerClass, URL fxmlFileUrl, Dimension2D sceneSize)
+            throws Exception {
+        return new FxmlDialog.Builder<>(fxmlFileUrl, sceneSize);
+    }
+
+    /*
+     * ******************************************************************
+     * ************* Information / Warning / Error dialogs **************
+     * ******************************************************************
+     */
 
     private static Alert createAlertDialog(AlertType alertType, String titleBarText, String headerText, String contentText) {
         Alert alert;
@@ -69,7 +111,6 @@ public class CommonJfxDialogs {
         return createAlertDialog(AlertType.WARNING, "Warning", messageHeader, message);
     }
 
-
     /**
      * Creates an simple error dialog.
      *
@@ -80,9 +121,9 @@ public class CommonJfxDialogs {
         return createErrorDialog(message, null);
     }
 
-
     /**
-     * Creates an error dialog containing the thrown exception inclusive its stacktrace, if the given exception is not null.
+     * Creates an error dialog containing the thrown exception inclusive its stacktrace, if the given exception is not
+     * null.
      *
      * @param message                The message to display.
      * @param exceptionForStacktrace The thrown exception. The stack trace of this exception will be displayed.
@@ -108,11 +149,7 @@ public class CommonJfxDialogs {
 
     /*
      * ******************************************************************
-     * ******************************************************************
-     * ******************************************************************
      * ******************** Confirm dialogs *****************************
-     * ******************************************************************
-     * ******************************************************************
      * ******************************************************************
      */
 
@@ -136,6 +173,7 @@ public class CommonJfxDialogs {
         if (alert.getResult().getButtonData() == ButtonData.OK_DONE) {
             stageToClose.close();
         }
+        alert.showAndWait();
     }
 
     @SuppressWarnings("unused")
@@ -145,15 +183,12 @@ public class CommonJfxDialogs {
             Platform.exit();
             System.exit(0);
         }
+        alert.showAndWait();
     }
 
     /*
      * ******************************************************************
-     * ******************************************************************
-     * ******************************************************************
      * ******************** Input dialogs *******************************
-     * ******************************************************************
-     * ******************************************************************
      * ******************************************************************
      */
 

@@ -1,9 +1,12 @@
 package com.wedasoft.simpleJavaFxApplicationBase.testBase;
 
 import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 
+import static java.lang.Thread.sleep;
 import static java.util.Objects.nonNull;
 
 /**
@@ -80,4 +83,15 @@ public class SimpleJavaFxTestBaseImpl {
         }
     }
 
+    public static void pressKeyAsyncInOtherThread(int millisToWait, KeyCode keyToPress) {
+        new Thread(() -> {
+            try {
+                sleep(millisToWait);
+                new Robot().keyPress(keyToPress.getCode());
+                new Robot().keyRelease(keyToPress.getCode());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }).start();
+    }
 }

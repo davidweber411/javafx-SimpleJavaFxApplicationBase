@@ -1,6 +1,6 @@
 package com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog;
 
-import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.FxmlDialogControllerBase;
+import com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.FxmlDialogControllerBase;
 
 import java.net.URL;
 import java.util.ResourceBundle;

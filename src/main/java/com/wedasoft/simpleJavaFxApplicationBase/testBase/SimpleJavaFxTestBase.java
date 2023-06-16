@@ -1,5 +1,7 @@
 package com.wedasoft.simpleJavaFxApplicationBase.testBase;
 
+import javafx.scene.input.KeyCode;
+
 /**
  * This is the only class, that shall be used by developers for interacting with this framework.<br>
  * All other classes of this framework are not meant to be used directly.
@@ -20,6 +22,10 @@ public abstract class SimpleJavaFxTestBase {
     public synchronized void runOnJavaFxThreadAndJoin(CodeRunner codeRunner) throws Exception {
         SimpleJavaFxTestBaseImpl.runAndWaitForPlatformStartup();
         SimpleJavaFxTestBaseImpl.runAndWaitForPlatformRunLater(codeRunner);
+    }
+
+    public static void pressKeyAsyncInOtherThread(int millisToWaitBeforeKeyPress, KeyCode keyToPress) {
+        SimpleJavaFxTestBaseImpl.pressKeyAsyncInOtherThread(millisToWaitBeforeKeyPress, keyToPress);
     }
 
 }

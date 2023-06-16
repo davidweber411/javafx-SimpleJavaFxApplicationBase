@@ -1,4 +1,4 @@
-package com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog;
+package com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs;
 
 import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.TestController;
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
@@ -8,10 +8,8 @@ import javafx.stage.Modality;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -23,14 +21,22 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
 
     private FxmlDialog.Builder builderWithoutController;
 
-    @Test
-    void constructor_checkForFxmlPathIsNullAndSceneSizeIsNull() {
-        assertThrows(Exception.class, () -> runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(null, null)));
-    }
+    @Nested
+    class ConstructorGeneral {
+        @Test
+        void checkForFxmlPathIsNull() {
+            assertThrows(Exception.class, () -> runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(null, new Dimension2D(500, 500))));
+        }
 
-    @Test
-    void constructor_checkForFxmlPathNotExists() {
-        assertThrows(Exception.class, () -> runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(getClass().getResource("/this/path/does/not/exist/file.fxml"), null)));
+        @Test
+        void checkForFxmlPathNotExists() {
+            assertThrows(Exception.class, () -> runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(getClass().getResource("/this/path/does/not/exist/file.fxml"), null)));
+        }
+
+        @Test
+        void checkForSceneSizeIsNull() {
+            assertDoesNotThrow(() -> runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null)));
+        }
     }
 
     @Nested
@@ -138,24 +144,18 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
 
         @Test
         void setCallbackOnDialogClose_setKeySetToCloseDialogTest_shallCheckForCallbackExecution() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
+            runOnJavaFxThreadAndJoin(() -> {
+                builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null);
+                builder.setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE));
+                builder.setCallbackOnDialogClose(() -> intChangedByCallback = 42);
+            });
             assertThat(builder).isNotNull();
             assertThat(builder.get()).isNotNull();
             assertThat(builder.get().getController()).isNotNull();
-            runOnJavaFxThreadAndJoin(() -> {
-                builder.setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE));
-                builder.setCallbackOnDialogClose(() -> intChangedByCallback = 42);
-                builder.get().getStage().setOnShown(event -> new Thread(() -> {
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
-                        new Robot().keyRelease(KeyCode.ESCAPE.getCode());
-                        new Robot().keyRelease(KeyCode.ESCAPE.getCode());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }).start());
-                builder.get().showAndWait();
-            });
+
+            pressKeyAsyncInOtherThread(1000, KeyCode.ESCAPE);
+            runOnJavaFxThreadAndJoin(() -> builder.get().showAndWait());
+
             assertThat(intChangedByCallback).isEqualTo(42);
             intChangedByCallback = 0;
         }

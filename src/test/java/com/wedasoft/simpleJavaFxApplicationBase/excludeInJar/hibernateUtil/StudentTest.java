@@ -55,11 +55,11 @@ class StudentTest {
 
     @Test
     void fieldNameConstants_test() {
-        assertThat(Student.Fields.id).isEqualTo("id");
-        assertThat(Student.Fields.firstName).isEqualTo("firstName");
-        assertThat(Student.Fields.lastName).isEqualTo("lastName");
-        assertThat(Student.Fields.email).isEqualTo("email");
-        assertThat(Student.Fields.age).isEqualTo("age");
+        assertThat(Student_.ID).isEqualTo("id");
+        assertThat(Student_.FIRST_NAME).isEqualTo("firstName");
+        assertThat(Student_.LAST_NAME).isEqualTo("lastName");
+        assertThat(Student_.EMAIL).isEqualTo("email");
+        assertThat(Student_.AGE).isEqualTo("age");
     }
 
 }

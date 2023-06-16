@@ -1,6 +1,6 @@
 package com.wedasoft.simpleJavaFxApplicationBase.testBase;
 
-import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.FxmlDialog;
+import com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.FxmlDialog;
 import javafx.geometry.Dimension2D;
 import javafx.scene.control.Button;
 import org.junit.jupiter.api.Test;

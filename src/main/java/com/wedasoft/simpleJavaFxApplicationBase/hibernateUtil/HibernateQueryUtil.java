@@ -91,12 +91,6 @@ public class HibernateQueryUtil {
         }
     }
 
-    public static class DeleterBuilder {
-        // deleteOne()
-        // deleteMany()
-        // deleteByConditions
-    }
-
     public static class Deleter {
 
         /**
