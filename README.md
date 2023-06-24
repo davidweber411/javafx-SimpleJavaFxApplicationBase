@@ -28,6 +28,10 @@ This library contains functions that simplify the development of JavaFX applicat
 This Java library was built by using JDK 17.<br>
 Please make sure that your project is using at least JDK 17 too.
 
+# Documentation
+
+A complete documentation of this framework can be found on https://wedasoft.com/simple-java-fx-application-base/.
+
 # Dependencies to add
 
 ##### Maven
