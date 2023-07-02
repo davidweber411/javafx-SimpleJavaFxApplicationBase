@@ -129,7 +129,7 @@ public abstract class Condition<VALUE_TYPE> {
 
     /**
      * This condition matches any attribute values, which contain the given value in several circumstances. <br>
-     * Has the same functionality like {@link #isLikeCaseSensitive <code>isLikeCaseSensitive()</code>}, but with the additional effect, that the case of the value is ignored.<br>
+     * Has the same functionality as {@link #isLikeCaseSensitive <code>isLikeCaseSensitive()</code>}, but with the additional effect, that the case of the value is ignored.<br>
      * Wildcards can be used. <br><br>
      * Examples:
      * <ul>

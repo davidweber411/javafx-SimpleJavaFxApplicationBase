@@ -105,7 +105,7 @@ dialog? You are at the right place.
 
 ### Step 2: Bind the controller class to your fxml file
 
-This is the same like in standard JavaFX. Either you do this in the SceneBuilder or you do this by code in your *.fxml
+This is the same as in standard JavaFX. Either you do this in the SceneBuilder or you do this by code in your *.fxml
 file:
 
       <?xml version="1.0" encoding="UTF-8"?>
@@ -157,7 +157,8 @@ argument by its String key out of the map.
 
 # Standard CRUD operations
 
-Standard CRUD operations are implemented generically, so you do not need to write boilerplate code for this actions.<br>
+Standard CRUD operations are implemented generically, so you do not need to write boilerplate code for these
+actions.<br>
 
 The entrypoint is the class <code>HibernateQueryUtil</code>.This class has some subclasses for grouping methods.<br>
 This subclasses are example given <code>Inserter</code>, <code>Updater</code>, <code>Deleter</code> and <code>
