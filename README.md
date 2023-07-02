@@ -1,26 +1,33 @@
-# Description
+# About
 
-This library contains functions that simplify the development of JavaFX applications.<br>
+### Description
+
+A library containing functions that simplify the development of JavaFX applications. These include handling FXML
+dialogs, a database API and an easy-to-use test suite.<br>
+
+### Features
 
 - <b>Powerful dialog API</b><br>
-  Create complex .fxml file based dialogs. Pass and retrieve arguments without any effort.<br>
-  Profit from predefined common information-, warning-, error-, confirmation- and input dialogs.<br>
+  Easily create complex FXML-based dialogs and pass parameters to them without batting an eyelid. Of course, there are
+  also predefined standard dialogs.<br>
 
 
 - <b>Powerful database API</b><br>
-  Perform standard CRUD operations on every entity/entities. No need for writing boilerplate code anymore.<br>
-  Make use of a simple but very powerful finding API using the builder pattern.<br>
-  The complete CRUD API is built on top of the Hibernate API - feel free to use it with every database, that is
-  supported by Hibernate.<br>
+  Perform standard CRUD operations with any entity you want. Find data with a mighty finder API that uses the builder
+  pattern – sessions & transactions included.
 
 
 - <b>Testing suite</b><br>
-  Run unit tests that require JavaFX components with ease, just by extending your test class with one single class.<br>
-  No more annoying errors like "Toolkit not found", "Toolkit already initialized","Location is not set" or "Not on FX
-  application thread" during testing.
+  Run unit tests that require JavaFX components with ease. No more annoying errors like “Toolkit not found” or “Not on
+  FX application thread” during testing.
 
 
-- <b>Other helpful classes</b><br>
+- <b>Easy to integrate</b><br>
+  Take advantage of this library being available in the central maven repository. Including this library in your project
+  is done in seconds – just like managing versions.
+
+
+- <b>Other helpful stuff</b><br>
   CommonUtils, SystemUtils, SuppressWarningStrings.
 
 # Requirements
@@ -28,51 +35,45 @@ This library contains functions that simplify the development of JavaFX applicat
 This Java library was built by using JDK 17.<br>
 Please make sure that your project is using at least JDK 17 too.
 
+# Documentation
+
+A complete documentation of this framework can be found on https://wedasoft.com/simple-java-fx-application-base/.
+
 # Dependencies to add
 
-##### Maven
+### Maven
 
     <!-- Maven looks in the central repository by default. -->
     <dependency>
       <groupId>com.wedasoft</groupId>
       <artifactId>simplejavafxapplicationbase</artifactId>
-      <version>1.2.1</version>
+      <version>1.3.0</version>
     </dependency>
 
-##### Gradle
+### Gradle
 
     repositories {
       mavenCentral()
     }
     dependencies {
-      implementation("com.wedasoft:simplejavafxapplicationbase:1.2.1")
+      implementation("com.wedasoft:simplejavafxapplicationbase:1.3.0")
     }
 
-# Common Dialogs
-
-##### Information dialogs
+# Some common dialog examples
 
     JfxDialogUtil.createInformationDialog(String message)
     
     JfxDialogUtil.createInformationDialog(String message, String messageHeader)
 
-##### Warning dialogs
-
     JfxDialogUtil.createWarningDialog(String message)
     
     JfxDialogUtil.createWarningDialog(String message, String messageHeader)
-
-##### Error dialogs
 
     JfxDialogUtil.createErrorDialog(String message)
      
     JfxDialogUtil.createErrorDialog(String message, Exception exceptionForStacktrace)
 
-##### Input dialogs
-
     JfxDialogUtil.displayInputDialogAndGetResult(String dialogText)
-
-##### Confirm dialogs
 
     JfxDialogUtil.displayConfirmDialogAndGetResult(String headerText, String contentText)
     
@@ -81,8 +82,6 @@ Please make sure that your project is using at least JDK 17 too.
     JfxDialogUtil.displayExitProgramDialog()
 
 # Complex Dialogs
-
-The entrypoint is the class <code>JfxDialogUtil</code>.
 
 Your dream is to create a fxml based dialog and pass arguments into it, and then get the arguments in the displayed
 dialog? You are at the right place.
@@ -106,8 +105,8 @@ dialog? You are at the right place.
 
 ### Step 2: Bind the controller class to your fxml file
 
-This is the same like in standard JavaFX.<br>
-Either you do this in the SceneBuilder or you do this by code in your *.fxml file:
+This is the same like in standard JavaFX. Either you do this in the SceneBuilder or you do this by code in your *.fxml
+file:
 
       <?xml version="1.0" encoding="UTF-8"?>
 
@@ -118,8 +117,7 @@ Either you do this in the SceneBuilder or you do this by code in your *.fxml fil
 
 ### Step 3: Create and show the fxml dialog and pass arguments
 
-Use the builder class to create your custom fxml dialog. <br>
-You can pass arguments with passArgumentsToController().
+Use the builder class to create your custom fxml dialog. You can pass arguments with passArgumentsToController().
 
     public void openDialog() throws Exception {
         FxmlDialog.Builder<YourControllerClass> dialogBuilder = JfxDialogUtil.createFxmlDialogBuilder(YourControllerClass.class, getClass().getResource("/path/to/your/fxml-file.fxml"))
@@ -138,8 +136,8 @@ You can pass arguments with passArgumentsToController().
 
 ### Step 4: Load and compute passed arguments
 
-To load the passed arguments in your controller, simply invoke getPassedArguments().<br>
-After that, just get the wanted argument by its String key out of the map.
+To load the passed arguments in your controller, simply invoke getPassedArguments(). After that, just get the wanted
+argument by its String key out of the map.
 
       public class YourControllerClass extends FxmlDialogControllerBase {
            
