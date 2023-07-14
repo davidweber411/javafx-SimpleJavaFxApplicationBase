@@ -56,7 +56,21 @@ public class DiagramComponent<CLASS_OF_SECTION, GETTER_RETURN_TYPE> extends Stac
     }
 
     private Node createUiForBarDiagram() {
-        return null;
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(50);
+        gridPane.setVgap(50);
+
+        gridPane.add(new Label("0,0"), 0, 0);
+        gridPane.add(new Label("0,1"), 0, 1);
+        gridPane.add(new Label("0,2"), 0, 2);
+        gridPane.add(new Label("1,0"), 1, 0);
+        gridPane.add(new Label("1,1"), 1, 1);
+        gridPane.add(new Label("1,2"), 1, 2);
+        gridPane.add(new Label("2,0"), 2, 0);
+        gridPane.add(new Label("2,1"), 2, 1);
+        gridPane.add(new Label("2,2"), 2, 2);
+
+        return gridPane;
     }
 
     private VBox createUiForBarDiagramSimple() {
