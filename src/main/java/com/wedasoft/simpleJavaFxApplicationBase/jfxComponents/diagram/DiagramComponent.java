@@ -46,8 +46,8 @@ public class DiagramComponent<CLASS_OF_SECTION, GETTER_RETURN_TYPE> extends Stac
 
         if (DiagramType.BAR_DIAGRAM_SIMPLE == diagramType) {
             borderPane.setCenter(createUiForBarDiagramSimple());
-        } else if (DiagramType.BAR_DIAGRAM_HORIZONTAL == diagramType) {
-            borderPane.setCenter(createUiForBarDiagramHorizontal());
+        } else if (DiagramType.BAR_DIAGRAM == diagramType) {
+            borderPane.setCenter(createUiForBarDiagram());
         } else {
             borderPane.setCenter(new Label("No diagram type selected."));
         }
@@ -55,7 +55,7 @@ public class DiagramComponent<CLASS_OF_SECTION, GETTER_RETURN_TYPE> extends Stac
         this.getChildren().add(borderPane);
     }
 
-    private Node createUiForBarDiagramHorizontal() {
+    private Node createUiForBarDiagram() {
         return null;
     }
 
