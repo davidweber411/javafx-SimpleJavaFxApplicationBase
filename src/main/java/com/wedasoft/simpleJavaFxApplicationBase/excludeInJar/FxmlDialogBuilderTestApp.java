@@ -60,7 +60,9 @@ public class FxmlDialogBuilderTestApp extends Application {
 
 //        stage.setScene(JfxComponentUtil.createDiagramSceneComponent(elements, Student::getLastName, DiagramType.BAR_DIAGRAM_SIMPLE, "Names of employees:")); // nach lastname -> Anker:1, Bond:2, Causalis:3, Deutsch:4
 
-        stage.setScene(JfxComponentUtil.createDiagramSceneComponent(elements, Student::getLastName, DiagramType.BAR_DIAGRAM_SIMPLE, "Names of employees:")); // nach lastname -> Anker:1, Bond:2, Causalis:3, Deutsch:4
+        stage.setScene(new Scene(JfxComponentUtil.createDiagramSceneComponent(
+                elements, Student::getLastName, DiagramType.BAR_DIAGRAM_SIMPLE,
+                "Names of employees:"))); // nach lastname -> Anker:1, Bond:2, Causalis:3, Deutsch:4
 
 
         stage.show();
