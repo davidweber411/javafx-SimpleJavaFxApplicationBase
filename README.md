@@ -14,6 +14,10 @@ This library contains functions that simplify the development of JavaFX applicat
   supported by Hibernate.<br>
 
 
+- <b>Scene switching API</b><br>
+  Switch scenes of stages easily. Pass and retrieve arguments to your scenes and compute them.<br>
+
+
 - <b>Testing suite</b><br>
   Run unit tests that require JavaFX components with ease, just by extending your test class with one single class.<br>
   No more annoying errors like "Toolkit not found", "Toolkit already initialized","Location is not set" or "Not on FX
@@ -308,6 +312,42 @@ Example of the file using the H2 database and mapping the entity "Student":
 ###### Count datasets
 
     HibernateQueryUtil.Finder.countAll(Class<T> entityClass)
+
+# Scene switching API
+
+Switch scenes of stages easily. Pass and retrieve arguments to your scenes and compute them.<br>
+The controller of the scene must inherit from the class 'FxmlSceneControllerBase'.
+
+### Switch scene of your opened stage
+
+If there is only one open stage, you can pass 'null' as parameter. This solution grabs all of your open stages and gets
+the first.
+
+    SceneSwitcher.createFxmlSceneSwitcher(
+      getClass().getResource("/path/to/your/scene.fxml"),
+      null)
+        .passArgumentsToControllerOfNewScene(Map.ofEntries(Map.entry("name", "Harald")))
+        .switchScene();
+
+### Switch scene of a stage got from an event
+
+Use this solution if your scene switching is triggered by an event, like a button click.
+
+    SceneSwitcher.createFxmlSceneSwitcher(
+      getClass().getResource("/path/to/your/scene.fxml"),
+      (Stage) ((Node) event.getSource()).getScene().getWindow())
+        .passArgumentsToControllerOfNewScene(Map.ofEntries(Map.entry("name", "Harald")))
+        .switchScene();
+
+### Switch scene of a stage where a component is located on
+
+With this solution you can define the wanted stage by passing the stage of any JavaFX component located on the stage.
+
+    SceneSwitcher.createFxmlSceneSwitcher(
+      getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene2.fxml"),
+      (Stage) scene1Label.getScene().getWindow())
+        .passArgumentsToControllerOfNewScene(Map.ofEntries(Map.entry("name", "Harald")))
+        .switchScene();
 
 # Testing suite
 
