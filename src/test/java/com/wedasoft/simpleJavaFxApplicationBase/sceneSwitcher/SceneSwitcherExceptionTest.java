@@ -7,14 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SceneSwitcherExceptionTest {
 
     @Test
-    void sceneSwitcherExceptionTest1() {
-        SceneSwitcherException e = new SceneSwitcherException();
-        assertThat(e).isNotNull();
-        assertThat(e.getMessage()).isNull();
-        assertThat(e.getCause()).isNull();
-    }
-
-    @Test
     void sceneSwitcherExceptionTest2() {
         SceneSwitcherException e = new SceneSwitcherException("Hello");
         assertThat(e).isNotNull();
@@ -28,6 +20,15 @@ class SceneSwitcherExceptionTest {
         assertThat(e).isNotNull();
         assertThat(e.getMessage()).isEqualTo("Hello");
         assertThat(e.getCause()).isNull();
+
+        try {
+            throw new Exception("Test");
+        } catch (Exception ex) {
+            SceneSwitcherException sse = new SceneSwitcherException("Hello", ex);
+            assertThat(sse).isNotNull();
+            assertThat(sse.getMessage()).isEqualTo("Hello");
+            assertThat(sse.getCause()).isNotNull();
+        }
     }
 
 }

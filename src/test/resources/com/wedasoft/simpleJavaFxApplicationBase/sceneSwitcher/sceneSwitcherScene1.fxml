@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.wedasoft.simpleJavaFxApplicationBase.sceneSwitcher.SceneSwitcherScene1Controller">
+   <center>
+      <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="scene1Label" text="This is scene1."/>
+            <Separator prefWidth="200.0"/>
+            <Button fx:id="switchToScene2WithStageIsNullButton" mnemonicParsing="false"
+                    onAction="#switchToScene2WithStageIsNullAction"
+                    text="Switch to scene2 (get default stage because stage is null)"/>
+            <Button fx:id="switchToScene2AndGetStageFromEventButton" mnemonicParsing="false"
+                    onAction="#switchToScene2AndGetStageFromEventAction"
+                    text="Switch to scene2 (get stage from event)"/>
+            <Button fx:id="switchToScene2AndGetStageFromAnyComponentButton" mnemonicParsing="false"
+                    onAction="#switchToScene2AndGetStageFromAnyComponentAction"
+                    text="Switch to scene2 (get stage from any component of stage)"/>
+            <Separator prefWidth="200.0"/>
+            <Label text="Parameter value: n/a"/>
+            <TextField fx:id="passedParameterTf"/>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+         </padding>
+      </VBox>
+   </center>
+</BorderPane>
