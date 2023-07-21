@@ -21,6 +21,13 @@
                     onAction="#switchToScene2AndGetStageFromAnyComponentAction"
                     text="Switch to scene2 (get stage from any component of stage)"/>
             <Separator prefWidth="200.0"/>
+            <Button fx:id="switchToScene2ViaSceneSwitcherUtilViaActionEventButton" mnemonicParsing="false"
+                    onAction="#doSwitchToScene2ViaSceneSwitcherUtilViaActionEventButtonClick"
+                    text="Switch to scene2 (via SSU via ActionEvent"/>
+            <Button fx:id="switchToScene2ViaSceneSwitcherUtilViaAnyComponentOfStageButton" mnemonicParsing="false"
+                    onAction="#doSwitchToScene2ViaSceneSwitcherUtilViaAnyComponentOfStageButtonClick"
+                    text="Switch to scene2 (via SSU via any component of stage)"/>
+            <Separator prefWidth="200.0"/>
             <Label text="Parameter value: n/a"/>
             <TextField fx:id="passedParameterTf"/>
          </children>

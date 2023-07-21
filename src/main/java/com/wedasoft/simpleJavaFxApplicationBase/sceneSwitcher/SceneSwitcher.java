@@ -16,6 +16,15 @@ public class SceneSwitcher<ControllerClassT extends FxmlSceneControllerBase> {
     private final Scene newScene;
     private final ControllerClassT controllerOfNewScene;
 
+    /**
+     * Creates a FxmlSceneSwitcher object which is used to switch scenes of a stage.
+     *
+     * @param fxmlFilePathUrl    The path to the fxml file of the new scene.
+     * @param stageToSwitchScene The stage which shall switch its scene.
+     * @param <ControllerClassT> The Class of the controller of the new scene.
+     * @return The SceneSwitcher object.
+     * @throws SceneSwitcherException If an error occurs.
+     */
     public static <ControllerClassT extends FxmlSceneControllerBase> SceneSwitcher<ControllerClassT> createFxmlSceneSwitcher(
             URL fxmlFilePathUrl, Stage stageToSwitchScene) throws SceneSwitcherException {
         return new SceneSwitcher<>(fxmlFilePathUrl, stageToSwitchScene);
@@ -44,7 +53,7 @@ public class SceneSwitcher<ControllerClassT extends FxmlSceneControllerBase> {
         try {
             controllerOfNewScene = fxmlLoader.getController();
         } catch (Exception e) {
-            throw new SceneSwitcherException("The controller of the new scene is not null, but it could not be loaded. Does the controller extend from the class FxmlSceneControllerBase?", e);
+            throw new SceneSwitcherException("The controller of the new scene is not null, but it could not be loaded and assigned. Does the controller extend from the class FxmlSceneControllerBase?", e);
         }
         if (controllerOfNewScene == null) {
             throw new SceneSwitcherException("The controller of the new scene is null. Please add a controller to the scene which extends from the class FxmlSceneControllerBase.");
@@ -54,11 +63,20 @@ public class SceneSwitcher<ControllerClassT extends FxmlSceneControllerBase> {
         controllerOfNewScene.setPassedArguments(new HashMap<>());
     }
 
+    /**
+     * This method is used to pass arguments to the controller of the new scene.
+     *
+     * @param argumentsToPass The arguments to pass.
+     * @return This instance of the SceneSwitcher object.
+     */
     public SceneSwitcher<ControllerClassT> passArgumentsToControllerOfNewScene(Map<String, String> argumentsToPass) {
         controllerOfNewScene.setPassedArguments(argumentsToPass);
         return this;
     }
 
+    /**
+     * This method is used to switch the scene.
+     */
     public void switchScene() {
         stageToSwitchScene.setScene(newScene);
         controllerOfNewScene.onFxmlSceneReady();

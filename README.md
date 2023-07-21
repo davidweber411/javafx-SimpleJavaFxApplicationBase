@@ -1,6 +1,7 @@
 # Description
 
 This library contains functions that simplify the development of JavaFX applications.<br>
+This library is 100% free.
 
 - <b>Powerful dialog API</b><br>
   Create complex .fxml file based dialogs. Pass and retrieve arguments without any effort.<br>
@@ -44,7 +45,7 @@ A complete documentation of this framework can be found on https://wedasoft.com/
     <dependency>
       <groupId>com.wedasoft</groupId>
       <artifactId>simplejavafxapplicationbase</artifactId>
-      <version>1.2.1</version>
+      <version>1.5.0</version>
     </dependency>
 
 ##### Gradle
@@ -53,34 +54,24 @@ A complete documentation of this framework can be found on https://wedasoft.com/
       mavenCentral()
     }
     dependencies {
-      implementation("com.wedasoft:simplejavafxapplicationbase:1.2.1")
+      implementation("com.wedasoft:simplejavafxapplicationbase:1.5.0")
     }
 
 # Common Dialogs
 
-##### Information dialogs
-
     JfxDialogUtil.createInformationDialog(String message)
-    
-    JfxDialogUtil.createInformationDialog(String message, String messageHeader)
 
-##### Warning dialogs
+    JfxDialogUtil.createInformationDialog(String message, String messageHeader)
 
     JfxDialogUtil.createWarningDialog(String message)
     
     JfxDialogUtil.createWarningDialog(String message, String messageHeader)
 
-##### Error dialogs
-
     JfxDialogUtil.createErrorDialog(String message)
      
     JfxDialogUtil.createErrorDialog(String message, Exception exceptionForStacktrace)
 
-##### Input dialogs
-
     JfxDialogUtil.displayInputDialogAndGetResult(String dialogText)
-
-##### Confirm dialogs
 
     JfxDialogUtil.displayConfirmDialogAndGetResult(String headerText, String contentText)
     

@@ -23,6 +23,10 @@ public class SceneSwitcherScene1Controller extends FxmlSceneControllerBase {
     Button switchToScene2AndGetStageFromEventButton;
     @FXML
     Button switchToScene2AndGetStageFromAnyComponentButton;
+    @FXML
+    Button switchToScene2ViaSceneSwitcherUtilViaActionEventButton;
+    @FXML
+    Button switchToScene2ViaSceneSwitcherUtilViaAnyComponentOfStageButton;
 
     @Override
     public void onFxmlSceneReady() {
@@ -39,11 +43,16 @@ public class SceneSwitcherScene1Controller extends FxmlSceneControllerBase {
             if (keyEvent.getCode() == KeyCode.C) {
                 switchToScene2AndGetStageFromAnyComponentButton.fire();
             }
+            if (keyEvent.getCode() == KeyCode.D) {
+                switchToScene2ViaSceneSwitcherUtilViaActionEventButton.fire();
+            }
+            if (keyEvent.getCode() == KeyCode.E) {
+                switchToScene2ViaSceneSwitcherUtilViaAnyComponentOfStageButton.fire();
+            }
         });
     }
 
-    @SuppressWarnings("unused")
-    public void switchToScene2WithStageIsNullAction(ActionEvent event) throws SceneSwitcherException {
+    public void switchToScene2WithStageIsNullAction(@SuppressWarnings("unused") ActionEvent event) throws SceneSwitcherException {
         SceneSwitcher.createFxmlSceneSwitcher(
                         getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene2.fxml"),
                         null)
@@ -59,13 +68,22 @@ public class SceneSwitcherScene1Controller extends FxmlSceneControllerBase {
                 .switchScene();
     }
 
-    @SuppressWarnings("unused")
-    public void switchToScene2AndGetStageFromAnyComponentAction(ActionEvent event) throws SceneSwitcherException {
+    public void switchToScene2AndGetStageFromAnyComponentAction(@SuppressWarnings("unused") ActionEvent event) throws SceneSwitcherException {
         SceneSwitcher.createFxmlSceneSwitcher(
                         getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene2.fxml"),
                         (Stage) scene1Label.getScene().getWindow())
                 .passArgumentsToControllerOfNewScene(Map.ofEntries(Map.entry("name", "Harald")))
                 .switchScene();
+    }
+
+    public void doSwitchToScene2ViaSceneSwitcherUtilViaActionEventButtonClick(ActionEvent event) throws SceneSwitcherException {
+        SceneSwitcherUtil.switchSceneOfStageViaActionEvent(
+                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene2.fxml"), null, event);
+    }
+
+    public void doSwitchToScene2ViaSceneSwitcherUtilViaAnyComponentOfStageButtonClick(@SuppressWarnings("unused") ActionEvent event) throws SceneSwitcherException {
+        SceneSwitcherUtil.switchSceneOfStageViaAnyComponent(
+                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene2.fxml"), null, scene1Label);
     }
 
 }

@@ -4,7 +4,7 @@ import javafx.event.ActionEvent;
 
 import java.util.Map;
 
-public class SceneSwitcherSceneWithNonInheritingController {
+public class SceneSwitcherSceneWithNonInheritingControllerController {
 
     @SuppressWarnings("unused")
     public void switchToScene1Action(ActionEvent event) throws SceneSwitcherException {
