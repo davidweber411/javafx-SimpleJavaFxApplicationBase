@@ -39,6 +39,9 @@ class SceneSwitcherTest extends SimpleJavaFxTestBase {
         assertThrows(Exception.class, () -> sceneSwitcher = SceneSwitcher.createFxmlSceneSwitcher(
                 getClass().getResource("/does/not/exist.fxml"), (Stage) label.getScene().getWindow()));
 
+        assertThrows(Exception.class, () -> SceneSwitcher.createFxmlSceneSwitcher(
+                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherSceneWithNonInheritingController.fxml"), null));
+
         assertThrows(Exception.class, () -> sceneSwitcher = SceneSwitcher.createFxmlSceneSwitcher(
                 getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherSceneWithoutController.fxml"), (Stage) label.getScene().getWindow()));
 

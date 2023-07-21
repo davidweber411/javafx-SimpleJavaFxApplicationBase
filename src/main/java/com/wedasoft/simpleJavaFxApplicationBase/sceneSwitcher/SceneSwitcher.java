@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SceneSwitcher<ControllerClassT extends FxmlSceneControllerBase> {
@@ -36,14 +37,21 @@ public class SceneSwitcher<ControllerClassT extends FxmlSceneControllerBase> {
                 ? stageToSwitchScene
                 : (Stage) Stage.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null);
         if (this.stageToSwitchScene == null) {
-            throw new SceneSwitcherException("The value of this.stageToSwitchScene is null. The default stage could not be loaded. Please use setStageToSwitchScene(Stage stage).");
+            throw new SceneSwitcherException("The value of this.stageToSwitchScene is null. The default stage could not be loaded.");
         }
 
         // check the controller of the scene
-        controllerOfNewScene = fxmlLoader.getController();
+        try {
+            controllerOfNewScene = fxmlLoader.getController();
+        } catch (Exception e) {
+            throw new SceneSwitcherException("The controller of the new scene is not null, but it could not be loaded. Does the controller extend from the class FxmlSceneControllerBase?", e);
+        }
         if (controllerOfNewScene == null) {
             throw new SceneSwitcherException("The controller of the new scene is null. Please add a controller to the scene which extends from the class FxmlSceneControllerBase.");
         }
+
+        // init arguments map with default values
+        controllerOfNewScene.setPassedArguments(new HashMap<>());
     }
 
     public SceneSwitcher<ControllerClassT> passArgumentsToControllerOfNewScene(Map<String, String> argumentsToPass) {
