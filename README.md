@@ -309,6 +309,10 @@ Example of the file using the H2 database and mapping the entity "Student":
 Switch scenes of stages easily. Pass and retrieve arguments to your scenes and compute them.<br>
 The controller of the scene must inherit from the class 'FxmlSceneControllerBase'.
 
+### Switch scene with SceneSwitcherUtil
+
+This utility class is used to wrap the below listed variants. Just check out the methods in the class SceneSwitcherUtil.
+
 ### Switch scene of your opened stage
 
 If there is only one open stage, you can pass 'null' as parameter. This solution grabs all of your open stages and gets
