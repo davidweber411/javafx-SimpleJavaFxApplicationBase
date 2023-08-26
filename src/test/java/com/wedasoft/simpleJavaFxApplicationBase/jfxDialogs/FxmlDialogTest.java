@@ -1,6 +1,6 @@
 package com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs;
 
-import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.TestController;
+import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.TestController;
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
 import javafx.geometry.Dimension2D;
 import javafx.scene.input.KeyCode;
@@ -35,7 +35,7 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
 
         @Test
         void checkForSceneSizeIsNull() {
-            assertDoesNotThrow(() -> runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null)));
+            assertDoesNotThrow(() -> runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null)));
         }
     }
 
@@ -43,14 +43,14 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
     class ConstructorWithoutController {
         @Test
         void constructor_checkForFxmlPathExistsAndSceneSizeIsNull() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-without-controller-view.fxml"), null));
+            runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-without-controller-view.fxml"), null));
             assertNotNull(builderWithoutController);
             assertNotNull(builderWithoutController.get());
         }
 
         @Test
         void constructor_checkForFxmlPathExistsAndSceneSizeExists() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-without-controller-view.fxml"), new Dimension2D(600, 500)));
+            runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-without-controller-view.fxml"), new Dimension2D(600, 500)));
             assertNotNull(builderWithoutController);
             assertNotNull(builderWithoutController.get());
             assertEquals(600, builderWithoutController.get().getStage().getScene().getWidth());
@@ -63,7 +63,7 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
     class ConstructorWithController {
         @Test
         void constructor_checkForFxmlPathExistsAndSceneSizeIsNull() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
+            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
             assertNotNull(builder);
             assertNotNull(builder.get());
             assertNotNull(builder.get().getController());
@@ -73,7 +73,7 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
 
         @Test
         void constructor_checkForFxmlPathExistsAndSceneSizeExists() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), new Dimension2D(600, 500)));
+            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"), new Dimension2D(600, 500)));
             assertNotNull(builder);
             assertNotNull(builder.get());
             assertEquals(600, builder.get().getStage().getScene().getWidth());
@@ -85,7 +85,7 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
 
         @Test
         void fxmlDialog_getController_shallReturnCorrectController() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
+            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
             assertNotNull(builder);
             assertNotNull(builder.get());
             assertNotNull(builder.get().getController());
@@ -95,7 +95,7 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
 
         @Test
         void fxmlDialog_getController_shallReturnNull() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-without-controller-view.fxml"), null));
+            runOnJavaFxThreadAndJoin(() -> builderWithoutController = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-without-controller-view.fxml"), null));
             assertNotNull(builderWithoutController);
             assertNotNull(builderWithoutController.get());
             assertNull(builderWithoutController.get().getController());
@@ -109,7 +109,7 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
 
         @Test
         void setStageTitle_shallCheckForStageTitle() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
+            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
             assertThat(builder).isNotNull();
             assertThat(builder.get()).isNotNull();
             assertThat(builder.get().getController()).isNotNull();
@@ -120,7 +120,7 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
 
         @Test
         void setStageResizable_shallCheckForBoolean() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
+            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
             assertThat(builder).isNotNull();
             assertThat(builder.get()).isNotNull();
             assertThat(builder.get().getController()).isNotNull();
@@ -131,7 +131,7 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
 
         @Test
         void setModal_shallCheckForBoolean() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
+            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
             assertThat(builder).isNotNull();
             assertThat(builder.get()).isNotNull();
             assertThat(builder.get().getController()).isNotNull();
@@ -145,7 +145,7 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
         @Test
         void setCallbackOnDialogClose_setKeySetToCloseDialogTest_shallCheckForCallbackExecution() throws Exception {
             runOnJavaFxThreadAndJoin(() -> {
-                builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null);
+                builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null);
                 builder.setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE));
                 builder.setCallbackOnDialogClose(() -> intChangedByCallback = 42);
             });
@@ -162,7 +162,7 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
 
         @Test
         void passArgumentsToController_shallCheckForPassedArgumentsExistsAndSizeAndValue() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
+            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
             assertThat(builder).isNotNull();
             assertThat(builder.get()).isNotNull();
             assertThat(builder.get().getController()).isNotNull();
@@ -174,13 +174,13 @@ class FxmlDialogTest extends SimpleJavaFxTestBase {
             assertThat(builder.get().getController().getPassedArguments().get("argument1")).isEqualTo("1");
             assertThat(builder.get().getController().getPassedArguments().get("argument2")).isEqualTo("2");
 
-            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-without-controller-view.fxml"), null));
+            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-without-controller-view.fxml"), null));
             assertThatThrownBy(() -> builder.passArgumentsToController(new HashMap<>()));
         }
 
         @Test
         void get_shallCheckForDialogIsNotNull() throws Exception {
-            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
+            runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder<>(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"), null));
             assertThat(builder).isNotNull();
             assertThat(builder.get()).isNotNull();
         }

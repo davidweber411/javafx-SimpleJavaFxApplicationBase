@@ -221,7 +221,7 @@ Example of the file using the H2 database and mapping the entity "Student":
             <property name="hibernate.dbcp.maxWaitMillis">-1</property>
  
             <!-- mappings from your classes to hibernate/database -->
-            <mapping class="com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.hibernateUtil.Student"/>
+            <mapping class="com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.Student"/>
         </session-factory>
     </hibernate-configuration>
 

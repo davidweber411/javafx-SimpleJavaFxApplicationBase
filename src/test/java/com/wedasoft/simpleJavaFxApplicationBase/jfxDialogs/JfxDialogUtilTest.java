@@ -1,6 +1,6 @@
 package com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs;
 
-import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.TestController;
+import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.TestController;
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
 import javafx.geometry.Dimension2D;
 import javafx.scene.control.Alert;
@@ -31,10 +31,10 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
         void createFxmlDialogBuilderTest() throws Exception {
             runOnJavaFxThreadAndJoin(() -> builder2 = JfxDialogUtil.createFxmlDialogBuilder(
                     TestController.class,
-                    getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml")));
+                    getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml")));
             runOnJavaFxThreadAndJoin(() -> builder2 = JfxDialogUtil.createFxmlDialogBuilder(
                     TestController.class,
-                    getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"),
+                    getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"),
                     new Dimension2D(500, 500)));
         }
     }

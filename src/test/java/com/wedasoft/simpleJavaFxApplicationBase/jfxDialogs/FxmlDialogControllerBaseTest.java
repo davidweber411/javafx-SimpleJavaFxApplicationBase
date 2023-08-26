@@ -1,6 +1,6 @@
 package com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs;
 
-import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.TestController;
+import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.TestController;
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ public class FxmlDialogControllerBaseTest extends SimpleJavaFxTestBase {
     void getPassedArgumentsAsIntTest() throws Exception {
         runOnJavaFxThreadAndJoin(() -> builder = JfxDialogUtil.createFxmlDialogBuilder(
                         TestController.class,
-                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"),
+                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"),
                         null)
                 .passArgumentsToController(Map.ofEntries(Map.entry("firstname", "Harald"), Map.entry("age", "25"))));
         assertNotNull(builder);

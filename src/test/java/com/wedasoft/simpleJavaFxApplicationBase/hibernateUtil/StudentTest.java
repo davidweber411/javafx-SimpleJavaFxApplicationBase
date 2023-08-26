@@ -1,4 +1,4 @@
-package com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.hibernateUtil;
+package com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil;
 
 import org.junit.jupiter.api.Test;
 
