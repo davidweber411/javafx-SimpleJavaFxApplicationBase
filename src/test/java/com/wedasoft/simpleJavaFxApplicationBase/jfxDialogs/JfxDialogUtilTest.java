@@ -206,7 +206,7 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
             assertThat(stageToClose.isShowing()).isTrue();
 
             typeKeysAfterSeconds(List.of(KeyCode.ESCAPE), 1);
-            runOnJavaFxThreadAndJoin(() -> JfxDialogUtil.displayCloseStageDialog(stageToClose));
+            runOnJavaFxThreadAndJoin(() -> JfxDialogUtil.displayCloseStageDialog(stageToClose, "Close Stage Dialog Title", "Close Stage Dialog Text"));
             assertThat(stageToClose.isShowing()).isTrue();
 
             typeKeysAfterSeconds(List.of(KeyCode.ENTER), 1);
@@ -216,7 +216,16 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
     }
 
 
-    @SuppressWarnings("SameParameterValue")
+    @Nested
+    class ExitProgramDialogTest {
+
+        @Test
+        void displayExitProgramDialog() throws Exception {
+            typeKeysAfterSeconds(List.of(KeyCode.ESCAPE), 2);
+            runOnJavaFxThreadAndJoin(JfxDialogUtil::displayExitProgramDialog);
+        }
+    }
+
     private static void typeKeysAfterSeconds(List<KeyCode> keys, int seconds) {
         new Thread(() -> {
             try {
