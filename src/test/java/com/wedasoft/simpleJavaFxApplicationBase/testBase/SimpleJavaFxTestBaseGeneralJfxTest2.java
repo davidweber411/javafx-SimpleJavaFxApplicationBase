@@ -21,7 +21,7 @@ class SimpleJavaFxTestBaseGeneralJfxTest2 extends SimpleJavaFxTestBase {
     @Test
     void testFxmlLoader() throws Exception {
         runOnJavaFxThreadAndJoin(() -> {
-            builder = new FxmlDialog.Builder(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/testBase/test-woc.fxml"), new Dimension2D(600, 500));
+            builder = new FxmlDialog.Builder(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/testBase/test-woc.fxml"), new Dimension2D(600, 500));
             builder.setStageTitle("Old StageTitle");
         });
         assertEquals("Old StageTitle", builder.get().getStage().getTitle());
@@ -33,7 +33,7 @@ class SimpleJavaFxTestBaseGeneralJfxTest2 extends SimpleJavaFxTestBase {
 
         assertThrows(Exception.class, () -> runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder(getClass().getResource("/doesnotexistse/test-woc.fxml"), new Dimension2D(600, 500))));
         runOnJavaFxThreadAndJoin(() -> {
-            builder = new FxmlDialog.Builder(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/testBase/test-woc.fxml"), new Dimension2D(1000, 1000));
+            builder = new FxmlDialog.Builder(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/testBase/test-woc.fxml"), new Dimension2D(1000, 1000));
             builder.setStageTitle("Another StageTitle");
             button2 = new Button("second init button");
         });

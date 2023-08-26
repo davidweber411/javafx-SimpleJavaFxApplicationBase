@@ -1,7 +1,5 @@
 package com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil;
 
-import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.hibernateUtil.Student;
-import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.hibernateUtil.Student_;
 import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.HibernateQueryUtil.Deleter;
 import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.HibernateQueryUtil.Finder;
 import com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.HibernateQueryUtil.Inserter;

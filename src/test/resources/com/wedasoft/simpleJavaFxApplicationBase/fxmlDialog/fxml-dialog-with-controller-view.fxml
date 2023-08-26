@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.TestController"
+            fx:controller="com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.TestController"
             prefHeight="400.0" prefWidth="600.0">
     <Button text="Hello2!"/>
 </AnchorPane>

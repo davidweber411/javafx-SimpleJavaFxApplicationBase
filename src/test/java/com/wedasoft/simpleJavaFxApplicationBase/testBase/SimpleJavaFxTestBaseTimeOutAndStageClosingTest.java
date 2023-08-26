@@ -1,7 +1,7 @@
 package com.wedasoft.simpleJavaFxApplicationBase.testBase;
 
 
-import com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog.TestController;
+import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.TestController;
 import com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.FxmlDialog;
 import com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.JfxDialogUtil;
 import javafx.scene.input.KeyCode;
@@ -27,7 +27,7 @@ public class SimpleJavaFxTestBaseTimeOutAndStageClosingTest extends SimpleJavaFx
     void openAndCloseStage_oneTime_shallCheckForChangedValue() throws Exception {
         valueChangedByCallback = 0;
         runOnJavaFxThreadAndJoin(() -> {
-            builder = JfxDialogUtil.createFxmlDialogBuilder(TestController.class, getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"));
+            builder = JfxDialogUtil.createFxmlDialogBuilder(TestController.class, getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"));
             builder.setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE, KeyCode.K));
             builder.setCallbackOnDialogClose(() -> valueChangedByCallback = 52);
         });
@@ -43,7 +43,7 @@ public class SimpleJavaFxTestBaseTimeOutAndStageClosingTest extends SimpleJavaFx
     void openAndCloseStage_multipleTimes_shallCheckForChangedValue() throws Exception {
         valueChangedByCallback = 0;
         runOnJavaFxThreadAndJoin(() -> {
-            builder = JfxDialogUtil.createFxmlDialogBuilder(TestController.class, getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/excludeInJar/fxmlDialog/fxml-dialog-with-controller-view.fxml"));
+            builder = JfxDialogUtil.createFxmlDialogBuilder(TestController.class, getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"));
             builder.setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE, KeyCode.K));
             builder.setCallbackOnDialogClose(() -> valueChangedByCallback = 52);
         });

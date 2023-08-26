@@ -1,4 +1,4 @@
-package com.wedasoft.simpleJavaFxApplicationBase.excludeInJar.fxmlDialog;
+package com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog;
 
 import com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.FxmlDialogControllerBase;
 
