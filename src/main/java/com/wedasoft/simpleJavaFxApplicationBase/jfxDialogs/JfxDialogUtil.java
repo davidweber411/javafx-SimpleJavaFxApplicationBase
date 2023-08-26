@@ -56,16 +56,16 @@ public class JfxDialogUtil {
      * ******************************************************************
      */
 
-    private static Alert createAlertDialog(AlertType alertType, String titleBarText, String headerText, String contentText) {
+    private static Alert createAlertDialog(AlertType alertType, String dialogTitleText, String dialogBodyHeaderText, String dialogContentText) {
         Alert alert;
         if (alertType == AlertType.WARNING || alertType == AlertType.ERROR) {
             alert = new Alert(alertType);
         } else {
             alert = new Alert(AlertType.INFORMATION);
         }
-        alert.setTitle(titleBarText);
-        alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
+        alert.setTitle(dialogTitleText);
+        alert.setHeaderText(dialogBodyHeaderText);
+        alert.setContentText(dialogContentText);
         return alert;
     }
 
@@ -161,29 +161,35 @@ public class JfxDialogUtil {
         return alert;
     }
 
-    public static boolean displayConfirmDialogAndGetResult(String headerText, String contentText) {
-        Alert alert = createConfirmDialog("Confirm", headerText, contentText);
+    public static boolean displayConfirmDialogAndGetResult(String dialogTitle, String dialogText) {
+        Alert alert = createConfirmDialog("Confirm", dialogTitle, dialogText);
         alert.showAndWait();
         return alert.getResult().getButtonData() == ButtonData.OK_DONE;
     }
 
-    @SuppressWarnings("unused")
-    public static void displayCloseStageDialog(Stage stageToClose) {
-        Alert alert = createConfirmDialog("Close window", null, "Do you really want to close this window?");
+    public static void displayCloseStageDialog(Stage stageToClose, String dialogTitle, String dialogText) {
+        Alert alert = createConfirmDialog(dialogTitle, null, dialogText);
+        alert.showAndWait();
         if (alert.getResult().getButtonData() == ButtonData.OK_DONE) {
             stageToClose.close();
         }
-        alert.showAndWait();
     }
 
-    @SuppressWarnings("unused")
-    public static void displayExitProgramDialog() {
-        Alert alert = createConfirmDialog("Exit program", null, "Do you really want to exit the program?");
+    public static void displayCloseStageDialog(Stage stageToClose) {
+        displayCloseStageDialog(stageToClose, "Close window", "Do you really want to close this window?");
+    }
+
+    public static void displayExitProgramDialog(String dialogTitle, String dialogText) {
+        Alert alert = createConfirmDialog(dialogTitle, null, dialogText);
+        alert.showAndWait();
         if (alert.getResult().getButtonData() == ButtonData.OK_DONE) {
             Platform.exit();
             System.exit(0);
         }
-        alert.showAndWait();
+    }
+
+    public static void displayExitProgramDialog() {
+        displayExitProgramDialog("Exit program", "Do you really want to exit the program?");
     }
 
     /*

@@ -6,6 +6,7 @@ import javafx.geometry.Dimension2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -188,6 +189,32 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
         }
 
     }
+
+    @Nested
+    class CloseStageDialogTest {
+
+        private Stage stageToClose;
+
+        @Test
+        void displayCloseStageDialog() throws Exception {
+            runOnJavaFxThreadAndJoin(() -> {
+                stageToClose = new Stage();
+                stageToClose.setWidth(300);
+                stageToClose.setHeight(300);
+                stageToClose.show();
+            });
+            assertThat(stageToClose.isShowing()).isTrue();
+
+            typeKeysAfterSeconds(List.of(KeyCode.ESCAPE), 1);
+            runOnJavaFxThreadAndJoin(() -> JfxDialogUtil.displayCloseStageDialog(stageToClose));
+            assertThat(stageToClose.isShowing()).isTrue();
+
+            typeKeysAfterSeconds(List.of(KeyCode.ENTER), 1);
+            runOnJavaFxThreadAndJoin(() -> JfxDialogUtil.displayCloseStageDialog(stageToClose));
+            assertThat(stageToClose.isShowing()).isFalse();
+        }
+    }
+
 
     @SuppressWarnings("SameParameterValue")
     private static void typeKeysAfterSeconds(List<KeyCode> keys, int seconds) {
