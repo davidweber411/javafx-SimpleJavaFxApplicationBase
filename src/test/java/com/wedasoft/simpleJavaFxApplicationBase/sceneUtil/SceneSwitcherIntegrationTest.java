@@ -1,4 +1,4 @@
-package com.wedasoft.simpleJavaFxApplicationBase.sceneSwitcher;
+package com.wedasoft.simpleJavaFxApplicationBase.sceneUtil;
 
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
 import javafx.scene.Node;
@@ -39,7 +39,7 @@ class SceneSwitcherIntegrationTest extends SimpleJavaFxTestBase {
     private void switchToScene1WithStageIsNull() throws Exception {
         runOnJavaFxThreadAndJoin(() -> {
             sceneSwitcherForScene1 = SceneSwitcher.createFxmlSceneSwitcher(
-                    getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene1.fxml"),
+                    getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/sceneSwitcherScene1.fxml"),
                     null);
             sceneSwitcherForScene1.switchScene();
         });
@@ -111,9 +111,9 @@ class SceneSwitcherIntegrationTest extends SimpleJavaFxTestBase {
         runOnJavaFxThreadAndJoin(() -> {
             try {
                 sceneSwitcherForScene1 = SceneSwitcher.createFxmlSceneSwitcher(
-                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene1.fxml"),
+                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/sceneSwitcherScene1.fxml"),
                         null);
-            } catch (SceneSwitcherException e) {
+            } catch (SceneUtilException e) {
                 exceptionWasThrown.set(true);
             }
         });

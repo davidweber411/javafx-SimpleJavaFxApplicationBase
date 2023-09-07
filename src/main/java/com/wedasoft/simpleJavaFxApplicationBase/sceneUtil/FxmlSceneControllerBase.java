@@ -1,4 +1,4 @@
-package com.wedasoft.simpleJavaFxApplicationBase.sceneSwitcher;
+package com.wedasoft.simpleJavaFxApplicationBase.sceneUtil;
 
 import java.util.Map;
 

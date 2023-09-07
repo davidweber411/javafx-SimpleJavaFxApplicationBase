@@ -1,4 +1,4 @@
-package com.wedasoft.simpleJavaFxApplicationBase.sceneSwitcher;
+package com.wedasoft.simpleJavaFxApplicationBase.sceneUtil;
 
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
 import javafx.scene.control.Label;
@@ -40,18 +40,18 @@ class SceneSwitcherTest extends SimpleJavaFxTestBase {
                 getClass().getResource("/does/not/exist.fxml"), (Stage) label.getScene().getWindow()));
 
         assertThrows(Exception.class, () -> SceneSwitcher.createFxmlSceneSwitcher(
-                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherSceneWithNonInheritingController.fxml"), null));
+                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/sceneSwitcherSceneWithNonInheritingController.fxml"), null));
 
         assertThrows(Exception.class, () -> sceneSwitcher = SceneSwitcher.createFxmlSceneSwitcher(
-                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherSceneWithoutController.fxml"), (Stage) label.getScene().getWindow()));
+                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/sceneSwitcherSceneWithoutController.fxml"), (Stage) label.getScene().getWindow()));
 
         assertDoesNotThrow(() -> sceneSwitcher = SceneSwitcher.createFxmlSceneSwitcher(
-                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene1.fxml"), null));
+                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/sceneSwitcherScene1.fxml"), null));
     }
 
     private void passArgumentsToControllerOfNewSceneTest() {
         assertDoesNotThrow(() -> sceneSwitcher = SceneSwitcher.createFxmlSceneSwitcher(
-                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene1.fxml"), null));
+                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/sceneSwitcherScene1.fxml"), null));
 
         sceneSwitcher.passArgumentsToControllerOfNewScene(new HashMap<>() {{
             put("name", "Rambo");

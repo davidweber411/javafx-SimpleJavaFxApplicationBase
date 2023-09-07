@@ -1,4 +1,4 @@
-package com.wedasoft.simpleJavaFxApplicationBase.sceneSwitcher;
+package com.wedasoft.simpleJavaFxApplicationBase.sceneUtil;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,38 +52,38 @@ public class SceneSwitcherScene1Controller extends FxmlSceneControllerBase {
         });
     }
 
-    public void switchToScene2WithStageIsNullAction(@SuppressWarnings("unused") ActionEvent event) throws SceneSwitcherException {
+    public void switchToScene2WithStageIsNullAction(@SuppressWarnings("unused") ActionEvent event) throws SceneUtilException {
         SceneSwitcher.createFxmlSceneSwitcher(
-                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene2.fxml"),
+                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/sceneSwitcherScene2.fxml"),
                         null)
                 .passArgumentsToControllerOfNewScene(Map.ofEntries(Map.entry("name", "Harald")))
                 .switchScene();
     }
 
-    public void switchToScene2AndGetStageFromEventAction(ActionEvent event) throws SceneSwitcherException {
+    public void switchToScene2AndGetStageFromEventAction(ActionEvent event) throws SceneUtilException {
         SceneSwitcher.createFxmlSceneSwitcher(
-                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene2.fxml"),
+                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/sceneSwitcherScene2.fxml"),
                         (Stage) ((Node) event.getSource()).getScene().getWindow())
                 .passArgumentsToControllerOfNewScene(Map.ofEntries(Map.entry("name", "Harald")))
                 .switchScene();
     }
 
-    public void switchToScene2AndGetStageFromAnyComponentAction(@SuppressWarnings("unused") ActionEvent event) throws SceneSwitcherException {
+    public void switchToScene2AndGetStageFromAnyComponentAction(@SuppressWarnings("unused") ActionEvent event) throws SceneUtilException {
         SceneSwitcher.createFxmlSceneSwitcher(
-                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene2.fxml"),
+                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/sceneSwitcherScene2.fxml"),
                         (Stage) scene1Label.getScene().getWindow())
                 .passArgumentsToControllerOfNewScene(Map.ofEntries(Map.entry("name", "Harald")))
                 .switchScene();
     }
 
-    public void doSwitchToScene2ViaSceneSwitcherUtilViaActionEventButtonClick(ActionEvent event) throws SceneSwitcherException {
-        SceneSwitcherUtil.switchSceneOfStageViaActionEvent(
-                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene2.fxml"), null, event);
+    public void doSwitchToScene2ViaSceneSwitcherUtilViaActionEventButtonClick(ActionEvent event) throws SceneUtilException {
+        SceneUtil.switchSceneOfStageViaActionEvent(
+                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/sceneSwitcherScene2.fxml"), null, event);
     }
 
-    public void doSwitchToScene2ViaSceneSwitcherUtilViaAnyComponentOfStageButtonClick(@SuppressWarnings("unused") ActionEvent event) throws SceneSwitcherException {
-        SceneSwitcherUtil.switchSceneOfStageViaAnyComponent(
-                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene2.fxml"), null, scene1Label);
+    public void doSwitchToScene2ViaSceneSwitcherUtilViaAnyComponentOfStageButtonClick(@SuppressWarnings("unused") ActionEvent event) throws SceneUtilException {
+        SceneUtil.switchSceneOfStageViaAnyComponent(
+                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/sceneSwitcherScene2.fxml"), null, scene1Label);
     }
 
 }

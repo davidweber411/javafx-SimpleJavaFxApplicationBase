@@ -1,22 +1,22 @@
-package com.wedasoft.simpleJavaFxApplicationBase.sceneSwitcher;
+package com.wedasoft.simpleJavaFxApplicationBase.sceneUtil;
 
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SceneSwitcherExceptionTest {
+class SceneUtilExceptionTest {
 
     @Test
-    void sceneSwitcherExceptionTest2() {
-        SceneSwitcherException e = new SceneSwitcherException("Hello");
+    void test1() {
+        SceneUtilException e = new SceneUtilException("Hello");
         assertThat(e).isNotNull();
         assertThat(e.getMessage()).isEqualTo("Hello");
         assertThat(e.getCause()).isNull();
     }
 
     @Test
-    void sceneSwitcherExceptionTest3() {
-        SceneSwitcherException e = new SceneSwitcherException("Hello", null);
+    void test2() {
+        SceneUtilException e = new SceneUtilException("Hello", null);
         assertThat(e).isNotNull();
         assertThat(e.getMessage()).isEqualTo("Hello");
         assertThat(e.getCause()).isNull();
@@ -24,7 +24,7 @@ class SceneSwitcherExceptionTest {
         try {
             throw new Exception("Test");
         } catch (Exception ex) {
-            SceneSwitcherException sse = new SceneSwitcherException("Hello", ex);
+            SceneUtilException sse = new SceneUtilException("Hello", ex);
             assertThat(sse).isNotNull();
             assertThat(sse.getMessage()).isEqualTo("Hello");
             assertThat(sse.getCause()).isNotNull();

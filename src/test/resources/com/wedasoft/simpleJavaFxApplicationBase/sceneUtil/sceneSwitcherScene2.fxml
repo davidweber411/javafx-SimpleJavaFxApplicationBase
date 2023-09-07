@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.wedasoft.simpleJavaFxApplicationBase.sceneSwitcher.SceneSwitcherScene2Controller">
+            fx:controller="com.wedasoft.simpleJavaFxApplicationBase.sceneUtil.SceneSwitcherScene2Controller">
     <center>
         <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
             <children>

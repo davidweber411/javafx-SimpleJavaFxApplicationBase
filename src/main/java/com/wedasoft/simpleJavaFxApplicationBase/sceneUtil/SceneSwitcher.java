@@ -1,4 +1,4 @@
-package com.wedasoft.simpleJavaFxApplicationBase.sceneSwitcher;
+package com.wedasoft.simpleJavaFxApplicationBase.sceneUtil;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,21 +23,21 @@ public class SceneSwitcher<ControllerClassT extends FxmlSceneControllerBase> {
      * @param stageToSwitchScene The stage which shall switch its scene.
      * @param <ControllerClassT> The Class of the controller of the new scene.
      * @return The SceneSwitcher object.
-     * @throws SceneSwitcherException If an error occurs.
+     * @throws SceneUtilException If an error occurs.
      */
     public static <ControllerClassT extends FxmlSceneControllerBase> SceneSwitcher<ControllerClassT> createFxmlSceneSwitcher(
-            URL fxmlFilePathUrl, Stage stageToSwitchScene) throws SceneSwitcherException {
+            URL fxmlFilePathUrl, Stage stageToSwitchScene) throws SceneUtilException {
         return new SceneSwitcher<>(fxmlFilePathUrl, stageToSwitchScene);
     }
 
-    private SceneSwitcher(URL fxmlFilePathUrl, Stage stageToSwitchScene) throws SceneSwitcherException {
+    private SceneSwitcher(URL fxmlFilePathUrl, Stage stageToSwitchScene) throws SceneUtilException {
         // check and load the new scene
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlFilePathUrl);
         Parent root;
         try {
             root = fxmlLoader.load(); // this calls the constructor and after that initialize from jfx
         } catch (Exception e) {
-            throw new SceneSwitcherException("Could not create SceneSwitcher object because the FXMLLoader could not load the fxml file. Is the URL parameter correct?", e);
+            throw new SceneUtilException("Could not create SceneSwitcher object because the FXMLLoader could not load the fxml file. Is the URL parameter correct?", e);
         }
         newScene = new Scene(root);
 
@@ -46,17 +46,17 @@ public class SceneSwitcher<ControllerClassT extends FxmlSceneControllerBase> {
                 ? stageToSwitchScene
                 : (Stage) Stage.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null);
         if (this.stageToSwitchScene == null) {
-            throw new SceneSwitcherException("The value of this.stageToSwitchScene is null. The default stage could not be loaded.");
+            throw new SceneUtilException("The value of this.stageToSwitchScene is null. The default stage could not be loaded.");
         }
 
         // check the controller of the scene
         try {
             controllerOfNewScene = fxmlLoader.getController();
         } catch (Exception e) {
-            throw new SceneSwitcherException("The controller of the new scene is not null, but it could not be loaded and assigned. Does the controller extend from the class FxmlSceneControllerBase?", e);
+            throw new SceneUtilException("The controller of the new scene is not null, but it could not be loaded and assigned. Does the controller extend from the class FxmlSceneControllerBase?", e);
         }
         if (controllerOfNewScene == null) {
-            throw new SceneSwitcherException("The controller of the new scene is null. Please add a controller to the scene which extends from the class FxmlSceneControllerBase.");
+            throw new SceneUtilException("The controller of the new scene is null. Please add a controller to the scene which extends from the class FxmlSceneControllerBase.");
         }
 
         // init arguments map with default values
