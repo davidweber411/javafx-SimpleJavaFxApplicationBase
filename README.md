@@ -16,7 +16,8 @@ This library is 100% free.
 
 
 - <b>Scene switching API</b><br>
-  Switch scenes of stages easily. Pass and retrieve arguments to your scenes and compute them.<br>
+  Switch scenes of stages or the complete root content of scenes easily. Pass and retrieve arguments to your scenes and
+  compute them.<br>
 
 
 - <b>Testing suite</b><br>
