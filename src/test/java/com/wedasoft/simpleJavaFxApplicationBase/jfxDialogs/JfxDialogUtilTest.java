@@ -146,7 +146,7 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
         @Test
         void createErrorDialog_withoutStacktrace() throws Exception {
             runOnJavaFxThreadAndJoin(() -> {
-                dialog = createDialogWithColumns("Dialog with columns", 3, 20, List.of(
+                dialog = JfxDialogUtil.createDialogWithColumns("Dialog with columns", 3, 20, List.of(
                         new Label("Label1"),
                         new Label("Label2"),
                         new Label("Label3"),
