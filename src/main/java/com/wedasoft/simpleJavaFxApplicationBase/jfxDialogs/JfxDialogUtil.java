@@ -2,24 +2,30 @@ package com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs;
 
 import javafx.application.Platform;
 import javafx.geometry.Dimension2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 
 public class JfxDialogUtil {
 
     /*
      * ******************************************************************
-     * ********************** FXML Dialogs ******************************
+     * ********************** FXML dialogs ******************************
      * ******************************************************************
      */
 
@@ -56,81 +62,12 @@ public class JfxDialogUtil {
         return new FxmlDialog.Builder<>(fxmlFileUrl, sceneSize);
     }
 
+
     /*
      * ******************************************************************
-     * ************* Information / Warning / Error dialogs **************
+     * ************* Error dialogs **************************************
      * ******************************************************************
      */
-
-    private static Alert createAlertDialog(
-            AlertType alertType,
-            String dialogTitleText,
-            String dialogBodyHeaderText,
-            String dialogContentText) {
-
-        Alert alert;
-        if (alertType == AlertType.WARNING || alertType == AlertType.ERROR) {
-            alert = new Alert(alertType);
-        } else {
-            alert = new Alert(AlertType.INFORMATION);
-        }
-        alert.setTitle(dialogTitleText);
-        alert.setHeaderText(dialogBodyHeaderText);
-        alert.setContentText(dialogContentText);
-        return alert;
-    }
-
-    /**
-     * Creates an information dialog.
-     *
-     * @param message The message to display.
-     * @return The information dialog.
-     */
-    public static Alert createInformationDialog(
-            String message) {
-
-        return createAlertDialog(AlertType.INFORMATION, "Information", null, message);
-    }
-
-    /**
-     * Creates an information dialog.
-     *
-     * @param message       The message to display.
-     * @param messageHeader The header of the message.
-     * @return The information dialog.
-     */
-    public static Alert createInformationDialog(
-            String message,
-            String messageHeader) {
-
-        return createAlertDialog(AlertType.INFORMATION, "Information", messageHeader, message);
-    }
-
-    /**
-     * Creates a warning dialog.
-     *
-     * @param message The message to display.
-     * @return The warning dialog.
-     */
-    public static Alert createWarningDialog(
-            String message) {
-
-        return createAlertDialog(AlertType.WARNING, "Warning", null, message);
-    }
-
-    /**
-     * Creates a warning dialog.
-     *
-     * @param message       The message to display.
-     * @param messageHeader The header of the message.
-     * @return The warning dialog.
-     */
-    public static Alert createWarningDialog(
-            String message,
-            String messageHeader) {
-
-        return createAlertDialog(AlertType.WARNING, "Warning", messageHeader, message);
-    }
 
     /**
      * Creates an simple error dialog.
@@ -172,24 +109,122 @@ public class JfxDialogUtil {
         return alert;
     }
 
+    /*
+     * ******************************************************************
+     * ************* Warning dialogs ************************************
+     * ******************************************************************
+     */
+
+    /**
+     * Creates a warning dialog.
+     *
+     * @param message The message to display.
+     * @return The warning dialog.
+     */
+    public static Alert createWarningDialog(
+            String message) {
+
+        return createAlertDialog(AlertType.WARNING, "Warning", null, message);
+    }
+
+    /**
+     * Creates a warning dialog.
+     *
+     * @param message       The message to display.
+     * @param messageHeader The header of the message.
+     * @return The warning dialog.
+     */
+    public static Alert createWarningDialog(
+            String message,
+            String messageHeader) {
+
+        return createAlertDialog(AlertType.WARNING, "Warning", messageHeader, message);
+    }
+
+    /*
+     * ******************************************************************
+     * ************* Information dialogs ********************************
+     * ******************************************************************
+     */
+
+    /**
+     * Creates an information dialog.
+     *
+     * @param message The message to display.
+     * @return The information dialog.
+     */
+    public static Alert createInformationDialog(
+            String message) {
+
+        return createAlertDialog(AlertType.INFORMATION, "Information", null, message);
+    }
+
+    /**
+     * Creates an information dialog.
+     *
+     * @param message       The message to display.
+     * @param messageHeader The header of the message.
+     * @return The information dialog.
+     */
+    public static Alert createInformationDialog(
+            String message,
+            String messageHeader) {
+
+        return createAlertDialog(AlertType.INFORMATION, "Information", messageHeader, message);
+    }
+
+    /*
+     * ******************************************************************
+     * ******************** Column dialogs ******************************
+     * ******************************************************************
+     */
+
+    /**
+     * Creates a dialog which displays the given node in a grid. All columns will have the same width.
+     *
+     * @param title           The title of the dialog.
+     * @param amountOfColumns Specifies the amount of columns.
+     * @param nodes           All nodes that shall be displayed in the grid system.
+     */
+    public static Alert createDialogWithColumns(
+            String title,
+            int amountOfColumns,
+            int cellGap,
+            List<Node> nodes) {
+
+        GridPane grid = new GridPane();
+        grid.setHgap(cellGap);
+        grid.setVgap(cellGap);
+        for (int i = 0; i < amountOfColumns; i++) {
+            ColumnConstraints cc = new ColumnConstraints();
+            cc.setHgrow(Priority.ALWAYS);
+            grid.getColumnConstraints().add(cc);
+        }
+
+        int amountOfRows = (int) Math.ceil(nodes.size() / (double) amountOfColumns);
+        Iterator<Node> iterator = nodes.iterator();
+        for (int rowI = 0; rowI < amountOfRows; rowI++) {
+            for (int columnJ = 0; columnJ < amountOfColumns; columnJ++) {
+                if (iterator.hasNext()) {
+                    grid.add(iterator.next(), columnJ, rowI);
+                }
+            }
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title != null ? title : "");
+        alert.setHeaderText(null);
+        // alert.setGraphic(null);
+        alert.setResizable(true);
+        alert.getDialogPane().setContent(grid);
+        return alert;
+    }
 
     /*
      * ******************************************************************
      * ******************** Confirm dialogs *****************************
      * ******************************************************************
      */
-
-    private static Alert createConfirmDialog(
-            String titleBarText,
-            String headerText,
-            String contentText) {
-
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle(titleBarText);
-        alert.setHeaderText(headerText);
-        alert.setContentText(contentText);
-        return alert;
-    }
 
     public static boolean displayConfirmDialogAndGetResult(
             String dialogTitle,
@@ -259,6 +294,41 @@ public class JfxDialogUtil {
         dialog.showAndWait();
         String result = dialog.getResult();
         return result != null ? result : "";
+    }
+
+    /*
+     * ******************************************************************
+     * ******************** Private methods *****************************
+     * ******************************************************************
+     */
+    private static Alert createAlertDialog(
+            AlertType alertType,
+            String dialogTitleText,
+            String dialogBodyHeaderText,
+            String dialogContentText) {
+
+        Alert alert;
+        if (alertType == AlertType.WARNING || alertType == AlertType.ERROR) {
+            alert = new Alert(alertType);
+        } else {
+            alert = new Alert(AlertType.INFORMATION);
+        }
+        alert.setTitle(dialogTitleText);
+        alert.setHeaderText(dialogBodyHeaderText);
+        alert.setContentText(dialogContentText);
+        return alert;
+    }
+
+    private static Alert createConfirmDialog(
+            String titleBarText,
+            String headerText,
+            String contentText) {
+
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle(titleBarText);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        return alert;
     }
 
 }

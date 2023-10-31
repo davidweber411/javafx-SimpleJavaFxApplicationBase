@@ -4,8 +4,10 @@ import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.TestController;
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
 import javafx.geometry.Dimension2D;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -138,6 +140,36 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
     }
 
     @Nested
+    class DialogWithColumnsTest {
+        private Alert dialog;
+
+        @Test
+        void createErrorDialog_withoutStacktrace() throws Exception {
+            runOnJavaFxThreadAndJoin(() -> {
+                dialog = createDialogWithColumns("Dialog with columns", 3, 20, List.of(
+                        new Label("Label1"),
+                        new Label("Label2"),
+                        new Label("Label3"),
+                        new Label("Label4"),
+                        new Label("Label5")));
+                dialog.show();
+                dialog.close();
+            });
+            assertThat(dialog.getTitle()).isEqualTo("Dialog with columns");
+            assertThat(dialog.getHeaderText()).isNull();
+            GridPane grid = (GridPane) dialog.getDialogPane().getContent();
+            assertThat(grid.getColumnCount()).isEqualTo(3);
+            assertThat(grid.getRowCount()).isEqualTo(2);
+            assertThat(grid.getVgap()).isEqualTo(20);
+            assertThat(grid.getHgap()).isEqualTo(20);
+            for (int i = 0; i < grid.getChildren().size(); i++) {
+                assertThat(((Label) grid.getChildren().get(i)).getText()).isEqualTo("Label" + (i + 1));
+            }
+        }
+
+    }
+
+    @Nested
     class ConfirmDialogTest {
 
         private boolean result;
@@ -214,7 +246,6 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
             assertThat(stageToClose.isShowing()).isFalse();
         }
     }
-
 
     @Nested
     class ExitProgramDialogTest {
