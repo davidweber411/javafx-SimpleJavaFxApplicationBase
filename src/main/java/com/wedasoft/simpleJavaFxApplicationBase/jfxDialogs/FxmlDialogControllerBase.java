@@ -32,7 +32,10 @@ public abstract class FxmlDialogControllerBase implements Initializable {
      *
      * @param mapKey Key of the argument.
      */
-    public int getPassedArgumentsAsInt(String mapKey) throws Exception {
+    public int getPassedArgumentsAsInt(
+            String mapKey)
+            throws Exception {
+
         try {
             return Integer.parseInt(passedArguments.get(mapKey));
         } catch (Exception e) {
@@ -40,7 +43,9 @@ public abstract class FxmlDialogControllerBase implements Initializable {
         }
     }
 
-    public void setPassedArguments(Map<String, String> passedArguments) {
+    public void setPassedArguments(
+            Map<String, String> passedArguments) {
+
         this.passedArguments = passedArguments;
     }
 }

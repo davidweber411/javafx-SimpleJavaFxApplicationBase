@@ -26,7 +26,11 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
 
     private final CONTROLLER_CLASS controller;
 
-    private FxmlDialog(URL fxmlFileUrl, Dimension2D sceneSize) throws Exception {
+    private FxmlDialog(
+            URL fxmlFileUrl,
+            Dimension2D sceneSize)
+            throws Exception {
+
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlFileUrl);
         Parent root = fxmlLoader.load(); // this calls the constructor and after that initialize from jfx()
         Scene scene = sceneSize == null ? new Scene(root) : new Scene(root, sceneSize.getWidth(), sceneSize.getHeight());
@@ -38,7 +42,9 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
         }
     }
 
-    private void setCallbackOnDialogClose(CallbackOnDialogClose callback) {
+    private void setCallbackOnDialogClose(
+            CallbackOnDialogClose callback) {
+
         stage.setOnHidden(event -> {
             event.consume();
             callback.execute();
@@ -46,7 +52,9 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
         });
     }
 
-    private void setKeySetToCloseDialog(Set<KeyCode> keySet) {
+    private void setKeySetToCloseDialog(
+            Set<KeyCode> keySet) {
+
         if (keySet != null) {
             stage.getScene().setOnKeyReleased(event -> {
                 for (KeyCode keyCode : keySet)
@@ -58,7 +66,10 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
         }
     }
 
-    private void passArgumentsToController(Map<String, String> argumentsToPass) throws Exception {
+    private void passArgumentsToController(
+            Map<String, String> argumentsToPass)
+            throws Exception {
+
         if (isNull(controller)) {
             throw new Exception("Can not execute 'passArgumentsToController()' because the controller of the fxml file is null.");
         }
@@ -99,7 +110,11 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
          * @param sceneSize   The size of the {@link Scene}. Null is allowed and computes the scene size automatically.
          * @throws Exception Throws if an error occurs.
          */
-        public Builder(URL fxmlFileUrl, Dimension2D sceneSize) throws Exception {
+        public Builder(
+                URL fxmlFileUrl,
+                Dimension2D sceneSize)
+                throws Exception {
+
             this.fxmlDialog = new FxmlDialog<>(fxmlFileUrl, sceneSize);
         }
 
@@ -109,7 +124,9 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
          *
          * @param stageTitle The title of the stage.
          */
-        public Builder<CONTROLLER_CLASS> setStageTitle(String stageTitle) {
+        public Builder<CONTROLLER_CLASS> setStageTitle(
+                String stageTitle) {
+
             this.fxmlDialog.getStage().setTitle(stageTitle);
             return this;
         }
@@ -120,7 +137,9 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
          *
          * @param isResizable The ability to be resizable.
          */
-        public Builder<CONTROLLER_CLASS> setStageResizable(boolean isResizable) {
+        public Builder<CONTROLLER_CLASS> setStageResizable(
+                boolean isResizable) {
+
             this.fxmlDialog.getStage().setResizable(isResizable);
             return this;
         }
@@ -131,7 +150,9 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
          *
          * @param isModal The ability to be modal.
          */
-        public Builder<CONTROLLER_CLASS> setModal(boolean isModal) {
+        public Builder<CONTROLLER_CLASS> setModal(
+                boolean isModal) {
+
             if (isModal) {
                 this.fxmlDialog.getStage().initModality(Modality.APPLICATION_MODAL);
             } else {
@@ -145,7 +166,9 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
          *
          * @param callback The callback function.
          */
-        public Builder<CONTROLLER_CLASS> setCallbackOnDialogClose(CallbackOnDialogClose callback) {
+        public Builder<CONTROLLER_CLASS> setCallbackOnDialogClose(
+                CallbackOnDialogClose callback) {
+
             this.fxmlDialog.setCallbackOnDialogClose(callback);
             return this;
         }
@@ -156,7 +179,9 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
          *
          * @param keySet The key containing set.
          */
-        public Builder<CONTROLLER_CLASS> setKeySetToCloseDialog(Set<KeyCode> keySet) {
+        public Builder<CONTROLLER_CLASS> setKeySetToCloseDialog(
+                Set<KeyCode> keySet) {
+
             this.fxmlDialog.setKeySetToCloseDialog(keySet);
             return this;
         }
@@ -170,7 +195,10 @@ public class FxmlDialog<CONTROLLER_CLASS extends FxmlDialogControllerBase> {
          * @throws Exception If an error occurs.
          * @see FxmlDialogControllerBase#getPassedArguments()
          */
-        public Builder<CONTROLLER_CLASS> passArgumentsToController(Map<String, String> argumentsToPass) throws Exception {
+        public Builder<CONTROLLER_CLASS> passArgumentsToController(
+                Map<String, String> argumentsToPass)
+                throws Exception {
+
             this.fxmlDialog.passArgumentsToController(argumentsToPass);
             return this;
         }

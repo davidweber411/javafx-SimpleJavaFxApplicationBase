@@ -24,6 +24,7 @@ public class SceneUtil {
             HashMap<String, String> argumentsToPass,
             ActionEvent event)
             throws SceneUtilException {
+
         Node node = (Node) event.getSource();
         switchSceneOfStageViaAnyComponent(fxmlFilePathUrl, argumentsToPass, node);
     }
@@ -41,6 +42,7 @@ public class SceneUtil {
             HashMap<String, String> argumentsToPass,
             Node anyComponentOfTheStage)
             throws SceneUtilException {
+
         Stage stage = (Stage) anyComponentOfTheStage.getScene().getWindow();
         SceneSwitcher.createFxmlSceneSwitcher(fxmlFilePathUrl, stage)
                 .passArgumentsToControllerOfNewScene(argumentsToPass == null ? new HashMap<>() : argumentsToPass)
@@ -60,6 +62,7 @@ public class SceneUtil {
             URL urlToNewFxmlFile,
             Map<String, String> argumentsToPass)
             throws SceneUtilException {
+
         SceneContentSwitcher.createSceneContentSwitcher(sceneToSwitchContent, urlToNewFxmlFile)
                 .passArgumentsToNewController(argumentsToPass)
                 .switchSceneContent();

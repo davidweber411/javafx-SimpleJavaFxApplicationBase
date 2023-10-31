@@ -8,7 +8,9 @@ public class CommonUtils {
      * @param string The string to check.
      * @return True if the string is empty, blank or null.
      */
-    public static boolean isEmptyBlankOrNull(String string) {
+    public static boolean isEmptyBlankOrNull(
+            String string) {
+
         return string == null || string.trim().isEmpty();
     }
 
@@ -19,7 +21,10 @@ public class CommonUtils {
      * @param numberOfDecimalPlaces The number of commaspaces.
      * @return The rounded float.
      */
-    public static float roundNumberOnCommaspace(float numberToRound, int numberOfDecimalPlaces) {
+    public static float roundNumberOnCommaspace(
+            float numberToRound,
+            int numberOfDecimalPlaces) {
+
         return (float) roundNumberOnCommaspace((double) numberToRound, numberOfDecimalPlaces);
     }
 
@@ -30,7 +35,10 @@ public class CommonUtils {
      * @param numberOfDecimalPlaces The number of commaspaces.
      * @return The rounded double.
      */
-    public static double roundNumberOnCommaspace(double numberToRound, int numberOfDecimalPlaces) {
+    public static double roundNumberOnCommaspace(
+            double numberToRound,
+            int numberOfDecimalPlaces) {
+
         double x = 1;
         for (int i = 0; i < numberOfDecimalPlaces; i++) {
             x *= 10;

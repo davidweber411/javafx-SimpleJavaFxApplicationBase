@@ -31,8 +31,10 @@ public class JfxDialogUtil {
      * @throws Exception Throws if an error occurs.
      */
     public static <CONTROLLER_CLASS extends FxmlDialogControllerBase> FxmlDialog.Builder<CONTROLLER_CLASS> createFxmlDialogBuilder(
-            @SuppressWarnings("unused") Class<CONTROLLER_CLASS> controllerClass, URL fxmlFileUrl)
+            Class<CONTROLLER_CLASS> controllerClass,
+            URL fxmlFileUrl)
             throws Exception {
+
         return createFxmlDialogBuilder(controllerClass, fxmlFileUrl, null);
     }
 
@@ -44,9 +46,13 @@ public class JfxDialogUtil {
      * @param sceneSize   The size of the {@link Scene}. Null is allowed and computes the scene size automatically.
      * @throws Exception Throws if an error occurs.
      */
+    @SuppressWarnings("unused")
     public static <CONTROLLER_CLASS extends FxmlDialogControllerBase> FxmlDialog.Builder<CONTROLLER_CLASS> createFxmlDialogBuilder(
-            @SuppressWarnings("unused") Class<CONTROLLER_CLASS> controllerClass, URL fxmlFileUrl, Dimension2D sceneSize)
+            Class<CONTROLLER_CLASS> controllerClass,
+            URL fxmlFileUrl,
+            Dimension2D sceneSize)
             throws Exception {
+
         return new FxmlDialog.Builder<>(fxmlFileUrl, sceneSize);
     }
 
@@ -56,7 +62,12 @@ public class JfxDialogUtil {
      * ******************************************************************
      */
 
-    private static Alert createAlertDialog(AlertType alertType, String dialogTitleText, String dialogBodyHeaderText, String dialogContentText) {
+    private static Alert createAlertDialog(
+            AlertType alertType,
+            String dialogTitleText,
+            String dialogBodyHeaderText,
+            String dialogContentText) {
+
         Alert alert;
         if (alertType == AlertType.WARNING || alertType == AlertType.ERROR) {
             alert = new Alert(alertType);
@@ -75,7 +86,9 @@ public class JfxDialogUtil {
      * @param message The message to display.
      * @return The information dialog.
      */
-    public static Alert createInformationDialog(String message) {
+    public static Alert createInformationDialog(
+            String message) {
+
         return createAlertDialog(AlertType.INFORMATION, "Information", null, message);
     }
 
@@ -86,7 +99,10 @@ public class JfxDialogUtil {
      * @param messageHeader The header of the message.
      * @return The information dialog.
      */
-    public static Alert createInformationDialog(String message, String messageHeader) {
+    public static Alert createInformationDialog(
+            String message,
+            String messageHeader) {
+
         return createAlertDialog(AlertType.INFORMATION, "Information", messageHeader, message);
     }
 
@@ -96,7 +112,9 @@ public class JfxDialogUtil {
      * @param message The message to display.
      * @return The warning dialog.
      */
-    public static Alert createWarningDialog(String message) {
+    public static Alert createWarningDialog(
+            String message) {
+
         return createAlertDialog(AlertType.WARNING, "Warning", null, message);
     }
 
@@ -107,7 +125,10 @@ public class JfxDialogUtil {
      * @param messageHeader The header of the message.
      * @return The warning dialog.
      */
-    public static Alert createWarningDialog(String message, String messageHeader) {
+    public static Alert createWarningDialog(
+            String message,
+            String messageHeader) {
+
         return createAlertDialog(AlertType.WARNING, "Warning", messageHeader, message);
     }
 
@@ -117,7 +138,9 @@ public class JfxDialogUtil {
      * @param message The message to display.
      * @return The error dialog.
      */
-    public static Alert createErrorDialog(String message) {
+    public static Alert createErrorDialog(
+            String message) {
+
         return createErrorDialog(message, null);
     }
 
@@ -128,7 +151,10 @@ public class JfxDialogUtil {
      * @param message                The message to display.
      * @param exceptionForStacktrace The thrown exception. The stack trace of this exception will be displayed.
      */
-    public static Alert createErrorDialog(String message, Exception exceptionForStacktrace) {
+    public static Alert createErrorDialog(
+            String message,
+            Exception exceptionForStacktrace) {
+
         Alert alert = createAlertDialog(AlertType.ERROR, "Error", null, message);
         if (exceptionForStacktrace != null) {
             StringWriter sw = new StringWriter();
@@ -153,7 +179,11 @@ public class JfxDialogUtil {
      * ******************************************************************
      */
 
-    private static Alert createConfirmDialog(String titleBarText, String headerText, String contentText) {
+    private static Alert createConfirmDialog(
+            String titleBarText,
+            String headerText,
+            String contentText) {
+
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle(titleBarText);
         alert.setHeaderText(headerText);
@@ -161,13 +191,20 @@ public class JfxDialogUtil {
         return alert;
     }
 
-    public static boolean displayConfirmDialogAndGetResult(String dialogTitle, String dialogText) {
+    public static boolean displayConfirmDialogAndGetResult(
+            String dialogTitle,
+            String dialogText) {
+
         Alert alert = createConfirmDialog("Confirm", dialogTitle, dialogText);
         alert.showAndWait();
         return alert.getResult().getButtonData() == ButtonData.OK_DONE;
     }
 
-    public static void displayCloseStageDialog(Stage stageToClose, String dialogTitle, String dialogText) {
+    public static void displayCloseStageDialog(
+            Stage stageToClose,
+            String dialogTitle,
+            String dialogText) {
+
         Alert alert = createConfirmDialog(dialogTitle, null, dialogText);
         alert.showAndWait();
         if (alert.getResult().getButtonData() == ButtonData.OK_DONE) {
@@ -175,11 +212,16 @@ public class JfxDialogUtil {
         }
     }
 
-    public static void displayCloseStageDialog(Stage stageToClose) {
+    public static void displayCloseStageDialog(
+            Stage stageToClose) {
+
         displayCloseStageDialog(stageToClose, "Close window", "Do you really want to close this window?");
     }
 
-    public static void displayExitProgramDialog(String dialogTitle, String dialogText) {
+    public static void displayExitProgramDialog(
+            String dialogTitle,
+            String dialogText) {
+
         Alert alert = createConfirmDialog(dialogTitle, null, dialogText);
         alert.showAndWait();
         if (alert.getResult().getButtonData() == ButtonData.OK_DONE) {
@@ -198,7 +240,11 @@ public class JfxDialogUtil {
      * ******************************************************************
      */
 
-    public static TextInputDialog createInputDialog(String titleText, String headerText, String contentText) {
+    public static TextInputDialog createInputDialog(
+            String titleText,
+            String headerText,
+            String contentText) {
+
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle(titleText);
         dialog.setHeaderText(headerText);
@@ -206,7 +252,9 @@ public class JfxDialogUtil {
         return dialog;
     }
 
-    public static String displayInputDialogAndGetResult(String dialogText) {
+    public static String displayInputDialogAndGetResult(
+            String dialogText) {
+
         TextInputDialog dialog = createInputDialog("Input", dialogText, null);
         dialog.showAndWait();
         String result = dialog.getResult();
