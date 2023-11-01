@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * @author davidweber411
  */
-public class FileUtils {
+public class FileUtilsOLD {
 
     /**
      * This method is used for deleting a file or a directory, including directories

@@ -12,7 +12,7 @@ import java.nio.file.StandardCopyOption;
 /**
  * @author davidweber411
  */
-public class FileSystemUtils {
+public class FileSystemUtilsOLD {
 
     /**
      * Creates a file, including any necessary but not existent parent directories.
@@ -129,7 +129,7 @@ public class FileSystemUtils {
                     "File could not be copied. The path of the file to copy either does not exist or it does not represent a file.");
         }
 
-        Path copiedFilePath = FileSystemUtils.appendToPath(copyIntoDirPath, pathOfFileToCopy.getFileName().toString());
+        Path copiedFilePath = FileSystemUtilsOLD.appendToPath(copyIntoDirPath, pathOfFileToCopy.getFileName().toString());
         Files.createDirectories(copyIntoDirPath);
         if (!overwriteExistingFile) {
             Files.copy(pathOfFileToCopy, copiedFilePath);
@@ -244,13 +244,13 @@ public class FileSystemUtils {
                     "File could not be moved. The path of the file to move either does not exist or it does not represent a file.");
         }
         if (!overwriteExistingFile && Files.isRegularFile(
-                FileSystemUtils.appendToPath(moveIntoDirPath, pathOfFileToMove.getFileName().toString()))) {
+                FileSystemUtilsOLD.appendToPath(moveIntoDirPath, pathOfFileToMove.getFileName().toString()))) {
             throw new IllegalArgumentException(
                     "File could not be moved. In the directory, in which the file shall be moved, exists already a file with the given name.");
         }
 
-        Path result = FileSystemUtils.copyFile(pathOfFileToMove, moveIntoDirPath, overwriteExistingFile);
-        FileSystemUtils.deleteFile(pathOfFileToMove, false);
+        Path result = FileSystemUtilsOLD.copyFile(pathOfFileToMove, moveIntoDirPath, overwriteExistingFile);
+        FileSystemUtilsOLD.deleteFile(pathOfFileToMove, false);
         return result;
     }
 
@@ -284,14 +284,14 @@ public class FileSystemUtils {
                     "Directory could not be moved. The path of the directory to move either does not exist or it does not represent a file.");
         }
         if (!overwriteExistingFiles && Files
-                .isDirectory(FileSystemUtils.appendToPath(moveIntoDirPath, pathOfDirToMove.getFileName().toString()))) {
+                .isDirectory(FileSystemUtilsOLD.appendToPath(moveIntoDirPath, pathOfDirToMove.getFileName().toString()))) {
             throw new IllegalArgumentException(
                     "Directory could not be moved. In the directory, in which the file shall be moved, exists already a directory with the given name.");
         }
 
-        FileSystemUtils.copyDir(pathOfDirToMove, moveIntoDirPath, true);
-        Path result = FileSystemUtils.copyDir(pathOfDirToMove, moveIntoDirPath, overwriteExistingFiles);
-        FileSystemUtils.deleteDir(pathOfDirToMove, false);
+        FileSystemUtilsOLD.copyDir(pathOfDirToMove, moveIntoDirPath, true);
+        Path result = FileSystemUtilsOLD.copyDir(pathOfDirToMove, moveIntoDirPath, overwriteExistingFiles);
+        FileSystemUtilsOLD.deleteDir(pathOfDirToMove, false);
         return result;
     }
 
@@ -390,8 +390,8 @@ public class FileSystemUtils {
         if (!Files.isRegularFile(fileToClear)) {
             throw new FileNotFoundException("File could not be cleared. The file to clear does not exist.");
         }
-        FileSystemUtils.deleteFile(fileToClear, true);
-        return FileSystemUtils.createFile(fileToClear, true);
+        FileSystemUtilsOLD.deleteFile(fileToClear, true);
+        return FileSystemUtilsOLD.createFile(fileToClear, true);
     }
 
     /**
@@ -413,8 +413,8 @@ public class FileSystemUtils {
         if (!Files.isDirectory(dirToClear)) {
             throw new FileNotFoundException("Directory could not be cleared. The directory to clear does not exist.");
         }
-        FileSystemUtils.deleteDir(dirToClear, true);
-        return FileSystemUtils.createDir(dirToClear);
+        FileSystemUtilsOLD.deleteDir(dirToClear, true);
+        return FileSystemUtilsOLD.createDir(dirToClear);
     }
 
     /**
