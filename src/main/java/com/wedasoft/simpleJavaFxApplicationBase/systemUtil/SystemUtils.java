@@ -7,6 +7,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Map;
 
+/**
+ * @author davidweber411
+ */
 public class SystemUtils {
 
     /**
@@ -56,4 +59,5 @@ public class SystemUtils {
         }
         return mainClass != null ? mainClass.getName() : null;
     }
+
 }

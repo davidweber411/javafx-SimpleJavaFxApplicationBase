@@ -32,7 +32,9 @@ public class SimpleJavaFxTestBaseImpl {
     private static volatile boolean prl_jfxThreadIsLoading;
     private static Exception prl_passedExceptionFromJfxThread;
 
-    static synchronized void runAndWaitForPlatformStartup() throws Exception {
+    static synchronized void runAndWaitForPlatformStartup()
+            throws Exception {
+
         if (ps_runPlatformStartup) {
             Platform.startup(() -> {
                 Platform.setImplicitExit(false);
@@ -53,7 +55,10 @@ public class SimpleJavaFxTestBaseImpl {
         }
     }
 
-    static synchronized void runAndWaitForPlatformRunLater(CodeRunner codeRunner) throws Exception {
+    static synchronized void runAndWaitForPlatformRunLater(
+            CodeRunner codeRunner)
+            throws Exception {
+
         prl_jfxThreadIsLoading = true;
 
         Platform.runLater(() -> {
@@ -83,7 +88,10 @@ public class SimpleJavaFxTestBaseImpl {
         }
     }
 
-    public static void pressKeyAsyncInOtherThread(int millisToWait, KeyCode keyToPress) {
+    public static void pressKeyAsyncInOtherThread(
+            int millisToWait,
+            KeyCode keyToPress) {
+
         new Thread(() -> {
             try {
                 sleep(millisToWait);
@@ -94,4 +102,5 @@ public class SimpleJavaFxTestBaseImpl {
             }
         }).start();
     }
+
 }

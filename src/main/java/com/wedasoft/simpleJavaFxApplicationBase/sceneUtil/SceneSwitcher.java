@@ -10,6 +10,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author davidweber411
+ */
 public class SceneSwitcher<ControllerClassT extends FxmlSceneControllerBase> {
 
     private final Stage stageToSwitchScene;
@@ -83,15 +86,25 @@ public class SceneSwitcher<ControllerClassT extends FxmlSceneControllerBase> {
     }
 
 
+    /**
+     * This method gets the stage, whose scene shall be switched.
+     */
     public Stage getStageToSwitchScene() {
         return stageToSwitchScene;
     }
 
+    /**
+     * This method gets the new scene.
+     */
     public Scene getNewScene() {
         return newScene;
     }
 
+    /**
+     * This method gets the controller of the new scene.
+     */
     public ControllerClassT getControllerOfNewScene() {
         return controllerOfNewScene;
     }
+
 }

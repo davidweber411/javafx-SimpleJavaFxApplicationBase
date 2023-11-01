@@ -8,6 +8,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author davidweber411
+ */
 public class SceneContentSwitcher<ControllerClassT extends FxmlSceneControllerBase> {
 
     private final Scene sceneToSwitchContent;
@@ -80,10 +83,16 @@ public class SceneContentSwitcher<ControllerClassT extends FxmlSceneControllerBa
         controllerOfNewFxmlFile.onFxmlSceneReady();
     }
 
+    /**
+     * This method gets the scene, whose content shall be switched.
+     */
     public Scene getSceneToSwitchContent() {
         return sceneToSwitchContent;
     }
 
+    /**
+     * This method gets the controller of the new FXML file.
+     */
     public ControllerClassT getControllerOfNewFxmlFile() {
         return controllerOfNewFxmlFile;
     }

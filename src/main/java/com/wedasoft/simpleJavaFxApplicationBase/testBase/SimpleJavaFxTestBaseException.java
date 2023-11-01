@@ -5,11 +5,17 @@ package com.wedasoft.simpleJavaFxApplicationBase.testBase;
  */
 public class SimpleJavaFxTestBaseException extends Exception {
 
-    public SimpleJavaFxTestBaseException(String message) {
+    public SimpleJavaFxTestBaseException(
+            String message) {
+
         super(message);
     }
 
-    public SimpleJavaFxTestBaseException(String message, Throwable cause) {
+    public SimpleJavaFxTestBaseException(
+            String message,
+            Throwable cause) {
+
         super(message, cause);
     }
+
 }

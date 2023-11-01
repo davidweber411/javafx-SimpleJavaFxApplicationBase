@@ -7,6 +7,9 @@ import java.util.Map;
  */
 public abstract class FxmlSceneControllerBase {
 
+    /**
+     * This map contains all passed attributes.
+     */
     private Map<String, String> passedArguments;
 
     /**
@@ -41,6 +44,11 @@ public abstract class FxmlSceneControllerBase {
         return passedArguments;
     }
 
+    /**
+     * This method sets the map of passed arguments. Beware: This method replaces the complete map with a new one!
+     *
+     * @param passedArguments The passed attributes.
+     */
     public void setPassedArguments(Map<String, String> passedArguments) {
         this.passedArguments = passedArguments;
     }

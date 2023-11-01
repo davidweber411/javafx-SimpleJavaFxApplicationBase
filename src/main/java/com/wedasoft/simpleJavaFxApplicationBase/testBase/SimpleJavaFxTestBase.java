@@ -19,12 +19,24 @@ public abstract class SimpleJavaFxTestBase {
      * @param codeRunner Passes code to the JavaFX thread.
      * @throws Exception If an error occurs.
      */
-    public synchronized void runOnJavaFxThreadAndJoin(CodeRunner codeRunner) throws Exception {
+    public synchronized void runOnJavaFxThreadAndJoin(
+            CodeRunner codeRunner)
+            throws Exception {
+
         SimpleJavaFxTestBaseImpl.runAndWaitForPlatformStartup();
         SimpleJavaFxTestBaseImpl.runAndWaitForPlatformRunLater(codeRunner);
     }
 
-    public static void pressKeyAsyncInOtherThread(int millisToWaitBeforeKeyPress, KeyCode keyToPress) {
+    /**
+     * This method presses a key after the given amount of milliseconds. The key is pressed in an other thread.
+     *
+     * @param millisToWaitBeforeKeyPress Milliseconds to wait before pressing the key.
+     * @param keyToPress                 The key to press.
+     */
+    public static void pressKeyAsyncInOtherThread(
+            int millisToWaitBeforeKeyPress,
+            KeyCode keyToPress) {
+
         SimpleJavaFxTestBaseImpl.pressKeyAsyncInOtherThread(millisToWaitBeforeKeyPress, keyToPress);
     }
 
