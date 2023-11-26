@@ -46,7 +46,7 @@ A complete documentation of this framework can be found on https://wedasoft.com/
     <dependency>
       <groupId>com.wedasoft</groupId>
       <artifactId>simplejavafxapplicationbase</artifactId>
-      <version>1.5.0</version>
+      <version>2.0.0</version>
     </dependency>
 
 ##### Gradle
@@ -55,7 +55,7 @@ A complete documentation of this framework can be found on https://wedasoft.com/
       mavenCentral()
     }
     dependencies {
-      implementation("com.wedasoft:simplejavafxapplicationbase:1.5.0")
+      implementation("com.wedasoft:simplejavafxapplicationbase:2.0.0")
     }
 
 # Common Dialogs
@@ -82,90 +82,25 @@ A complete documentation of this framework can be found on https://wedasoft.com/
 
 # Complex Dialogs
 
-The entrypoint is the class <code>JfxDialogUtil</code>.
+Your dream is to create a fxml based dialog, pass arguments into it, and compute them in the controller of the new
+Scene? Then take a look at this:
 
-Your dream is to create a fxml based dialog and pass arguments into it, and then get the arguments in the displayed
-dialog? You are at the right place.
-
-### Step 1: Extend your dialog controller with FxmlDialogControllerBase
-
-      public class YourControllerClass extends FxmlDialogControllerBase {
-           
-             @Override
-             public void onFxmlDialogReady() {
-                  // This method is executed, after the fxml dialog creation is complete. 
-                  // Load arguments here etc.
-             }
-         
-             @Override
-             public void initialize(URL location, ResourceBundle resources) {
-                  // This is the JavaFx initialize().
-             }
-      
-      }
-
-### Step 2: Bind the controller class to your fxml file
-
-This is the same like in standard JavaFX.<br>
-Either you do this in the SceneBuilder or you do this by code in your *.fxml file:
-
-      <?xml version="1.0" encoding="UTF-8"?>
-
-      <VBox xmlns:fx="http://javafx.com/fxml"
-         fx:controller="com.wedasoft.abc.YourControllerClass">
-         ...
-      </VBox>
-
-### Step 3: Create and show the fxml dialog and pass arguments
-
-Use the builder class to create your custom fxml dialog. <br>
-You can pass arguments with passArgumentsToController().
-
-    public void openDialog() throws Exception {
-        FxmlDialog.Builder<YourControllerClass> dialogBuilder = JfxDialogUtil.createFxmlDialogBuilder(YourControllerClass.class, getClass().getResource("/path/to/your/fxml-file.fxml"))
-                .setStageTitle("My stage title")
-                .setStageResizable(true)
-                .setModal(false)
-                .setCallbackOnDialogClose(() -> System.out.println("CALLBACK ON DIALOG CLOSE!"))
-                .setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE))
-                .passArgumentsToController(new HashMap<>() {{
-                    put("firstname", "David");
-                    put("age", "31");
-                    put("isMale", "true");
-                }});
-        dialogBuilder.get().showAndWait();
-    }
-
-### Step 4: Load and compute passed arguments
-
-To load the passed arguments in your controller, simply invoke getPassedArguments().<br>
-After that, just get the wanted argument by its String key out of the map.
-
-      public class YourControllerClass extends FxmlDialogControllerBase {
-           
-          @Override
-          public void onFxmlDialogReady() {
-              if (getPassedArguments() != null) {
-                  String firstname = getPassedArguments().getOrDefault("firstname", "default name");
-                  int age = Integer.parseInt(getPassedArguments().getOrDefault("age", "-1"));
-                  boolean isMale = Boolean.parseBoolean(getPassedArguments().getOrDefault("isMale", "false"));
-                  System.out.println("firstname=" + firstname);
-                  System.out.println("age=" + age);
-                  System.out.println("isMale=" + isMale);
-              }
-          }
-      
-      }
+    JfxDialogUtil.createAndShowFxmlDialog(
+        /* title */                  "My Dialog title",
+        /* dialogIsModal */          true,
+        /* dialogIsResizeable */     false,
+        /* absoluteFxmlFileUrl */    getClass().getResource("/com/example/app/views/scene1.fxml"),
+        /* sceneSize */              new Dimension2D(600, 500),
+        /* initMethodOfController */ (Consumer<Scene1Controller>) consumer -> consumer.init("myparamter1"),
+        /* callbackOnDialogClose */  () -> integerValueChangedByCallback = 52)
 
 # Standard CRUD operations
 
-Standard CRUD operations are implemented generically, so you do not need to write boilerplate code for this actions.<br>
+Execute standard CRUD operations on your database. A session/transaction is created for every action.<br>
 
-The entrypoint is the class <code>HibernateQueryUtil</code>.This class has some subclasses for grouping methods.<br>
-This subclasses are example given <code>Inserter</code>, <code>Updater</code>, <code>Deleter</code> and <code>
+The entrypoint is the class <code>HibernateQueryUtil</code>.This class has some subclasses for grouping methods. These
+subclasses are called e.g. <code>Inserter</code>, <code>Updater</code>, <code>Deleter</code> and <code>
 Finder</code>.
-
-A session/transaction is created for every action.
 
 This API is built on top of the Hibernate API.
 You need to set up the file <code>hibernate.cfg.xml</code> in your resources directory.
@@ -305,45 +240,35 @@ Example of the file using the H2 database and mapping the entity "Student":
 
     HibernateQueryUtil.Finder.countAll(Class<T> entityClass)
 
-# Scene switching API
+# SceneUtil API
 
-Switch scenes of stages easily. Pass and retrieve arguments to your scenes and compute them.<br>
-The controller of the scene must inherit from the class 'FxmlSceneControllerBase'.
+Switch scenes of stages easily. Pass and retrieve arguments to your scenes and compute them.
 
-### Switch scene with SceneSwitcherUtil
+### Step 1: Determine the stage ...
 
-This utility class is used to wrap the below listed variants. Just check out the methods in the class SceneSwitcherUtil.
+    getStageByActionEvent(ActionEvent event);
 
-### Switch scene of your opened stage
+    getStageByChildNode(Node node);
 
-If there is only one open stage, you can pass 'null' as parameter. This solution grabs all of your open stages and gets
-the first.
+    getStageByScene(Scene scene);
 
-    SceneSwitcher.createFxmlSceneSwitcher(
-      getClass().getResource("/path/to/your/scene.fxml"),
-      null)
-        .passArgumentsToControllerOfNewScene(Map.ofEntries(Map.entry("name", "Harald")))
-        .switchScene();
+### Step 2 (optional): Create an init() in the new controller ...
 
-### Switch scene of a stage got from an event
+    public void init(String passedParameter){
+        // compute the passed parameters
+        // do other "constructor things"
+    }
 
-Use this solution if your scene switching is triggered by an event, like a button click.
+### Step 3: Switch the content of its scene ...
 
-    SceneSwitcher.createFxmlSceneSwitcher(
-      getClass().getResource("/path/to/your/scene.fxml"),
-      (Stage) ((Node) event.getSource()).getScene().getWindow())
-        .passArgumentsToControllerOfNewScene(Map.ofEntries(Map.entry("name", "Harald")))
-        .switchScene();
+    SceneUtil.switchSceneRoot(
+        SceneUtil.getStageByActionEvent(event),
+        getClass().getResource("/com/example/app/views/scene1.fxml"),
+        (Consumer<Scene1Controller>) controller -> controller.init("PassThisToScene1"));
 
-### Switch scene of a stage where a component is located on
+### Step 4: Profit!
 
-With this solution you can define the wanted stage by passing the stage of any JavaFX component located on the stage.
-
-    SceneSwitcher.createFxmlSceneSwitcher(
-      getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneSwitcher/sceneSwitcherScene2.fxml"),
-      (Stage) scene1Label.getScene().getWindow())
-        .passArgumentsToControllerOfNewScene(Map.ofEntries(Map.entry("name", "Harald")))
-        .switchScene();
+Profit.
 
 # Testing suite
 
