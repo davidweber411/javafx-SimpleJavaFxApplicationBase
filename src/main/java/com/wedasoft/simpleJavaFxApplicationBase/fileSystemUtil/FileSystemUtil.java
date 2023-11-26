@@ -212,6 +212,7 @@ public class FileSystemUtil {
      * @param destinationDir         The directory in which the content shall be copied.
      * @param overwriteExistingFiles Overwrites existing files with the same name.
      * @return The destination directory.
+     * @throws Exception On error.
      */
     public static Path copyDirContent(
             Path sourceDir,

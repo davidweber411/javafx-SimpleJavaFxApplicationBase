@@ -35,6 +35,18 @@ public class JfxDialogUtil {
      * ******************************************************************
      */
 
+    /**
+     * Creates and shows a fxml dialog.
+     *
+     * @param title                  The dialog title.
+     * @param dialogIsModal          Dialog is modal or not.
+     * @param dialogIsResizeable     Dialog is resizeable or not.
+     * @param absoluteFxmlFileUrl    The absolut URL of the new fxml file.
+     * @param sceneSize              The scene size.
+     * @param initMethodOfController A method of the new controller which shall be executed if everything is ready.
+     * @param callbackOnDialogClose  A callback which shall be executed when the dialog closes.
+     * @throws IOException On error.
+     */
     public static void createAndShowFxmlDialog(
             String title,
             boolean dialogIsModal,
@@ -55,6 +67,19 @@ public class JfxDialogUtil {
                 .showAndWait();
     }
 
+    /**
+     * Creates a fxml dialog.
+     *
+     * @param title                  The dialog title.
+     * @param dialogIsModal          Dialog is modal or not.
+     * @param dialogIsResizeable     Dialog is resizeable or not.
+     * @param absoluteFxmlFileUrl    The absolut URL of the new fxml file.
+     * @param sceneSize              The scene size.
+     * @param initMethodOfController A method of the new controller which shall be executed if everything is ready.
+     * @param callbackOnDialogClose  A callback which shall be executed when the dialog closes.
+     * @return The stage of the created dialog.
+     * @throws IOException On error.
+     */
     public static Stage createFxmlDialog(
             String title,
             boolean dialogIsModal,
@@ -211,6 +236,7 @@ public class JfxDialogUtil {
      *
      * @param title           The title of the dialog.
      * @param amountOfColumns Specifies the amount of columns.
+     * @param cellGap         The horizontal and vertical cell gap.
      * @param nodes           All nodes that shall be displayed in the grid system.
      */
     public static Alert createDialogWithColumns(
@@ -253,6 +279,13 @@ public class JfxDialogUtil {
      * ******************************************************************
      */
 
+    /**
+     * Displays a simple OK/Cancel dialog.
+     *
+     * @param dialogTitle The dialog title.
+     * @param dialogText  The dialog text.
+     * @return True, if OK is clicked.
+     */
     public static boolean displayConfirmDialogAndGetResult(
             String dialogTitle,
             String dialogText) {
@@ -262,6 +295,13 @@ public class JfxDialogUtil {
         return alert.getResult().getButtonData() == ButtonData.OK_DONE;
     }
 
+    /**
+     * Displays a dialog for closing a stage.
+     *
+     * @param stageToClose The stage to close.
+     * @param dialogTitle  The dialog title.
+     * @param dialogText   The dialog text.
+     */
     public static void displayCloseStageDialog(
             Stage stageToClose,
             String dialogTitle,
@@ -274,12 +314,23 @@ public class JfxDialogUtil {
         }
     }
 
+    /**
+     * Displays a predefined dialog for closing a stage.
+     *
+     * @param stageToClose The stage to close.
+     */
     public static void displayCloseStageDialog(
             Stage stageToClose) {
 
         displayCloseStageDialog(stageToClose, "Close window", "Do you really want to close this window?");
     }
 
+    /**
+     * Display a dialog for exiting the application.
+     *
+     * @param dialogTitle The dialog title.
+     * @param dialogText  The dialog text.
+     */
     public static void displayExitProgramDialog(
             String dialogTitle,
             String dialogText) {
@@ -292,6 +343,9 @@ public class JfxDialogUtil {
         }
     }
 
+    /**
+     * Display a predefined dialog for exiting the application.
+     */
     public static void displayExitProgramDialog() {
         displayExitProgramDialog("Exit program", "Do you really want to exit the program?");
     }
@@ -302,18 +356,32 @@ public class JfxDialogUtil {
      * ******************************************************************
      */
 
+    /**
+     * Creates a text input dialog.
+     *
+     * @param dialogTitle The dialog title.
+     * @param headerText  The header text.
+     * @param contentText The content text.
+     * @return The text input dialog.
+     */
     public static TextInputDialog createInputDialog(
-            String titleText,
+            String dialogTitle,
             String headerText,
             String contentText) {
 
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle(titleText);
+        dialog.setTitle(dialogTitle);
         dialog.setHeaderText(headerText);
         dialog.setContentText(contentText);
         return dialog;
     }
 
+    /**
+     * Displays a dialog for inputting text.
+     *
+     * @param dialogText The dialog text.
+     * @return The inputted text or null.
+     */
     public static String displayInputDialogAndGetResult(
             String dialogText) {
 
@@ -328,9 +396,19 @@ public class JfxDialogUtil {
      * ******************** Private methods *****************************
      * ******************************************************************
      */
+
+    /**
+     * Creates an alert dialog.
+     *
+     * @param alertType            The alert type.
+     * @param dialogTitle          The dialog title.
+     * @param dialogBodyHeaderText The dialog header text.
+     * @param dialogContentText    The dialog content text.
+     * @return The created alert dialog.
+     */
     private static Alert createAlertDialog(
             AlertType alertType,
-            String dialogTitleText,
+            String dialogTitle,
             String dialogBodyHeaderText,
             String dialogContentText) {
 
@@ -340,19 +418,27 @@ public class JfxDialogUtil {
         } else {
             alert = new Alert(AlertType.INFORMATION);
         }
-        alert.setTitle(dialogTitleText);
+        alert.setTitle(dialogTitle);
         alert.setHeaderText(dialogBodyHeaderText);
         alert.setContentText(dialogContentText);
         return alert;
     }
 
+    /**
+     * Creates a confirmation alert dialog.
+     *
+     * @param dialogTitle The dialog title.
+     * @param headerText  The header text.
+     * @param contentText The content text.
+     * @return The created confirmation alert.
+     */
     private static Alert createConfirmDialog(
-            String titleBarText,
+            String dialogTitle,
             String headerText,
             String contentText) {
 
         Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle(titleBarText);
+        alert.setTitle(dialogTitle);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
         return alert;

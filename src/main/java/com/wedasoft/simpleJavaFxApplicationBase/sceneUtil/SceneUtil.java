@@ -54,7 +54,12 @@ public class SceneUtil {
      * switchSceneRoot(
      *     stage,
      *     getClass().getResource("/com/example/project/views/new-view.fxml"),
-     *     (Consumer<NewViewController>) newViewController -> newViewController.init(a,b,c,...));</code></pre>
+     *     (Consumer&lt;NewViewController&gt;) newViewController -> newViewController.init(a,b,c,...));</code></pre>
+     *
+     * @param stage                  The stage containing the scene.
+     * @param absoluteFxmlFileUrl    The absolute url of the new fxml file.
+     * @param initMethodOfController A method of the new controller which shall be executed when it is loaded completely.
+     * @throws IOException On error.
      */
     public static void switchSceneRoot(
             Stage stage,

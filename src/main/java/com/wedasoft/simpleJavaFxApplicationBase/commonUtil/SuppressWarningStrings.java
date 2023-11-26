@@ -1,5 +1,8 @@
 package com.wedasoft.simpleJavaFxApplicationBase.commonUtil;
 
+/**
+ * This class contains common suppress warning strings.
+ */
 @SuppressWarnings({"all", "unused", "FieldMayBeFinal", "FieldCanBeLocal"})
 public class SuppressWarningStrings {
 

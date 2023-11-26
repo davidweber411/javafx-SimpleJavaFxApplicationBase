@@ -18,9 +18,15 @@ import java.util.List;
 
 import static java.util.Objects.*;
 
+/**
+ * This class represents the entrypoint for performing CRUD operations on a database.
+ */
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 public class HibernateQueryUtil {
 
+    /**
+     * This class represents the {@link Inserter} subclass of {@link HibernateQueryUtil}.
+     */
     public static class Inserter {
 
         /**
@@ -29,6 +35,7 @@ public class HibernateQueryUtil {
          * @param entity Entity to insert.
          * @param <T>    Type of the entity.
          * @return True, if there were no errors while executing.
+         * @throws HibernateQueryUtilException On error.
          */
         public static synchronized <T> boolean insertOne(T entity) throws HibernateQueryUtilException {
             return insertMany(List.of(entity));
@@ -40,6 +47,7 @@ public class HibernateQueryUtil {
          * @param entities Entities to insert.
          * @param <T>      Type of the entities.
          * @return True, if there were no errors while executing.
+         * @throws HibernateQueryUtilException On error.
          */
         public static synchronized <T> boolean insertMany(List<T> entities) throws HibernateQueryUtilException {
             boolean isInserted = false;
@@ -56,6 +64,9 @@ public class HibernateQueryUtil {
         }
     }
 
+    /**
+     * This class represents the {@link Updater} subclass of {@link HibernateQueryUtil}.
+     */
     public static class Updater {
 
         /**
@@ -64,6 +75,7 @@ public class HibernateQueryUtil {
          * @param entity Entity to update.
          * @param <T>    Type of the entity.
          * @return True, if there were no errors while executing.
+         * @throws HibernateQueryUtilException On error.
          */
         public static synchronized <T> boolean updateOne(T entity) throws HibernateQueryUtilException {
             return updateMany(List.of(entity));
@@ -75,6 +87,7 @@ public class HibernateQueryUtil {
          * @param entities Entities to update.
          * @param <T>      Type of the entities.
          * @return True, if there were no errors while executing.
+         * @throws HibernateQueryUtilException On error.
          */
         public static synchronized <T> boolean updateMany(List<T> entities) throws HibernateQueryUtilException {
             boolean executedSuccessfully = false;
@@ -91,6 +104,9 @@ public class HibernateQueryUtil {
         }
     }
 
+    /**
+     * This class represents the {@link Deleter} subclass of {@link HibernateQueryUtil}.
+     */
     public static class Deleter {
 
         /**
@@ -99,6 +115,7 @@ public class HibernateQueryUtil {
          * @param entity Entity to delete.
          * @param <T>    Type of the entity.
          * @return True, if there were no errors while executing.
+         * @throws HibernateQueryUtilException On error.
          */
         public static synchronized <T> boolean deleteOne(T entity) throws HibernateQueryUtilException {
             return deleteMany(List.of(entity));
@@ -110,6 +127,7 @@ public class HibernateQueryUtil {
          * @param entities Entities to delete.
          * @param <T>      Type of the entities.
          * @return True, if there were no errors while executing.
+         * @throws HibernateQueryUtilException On error.
          */
         public static synchronized <T> boolean deleteMany(List<T> entities) throws HibernateQueryUtilException {
             boolean executedSuccessfully = false;
@@ -132,6 +150,7 @@ public class HibernateQueryUtil {
          * @param areYouSure  Security flag. Must be set to true.
          * @param <T>         Type of the entities.
          * @return True, if there were no errors while executing.
+         * @throws HibernateQueryUtilException On error.
          */
         public static synchronized <T> boolean deleteAll(Class<T> entityClass, boolean areYouSure) throws HibernateQueryUtilException {
             if (!areYouSure) {
@@ -163,6 +182,9 @@ public class HibernateQueryUtil {
 
     }
 
+    /**
+     * This class represents the {@link Finder} subclass of {@link HibernateQueryUtil}.
+     */
     public static class Finder {
 
         public static class Builder<ENTITY> {
@@ -371,6 +393,7 @@ public class HibernateQueryUtil {
          * @param entityClass Entity to count.
          * @param <T>         Type of the entity.
          * @return The number of datasets.
+         * @throws HibernateQueryUtilException On error.
          */
         public static synchronized <T> Long countAll(Class<T> entityClass) throws HibernateQueryUtilException {
             Long count = null;
@@ -398,6 +421,9 @@ public class HibernateQueryUtil {
         }
     }
 
+    /**
+     * Handles the rollback if code is catch in a try-catch-block.
+     */
     private static void handleCatch(boolean transactionIsNotNull, Transaction transaction, String methodName, Exception e) throws HibernateQueryUtilException {
         if (transactionIsNotNull) {
             transaction.rollback();

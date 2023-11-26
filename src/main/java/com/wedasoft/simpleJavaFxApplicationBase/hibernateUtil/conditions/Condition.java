@@ -1,11 +1,25 @@
 package com.wedasoft.simpleJavaFxApplicationBase.hibernateUtil.conditions;
 
+/**
+ * This class represents the base of a condition for querying a database.
+ *
+ * @param <VALUE_TYPE> Represents the field type.
+ */
 public abstract class Condition<VALUE_TYPE> {
 
+    /**
+     * Represents the attribute name of the Java entity.
+     */
     protected String attributeName;
 
+    /**
+     * Represents the database columne name.
+     */
     protected String databaseColumnName;
 
+    /**
+     * Represents the value, for which the database column is checked. E.g. The SQL string right from the equals sign in SQL.
+     */
     protected VALUE_TYPE valueToCheck;
 
     public Condition(VALUE_TYPE valueToCheck) {
@@ -129,7 +143,7 @@ public abstract class Condition<VALUE_TYPE> {
 
     /**
      * This condition matches any attribute values, which contain the given value in several circumstances. <br>
-     * Has the same functionality like {@link #isLikeCaseSensitive <code>isLikeCaseSensitive()</code>}, but with the additional effect, that the case of the value is ignored.<br>
+     * Has the same functionality like {@link #isLikeCaseSensitive isLikeCaseSensitive()}, but with the additional effect, that the case of the value is ignored.<br>
      * Wildcards can be used. <br><br>
      * Examples:
      * <ul>
@@ -192,4 +206,5 @@ public abstract class Condition<VALUE_TYPE> {
     public void setDatabaseColumnName(String databaseColumnName) {
         this.databaseColumnName = databaseColumnName;
     }
+
 }

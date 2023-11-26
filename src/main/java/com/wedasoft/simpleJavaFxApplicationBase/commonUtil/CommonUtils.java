@@ -1,5 +1,8 @@
 package com.wedasoft.simpleJavaFxApplicationBase.commonUtil;
 
+/**
+ * This class contains useful methods for common tasks.
+ */
 public class CommonUtils {
 
     /**

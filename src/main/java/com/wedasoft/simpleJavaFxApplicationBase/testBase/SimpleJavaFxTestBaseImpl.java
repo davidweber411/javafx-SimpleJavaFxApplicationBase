@@ -88,6 +88,12 @@ public class SimpleJavaFxTestBaseImpl {
         }
     }
 
+    /**
+     * Types a key asynchronously in another thread. The thread waits the given amount of millis before it types the key.
+     *
+     * @param millisToWait The millis the Thread waits before typing.
+     * @param keyToPress   The key to type.
+     */
     public static void pressKeyAsyncInOtherThread(
             int millisToWait,
             KeyCode keyToPress) {
