@@ -9,18 +9,18 @@ import java.nio.file.attribute.BasicFileAttributes;
  */
 public class CopyFileVisitor extends SimpleFileVisitor<Path> {
 
-    private final Path pathOfFileOrDirToCopy;
-    private final Path copyIntoDirPath;
-    private final boolean overwriteExistingData;
+    private final Path pathToCopy;
+    private final Path destinationPath;
+    private final boolean overwriteExisting;
 
     public CopyFileVisitor(
-            Path pathOfFileOrDirToCopy,
-            Path copyIntoDirPath,
-            boolean overwriteExistingData) {
+            Path pathToCopy,
+            Path destinationPath,
+            boolean overwriteExisting) {
 
-        this.pathOfFileOrDirToCopy = pathOfFileOrDirToCopy;
-        this.copyIntoDirPath = copyIntoDirPath;
-        this.overwriteExistingData = overwriteExistingData;
+        this.pathToCopy = pathToCopy;
+        this.destinationPath = destinationPath;
+        this.overwriteExisting = overwriteExisting;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class CopyFileVisitor extends SimpleFileVisitor<Path> {
             BasicFileAttributes attrs)
             throws IOException {
 
-        Path targetDir = copyIntoDirPath.resolve(pathOfFileOrDirToCopy.relativize(dir));
+        Path targetDir = destinationPath.resolve(pathToCopy.relativize(dir));
         if (Files.notExists(targetDir)) {
             Files.createDirectory(targetDir);
         }
@@ -48,11 +48,11 @@ public class CopyFileVisitor extends SimpleFileVisitor<Path> {
             BasicFileAttributes attrs)
             throws IOException {
 
-        if (overwriteExistingData) {
-            Files.copy(file, copyIntoDirPath.resolve(pathOfFileOrDirToCopy.relativize(file)),
+        if (overwriteExisting) {
+            Files.copy(file, destinationPath.resolve(pathToCopy.relativize(file)),
                     StandardCopyOption.REPLACE_EXISTING);
         } else {
-            Files.copy(file, copyIntoDirPath.resolve(pathOfFileOrDirToCopy.relativize(file)));
+            Files.copy(file, destinationPath.resolve(pathToCopy.relativize(file)));
         }
         return FileVisitResult.CONTINUE;
     }
