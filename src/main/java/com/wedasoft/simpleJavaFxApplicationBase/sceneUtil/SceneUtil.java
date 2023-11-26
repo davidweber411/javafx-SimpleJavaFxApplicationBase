@@ -1,71 +1,74 @@
 package com.wedasoft.simpleJavaFxApplicationBase.sceneUtil;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.function.Consumer;
 
+/**
+ * @author davidweber411
+ */
 public class SceneUtil {
 
     /**
-     * Switches the scene of the stage on which the node is located, which fired the ActionEvent.
+     * Gets the {@link Stage} on which the node is located, which fired the {@link ActionEvent}. For example a {@link Button}.
      *
-     * @param fxmlFilePathUrl The path to to fxml file of the new scene.
-     * @param argumentsToPass The arguments which shall be passed to the new scene.
-     * @param event           The event whose source node is used to determine the stage for the scene switching.
-     * @throws SceneUtilException If an error occurs.
+     * @param event The {@link ActionEvent}.
+     * @return The {@link Stage}.
      */
-    public static void switchSceneOfStageViaActionEvent(
-            URL fxmlFilePathUrl,
-            HashMap<String, String> argumentsToPass,
-            ActionEvent event)
-            throws SceneUtilException {
-
-        Node node = (Node) event.getSource();
-        switchSceneOfStageViaAnyComponent(fxmlFilePathUrl, argumentsToPass, node);
+    public static Stage getStageByActionEvent(ActionEvent event) {
+        return getStageByChildNode(((Node) event.getSource()));
     }
 
     /**
-     * Switches the scene of the stage on which the given node is located.
+     * Gets the {@link Stage} on which the {@link Node} is located on.
      *
-     * @param fxmlFilePathUrl        The path to to fxml file of the new scene.
-     * @param argumentsToPass        The arguments which shall be passed to the new scene.
-     * @param anyComponentOfTheStage The node which is used to determine the stage for scene switching.
-     * @throws SceneUtilException If an error occurs.
+     * @param node The {@link Node}.
+     * @return The {@link Stage} containing the {@link Node}.
      */
-    public static void switchSceneOfStageViaAnyComponent(
-            URL fxmlFilePathUrl,
-            HashMap<String, String> argumentsToPass,
-            Node anyComponentOfTheStage)
-            throws SceneUtilException {
-
-        Stage stage = (Stage) anyComponentOfTheStage.getScene().getWindow();
-        SceneSwitcher.createFxmlSceneSwitcher(fxmlFilePathUrl, stage)
-                .passArgumentsToControllerOfNewScene(argumentsToPass == null ? new HashMap<>() : argumentsToPass)
-                .switchScene();
+    public static Stage getStageByChildNode(Node node) {
+        return getStageByScene(node.getScene());
     }
 
     /**
-     * Switches the complete content of a scene.
+     * Gets the {@link Stage} on which the {@link Scene} is located on.
      *
-     * @param sceneToSwitchContent Scene whose content shall be switched.
-     * @param urlToNewFxmlFile     The url to the new fxml file.
-     * @param argumentsToPass      Arguments to pass to the controller of the new fxml file.
-     * @throws SceneUtilException If an error occurs.
+     * @param scene The {@link Scene}.
+     * @return The {@link Stage} containing the {@link Scene}.
      */
-    public static void switchSceneContent(
-            Scene sceneToSwitchContent,
-            URL urlToNewFxmlFile,
-            Map<String, String> argumentsToPass)
-            throws SceneUtilException {
+    public static Stage getStageByScene(Scene scene) {
+        return (Stage) scene.getWindow();
+    }
 
-        SceneContentSwitcher.createSceneContentSwitcher(sceneToSwitchContent, urlToNewFxmlFile)
-                .passArgumentsToNewController(argumentsToPass)
-                .switchSceneContent();
+    /**
+     * The {@link Consumer} parameter of this method is used to execute a method of the new controller after everything is done.
+     * The {@link Consumer} method can be used for passing values to the new controller or for initializing something in the new controller.<br><br>
+     * How to use: <br>
+     * <pre><code>
+     * switchSceneRoot(
+     *     stage,
+     *     getClass().getResource("/com/example/project/views/new-view.fxml"),
+     *     (Consumer<NewViewController>) newViewController -> newViewController.init(a,b,c,...));</code></pre>
+     */
+    public static void switchSceneRoot(
+            Stage stage,
+            URL absoluteFxmlFileUrl,
+            @SuppressWarnings("rawtypes") Consumer initMethodOfController)
+            throws IOException {
+
+        FXMLLoader loader = new FXMLLoader(absoluteFxmlFileUrl);
+        stage.getScene().setRoot(loader.load());
+        Object viewController = loader.getController();
+        if (initMethodOfController != null) {
+            //noinspection unchecked
+            initMethodOfController.accept(viewController);
+        }
     }
 
 }

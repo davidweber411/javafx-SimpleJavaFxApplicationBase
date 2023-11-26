@@ -5,14 +5,14 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.wedasoft.simpleJavaFxApplicationBase.sceneUtil.SceneSwitcherScene2Controller">
+            fx:controller="com.wedasoft.simpleJavaFxApplicationBase.sceneUtil.Scene1Controller">
     <center>
         <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="scene2Label" text="This is scene2."/>
+                <Label fx:id="scene1Label" text="This is scene1.fxml"/>
                 <Separator prefWidth="200.0"/>
-                <Button fx:id="switchToScene1Button" mnemonicParsing="false" onAction="#switchToScene1Action"
-                        text="Switch to scene1"/>
+                <Button fx:id="switchToScene2FxmlButton" mnemonicParsing="false"
+                        onAction="#onSwitchToScene2FxmlButtonClick" text="Switch to scene2.fxml"/>
                 <Separator prefWidth="200.0"/>
                 <Label text="Parameter value: n/a"/>
                 <TextField fx:id="passedParameterTf"/>
