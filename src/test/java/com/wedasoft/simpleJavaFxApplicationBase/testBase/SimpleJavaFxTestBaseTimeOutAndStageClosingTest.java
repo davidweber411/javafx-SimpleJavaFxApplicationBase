@@ -1,16 +1,17 @@
 package com.wedasoft.simpleJavaFxApplicationBase.testBase;
 
 
-import com.wedasoft.simpleJavaFxApplicationBase.fxmlDialog.TestController;
-import com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.FxmlDialog;
 import com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.JfxDialogUtil;
+import com.wedasoft.simpleJavaFxApplicationBase.sceneUtil.Scene1Controller;
+import javafx.geometry.Dimension2D;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import java.util.Set;
+import java.util.function.Consumer;
 
 import static com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBaseImpl.PRL_TIMEOUT_SECONDS_TO_WAIT;
 import static java.lang.Thread.sleep;
@@ -19,22 +20,27 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SimpleJavaFxTestBaseTimeOutAndStageClosingTest extends SimpleJavaFxTestBase {
 
-    private FxmlDialog.Builder<TestController> builder;
+    private Stage stage;
+
     private int valueChangedByCallback;
 
     @Test
     @Order(1)
     void openAndCloseStage_oneTime_shallCheckForChangedValue() throws Exception {
         valueChangedByCallback = 0;
-        runOnJavaFxThreadAndJoin(() -> {
-            builder = JfxDialogUtil.createFxmlDialogBuilder(TestController.class, getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"));
-            builder.setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE, KeyCode.K));
-            builder.setCallbackOnDialogClose(() -> valueChangedByCallback = 52);
-        });
-        pressKeyAsyncInOtherThread(1000, KeyCode.ESCAPE);
-        runOnJavaFxThreadAndJoin(() -> builder.get().showAndWait());
+        runOnJavaFxThreadAndJoin(() -> stage = JfxDialogUtil.createFxmlDialog(
+                "xxxxxxxx",
+                true,
+                true,
+                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/scene1.fxml"),
+                new Dimension2D(600, 500),
+                (Consumer<Scene1Controller>) consumer -> consumer.init("myparamter1"),
+                () -> valueChangedByCallback = 52));
 
-        assertNotNull(builder.get());
+        pressKeyAsyncInOtherThread(1000, KeyCode.ESCAPE);
+        runOnJavaFxThreadAndJoin(() -> stage.showAndWait());
+
+        assertNotNull(stage);
         assertEquals(52, valueChangedByCallback);
     }
 
@@ -42,21 +48,25 @@ public class SimpleJavaFxTestBaseTimeOutAndStageClosingTest extends SimpleJavaFx
     @Order(2)
     void openAndCloseStage_multipleTimes_shallCheckForChangedValue() throws Exception {
         valueChangedByCallback = 0;
-        runOnJavaFxThreadAndJoin(() -> {
-            builder = JfxDialogUtil.createFxmlDialogBuilder(TestController.class, getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/fxmlDialog/fxml-dialog-with-controller-view.fxml"));
-            builder.setKeySetToCloseDialog(Set.of(KeyCode.ESCAPE, KeyCode.K));
-            builder.setCallbackOnDialogClose(() -> valueChangedByCallback = 52);
-        });
-        pressKeyAsyncInOtherThread(1000, KeyCode.ESCAPE);
-        runOnJavaFxThreadAndJoin(() -> builder.get().showAndWait());
+        runOnJavaFxThreadAndJoin(() -> stage = JfxDialogUtil.createFxmlDialog(
+                "xxxxxxxx",
+                true,
+                true,
+                getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/scene1.fxml"),
+                new Dimension2D(600, 500),
+                (Consumer<Scene1Controller>) consumer -> consumer.init("myparamter1"),
+                () -> valueChangedByCallback = 52));
 
         pressKeyAsyncInOtherThread(1000, KeyCode.ESCAPE);
-        runOnJavaFxThreadAndJoin(() -> builder.get().showAndWait());
+        runOnJavaFxThreadAndJoin(() -> stage.showAndWait());
 
         pressKeyAsyncInOtherThread(1000, KeyCode.ESCAPE);
-        runOnJavaFxThreadAndJoin(() -> builder.get().showAndWait());
+        runOnJavaFxThreadAndJoin(() -> stage.showAndWait());
 
-        assertNotNull(builder.get());
+        pressKeyAsyncInOtherThread(1000, KeyCode.ESCAPE);
+        runOnJavaFxThreadAndJoin(() -> stage.showAndWait());
+
+        assertNotNull(stage);
         assertEquals(52, valueChangedByCallback);
     }
 

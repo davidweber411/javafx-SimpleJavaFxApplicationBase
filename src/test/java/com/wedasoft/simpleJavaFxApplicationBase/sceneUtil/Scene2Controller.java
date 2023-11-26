@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -23,6 +24,9 @@ public class Scene2Controller {
         scene2Label.getScene().setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.A) {
                 switchToScene1FxmlButton.fire();
+            }
+            if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                ((Stage) scene2Label.getScene().getWindow()).close();
             }
         });
         passedParameterTf.setText("");

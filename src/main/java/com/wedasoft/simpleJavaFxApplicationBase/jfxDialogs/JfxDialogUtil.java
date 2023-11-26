@@ -1,8 +1,10 @@
 package com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs;
 
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Dimension2D;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -12,14 +14,18 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.awt.*;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
+
 
 public class JfxDialogUtil {
 
@@ -29,39 +35,40 @@ public class JfxDialogUtil {
      * ******************************************************************
      */
 
-    /**
-     * This method builds an initial {@link FxmlDialog.Builder} object. The scene size is computed automatically.
-     *
-     * @param fxmlFileUrl Examples: <br>getClass().getResource("test.fxml"), null)
-     *                    <br>getClass().getResource("/com/wedasoft/jfxdialoghelpers/test.fxml"), null)
-     * @throws Exception Throws if an error occurs.
-     */
-    public static <CONTROLLER_CLASS extends FxmlDialogControllerBase> FxmlDialog.Builder<CONTROLLER_CLASS> createFxmlDialogBuilder(
-            Class<CONTROLLER_CLASS> controllerClass,
-            URL fxmlFileUrl)
-            throws Exception {
+    public static Stage createFxmlDialog(
+            String title,
+            boolean dialogIsModal,
+            boolean dialogIsResizeable,
+            URL absoluteFxmlFileUrl,
+            Dimension2D sceneSize,
+            @SuppressWarnings("rawtypes") Consumer initMethodOfController,
+            Runnable callbackOnDialogClose)
+            throws IOException {
 
-        return createFxmlDialogBuilder(controllerClass, fxmlFileUrl, null);
+        FXMLLoader loader = new FXMLLoader(absoluteFxmlFileUrl);
+        Parent root = loader.load(); // this calls the constructor and after that initialize from jfx()
+        Object viewController = loader.getController();
+        Scene scene = sceneSize == null ? new Scene(root) : new Scene(root, sceneSize.getWidth(), sceneSize.getHeight());
+
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.initModality(dialogIsModal ? Modality.APPLICATION_MODAL : Modality.NONE);
+        stage.setResizable(dialogIsResizeable);
+        stage.setScene(scene);
+        stage.setOnHidden(event -> {
+            event.consume();
+            if (callbackOnDialogClose != null) {
+                callbackOnDialogClose.run();
+            }
+            stage.close();
+        });
+
+        if (initMethodOfController != null) {
+            //noinspection unchecked
+            initMethodOfController.accept(viewController);
+        }
+        return stage;
     }
-
-    /**
-     * This method builds an initial {@link FxmlDialog.Builder} object.
-     *
-     * @param fxmlFileUrl Examples: <br>getClass().getResource("test.fxml"), null)
-     *                    <br>getClass().getResource("/com/wedasoft/jfxdialoghelpers/test.fxml"), null)
-     * @param sceneSize   The size of the {@link Scene}. Null is allowed and computes the scene size automatically.
-     * @throws Exception Throws if an error occurs.
-     */
-    @SuppressWarnings("unused")
-    public static <CONTROLLER_CLASS extends FxmlDialogControllerBase> FxmlDialog.Builder<CONTROLLER_CLASS> createFxmlDialogBuilder(
-            Class<CONTROLLER_CLASS> controllerClass,
-            URL fxmlFileUrl,
-            Dimension2D sceneSize)
-            throws Exception {
-
-        return new FxmlDialog.Builder<>(fxmlFileUrl, sceneSize);
-    }
-
 
     /*
      * ******************************************************************

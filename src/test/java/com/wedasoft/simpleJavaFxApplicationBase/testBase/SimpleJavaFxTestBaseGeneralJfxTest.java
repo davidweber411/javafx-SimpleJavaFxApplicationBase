@@ -1,56 +1,60 @@
 package com.wedasoft.simpleJavaFxApplicationBase.testBase;
 
-import com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.FxmlDialog;
+import com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.JfxDialogUtil;
+import com.wedasoft.simpleJavaFxApplicationBase.sceneUtil.Scene1Controller;
 import javafx.geometry.Dimension2D;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.function.Consumer;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SimpleJavaFxTestBaseGeneralJfxTest extends SimpleJavaFxTestBase {
 
-    private FxmlDialog.Builder builder;
-    private Button button;
-    private Button button2;
+    private Stage stage;
+
+    private Button dummyButton;
 
     @Test
-    void testFxmlLoader() throws Exception {
+    void generalTest() throws Exception {
         runOnJavaFxThreadAndJoin(() -> {
-            builder = new FxmlDialog.Builder(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/testBase/test-woc.fxml"), new Dimension2D(600, 500));
-            builder.setStageTitle("Old StageTitle");
+            stage = JfxDialogUtil.createFxmlDialog(
+                    "xxxxxxxx",
+                    true,
+                    true,
+                    getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/scene1.fxml"),
+                    new Dimension2D(600, 500),
+                    (Consumer<Scene1Controller>) consumer -> consumer.init("myparamter1"),
+                    null);
+            stage.setTitle("My Dialog");
+            stage.show();
         });
-        assertEquals("Old StageTitle", builder.get().getStage().getTitle());
-        assertNotNull(builder.get());
-        builder.setStageTitle("New StageTitle");
-        assertEquals(600, builder.get().getStage().getScene().getWidth());
-        assertEquals(500, builder.get().getStage().getScene().getHeight());
-        assertEquals("New StageTitle", builder.get().getStage().getTitle());
+        assertThat(stage).isNotNull();
+        assertThat(stage.getTitle()).isEqualTo("My Dialog");
 
-        assertThrows(Exception.class, () -> runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder(getClass().getResource("/doesnotexistse/test-woc.fxml"), new Dimension2D(600, 500))));
-        runOnJavaFxThreadAndJoin(() -> {
-            builder = new FxmlDialog.Builder(getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/testBase/test-woc.fxml"), new Dimension2D(1000, 1000));
-            builder.setStageTitle("Another StageTitle");
-            button2 = new Button("second init button");
-        });
-        assertEquals(1000, builder.get().getStage().getScene().getWidth());
-        assertEquals(1000, builder.get().getStage().getScene().getHeight());
-        assertEquals("Another StageTitle", builder.get().getStage().getTitle());
-        assertNotNull(button2);
-        assertEquals("second init button", button2.getText());
-        assertTrue(true);
+        runOnJavaFxThreadAndJoin(() -> stage.setTitle("New StageTitle"));
+        assertThat(stage.getScene().getWidth()).isEqualTo(600);
+        assertThat(stage.getScene().getHeight()).isEqualTo(500);
+        assertThat(stage.getTitle()).isEqualTo("New StageTitle");
+
+        runOnJavaFxThreadAndJoin(() -> dummyButton = new Button("my dummy button"));
+        assertThat(dummyButton).isNotNull();
+        assertThat(dummyButton.getText()).isEqualTo("my dummy button");
     }
 
     @Test
-    void testButton() throws Exception {
-        runOnJavaFxThreadAndJoin(() -> button = new Button("buttonLabel"));
-        assertEquals("buttonLabel", button.getText());
-        assertEquals("buttonLabel", button.getText());
-        assertNotEquals("wrongLabel", button.getText());
-    }
-
-    @Test
-    void exceptionOnJavaFxThread_shallThrow() {
-        assertThrows(Exception.class, () -> runOnJavaFxThreadAndJoin(() -> builder = new FxmlDialog.Builder(getClass().getResource("/this/path/does/not/exist/file.fxml"), null)));
+    void generalTest_shallThrow() {
+        assertThrows(Exception.class, () -> runOnJavaFxThreadAndJoin(() -> stage = JfxDialogUtil.createFxmlDialog(
+                "My Dialog",
+                true,
+                true,
+                getClass().getResource("/this/paht/does/not/exist.fxml"),
+                null,
+                null,
+                null)));
     }
 
 }
