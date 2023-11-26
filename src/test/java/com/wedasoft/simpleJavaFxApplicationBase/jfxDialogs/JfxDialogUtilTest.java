@@ -1,20 +1,26 @@
 package com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs;
 
+import com.wedasoft.simpleJavaFxApplicationBase.sceneUtil.Scene1Controller;
 import com.wedasoft.simpleJavaFxApplicationBase.testBase.SimpleJavaFxTestBase;
+import javafx.geometry.Dimension2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.wedasoft.simpleJavaFxApplicationBase.jfxDialogs.JfxDialogUtil.*;
 import static com.wedasoft.simpleJavaFxApplicationBase.userRobot.UserRobotUtil.typeKeysAfterSeconds;
+import static javafx.scene.input.KeyCode.ESCAPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JfxDialogUtilTest extends SimpleJavaFxTestBase {
@@ -23,6 +29,46 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
 
     @Nested
     class FxmlDialogTest {
+
+        private Stage stage;
+        private int valueChangedByCallback;
+
+        @Test
+        public void createAndShowFxmlDialogTest() throws Exception {
+            pressKeyAsyncInOtherThread(1000, ESCAPE);
+            runOnJavaFxThreadAndJoin(() -> JfxDialogUtil.createAndShowFxmlDialog(
+                    "My Dialog",
+                    true,
+                    false,
+                    getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/scene1.fxml"),
+                    new Dimension2D(600, 500),
+                    (Consumer<Scene1Controller>) consumer -> consumer.init("myparamter1"),
+                    () -> valueChangedByCallback = 52));
+        }
+
+        @Test
+        public void createFxmlDialogTest() throws Exception {
+            pressKeyAsyncInOtherThread(2000, ESCAPE);
+            runOnJavaFxThreadAndJoin(() -> {
+                stage = JfxDialogUtil.createFxmlDialog(
+                        "My Dialog",
+                        true,
+                        false,
+                        getClass().getResource("/com/wedasoft/simpleJavaFxApplicationBase/sceneUtil/scene1.fxml"),
+                        new Dimension2D(600, 500),
+                        (Consumer<Scene1Controller>) consumer -> consumer.init("myparamter1"),
+                        () -> valueChangedByCallback = 52);
+                stage.showAndWait();
+            });
+            assertThat(stage).isNotNull();
+            assertThat(stage.getTitle()).isEqualTo("My Dialog");
+            assertThat(stage.getModality()).isEqualTo(Modality.APPLICATION_MODAL);
+            assertThat(stage.isResizable()).isFalse();
+            assertThat(stage.getScene().getWidth()).isEqualTo(600);
+            assertThat(stage.getScene().getHeight()).isEqualTo(500);
+            assertThat(((TextField) stage.getScene().lookup("#passedParameterTf")).getText()).isEqualTo("myparamter1");
+            assertThat(valueChangedByCallback).isEqualTo(52);
+        }
 
     }
 
@@ -163,7 +209,7 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
         @Test
         void createConfirmDialog_test() throws Exception {
             runOnJavaFxThreadAndJoin(() -> {
-                typeKeysAfterSeconds(List.of(KeyCode.ESCAPE), 2);
+                typeKeysAfterSeconds(List.of(ESCAPE), 2);
                 result = displayConfirmDialogAndGetResult("headerText", "contentTest");
             });
             assertThat(result).isFalse();
@@ -193,13 +239,13 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
 
             runOnJavaFxThreadAndJoin(() -> {
                 typeKeysAfterSeconds(List.of(KeyCode.A, KeyCode.B, KeyCode.C), 1);
-                typeKeysAfterSeconds(List.of(KeyCode.ESCAPE), 2);
+                typeKeysAfterSeconds(List.of(ESCAPE), 2);
                 result = displayInputDialogAndGetResult("dummy text");
             });
             assertThat(result).isEqualTo("");
 
             runOnJavaFxThreadAndJoin(() -> {
-                typeKeysAfterSeconds(List.of(KeyCode.ESCAPE), 1);
+                typeKeysAfterSeconds(List.of(ESCAPE), 1);
                 result = displayInputDialogAndGetResult("dummy text");
             });
             assertThat(result).isEqualTo("");
@@ -222,7 +268,7 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
             });
             assertThat(stageToClose.isShowing()).isTrue();
 
-            typeKeysAfterSeconds(List.of(KeyCode.ESCAPE), 1);
+            typeKeysAfterSeconds(List.of(ESCAPE), 1);
             runOnJavaFxThreadAndJoin(() -> JfxDialogUtil.displayCloseStageDialog(stageToClose, "Close Stage Dialog Title", "Close Stage Dialog Text"));
             assertThat(stageToClose.isShowing()).isTrue();
 
@@ -237,7 +283,7 @@ class JfxDialogUtilTest extends SimpleJavaFxTestBase {
 
         @Test
         void displayExitProgramDialog() throws Exception {
-            typeKeysAfterSeconds(List.of(KeyCode.ESCAPE), 2);
+            typeKeysAfterSeconds(List.of(ESCAPE), 2);
             runOnJavaFxThreadAndJoin(JfxDialogUtil::displayExitProgramDialog);
         }
     }

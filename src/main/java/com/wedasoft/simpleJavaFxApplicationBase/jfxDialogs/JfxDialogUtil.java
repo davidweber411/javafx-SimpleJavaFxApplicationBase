@@ -35,6 +35,26 @@ public class JfxDialogUtil {
      * ******************************************************************
      */
 
+    public static void createAndShowFxmlDialog(
+            String title,
+            boolean dialogIsModal,
+            boolean dialogIsResizeable,
+            URL absoluteFxmlFileUrl,
+            Dimension2D sceneSize,
+            @SuppressWarnings("rawtypes") Consumer initMethodOfController,
+            Runnable callbackOnDialogClose)
+            throws IOException {
+
+        createFxmlDialog(title,
+                dialogIsModal,
+                dialogIsResizeable,
+                absoluteFxmlFileUrl,
+                sceneSize,
+                initMethodOfController,
+                callbackOnDialogClose)
+                .showAndWait();
+    }
+
     public static Stage createFxmlDialog(
             String title,
             boolean dialogIsModal,
