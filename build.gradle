@@ -9,7 +9,7 @@ plugins {
 }
 
 group 'com.wedasoft'
-version '2.0.0'
+version '2.0.1'
 
 repositories {
     mavenLocal()
@@ -128,8 +128,8 @@ publishing {
             // url = "https://s01.oss.sonatype.org/content/repositories/snapshots/" // repo for snapshots
             url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/" // creates staging repo in nexus
             credentials {
-                username = System.getenv("OSSRH_USERNAME") // echo %OSSRH_USERNAME%
-                password = System.getenv("OSSRH_PASSWORD") // echo %OSSRH_PASSWORD%
+                username = System.getenv("OSSRH_TOKEN_USERNAME") // echo %OSSRH_TOKEN_USERNAME%
+                password = System.getenv("OSSRH_TOKEN_PASSWORD") // echo %OSSRH_TOKEN_PASSWORD%
             }
         }
     }
